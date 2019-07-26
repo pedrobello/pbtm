@@ -1,0 +1,31 @@
+---
+title: "PBTM"
+output:
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Population-based Threshold Models - R Package *beta 
+
+Population-based Threshold Models Calculator (PBTM). This R package combines most existing PBT models with calculation and plot of these models.
+
+Initial step:
+Set working folder - Add the folder location of your data files
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
