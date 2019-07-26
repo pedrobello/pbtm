@@ -1,31 +1,14 @@
 
 install.packages("devtools")
-library("devtools")
-devtools::install_github("klutometis/roxygen")
 install.packages("roxygen2")
-library("roxygen2")
-
-setwd("..")
-install("PBTM")
-library("roxygen2")
-library("PBTM")
-
-
 install.packages("usethis")
 
-library(usethis)
+library("devtools")
+library("roxygen2")
+library("usethis")
 
-
-setwd("~/Dropbox/01-UCDavis/PBTM/PBTM/PBTM")
-document()
-
-DefineModel(1)
-
-
-
-??PBTM
-
-install_github('PBTM','pedrobello')
+install_github("pedrobello/PBTM")
+library("PBTM")
 
 #Population-based Threshold Models Calculator ------------------------------------------------------
 #Set working folder - Add the folder location of your data files
@@ -61,17 +44,21 @@ SeedData <- subset(mydata, Germ.temp>8 & Germ.temp<24)
 SeedData <- subset(mydata, Germ.temp>8 & Germ.temp<24 & Germ.temp!=16 & Germ.temp!=16)
 SeedData <- subset(mydata, Germ.temp>7 & Germ.temp<24 & Germ.temp!=16 & Germ.wp==0)
 
-#Calculates the time to 50% germination (T50) and the germination rate (GR50)
-#Function separates the treatments and adds data to the Treatments table
+SeedData <- mydata
+
+#Calculates the time to 50% germination (T50) and the germination rate (GR50).
+#Function separates the treatments and adds data to the Treatments table.
+#Functions uses SeedData as data source.
 CalcT50nGR50()
 
 #Plot germination rates over temperature
+#After CalcT50nGR50() 
 PlotGR50vsTemp()
 
 #Choose the model that you want to work on
 # (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime;
 # (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time
-DefineModel(1.5)
+DefineModel(3)
 
 #Define maximum germination percentage when seed lot does not germinate at optimum temperature and water potential.
 #Identify the correspondent treatment on the function. Use this function at your own discretion.
