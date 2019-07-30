@@ -1,23 +1,31 @@
 ---
-title: "PBTM"
-output:
-  html_document: 
-    keep_md: yes
+title: "The PBTM R-Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{The PBTM R-Package}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Population-based Threshold Models - R Package *beta 
+## Overview
+#### Population-based Threshold Models (PBTM) Calculator - beta version. 
+This R package combines existing PBTMs calculation, parameters output and respective plots. 
 
-Population-based Threshold Models Calculator (PBTM). This R package combines most existing PBT models with calculation and plot of these models.
+## Installation 
+Installation of the package requires the "devtools" package installed previosuly. 
 
-Initial step:
-Set working folder - Add the folder location of your data files
+#### Install development version from Github
+```
+devtools::install_github("pedrobello/PBTM")
+```
 
-```{r cars}
-summary(cars)
+#### Load installed package
+```
+library("PBTM")
 ```
 
 ## Including Plots
