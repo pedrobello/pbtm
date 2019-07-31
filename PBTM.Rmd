@@ -16,21 +16,46 @@ knitr::opts_chunk$set(echo = TRUE)
 This R package combines existing PBTMs calculation, parameters output and respective plots. 
 
 ## Installation 
-Installation of the package requires the "devtools" package installed previosuly. 
+Installation of the package requires the "devtools" package. 
 
 #### Install development version from Github
 ```
 devtools::install_github("pedrobello/PBTM")
 ```
 
-#### Load installed package
+#### Load package
 ```
 library("PBTM")
 ```
 
-## Including Plots
+## Data preparation steps
 
-You can also embed plots, for example:
+Before using the PBTM package, data preparation and selection is required. Main steps are described below.
+
+*    Download the template file (download PBTM-R-Data-Empty.csv or the example file PBTM-R-Data-Sample.csv).
+*    Enter your data on the proper columns and leave unsed columns in blank.
+*    Inform your working folder in R. Add the folder location of your data files.
+```
+setwd("~/MyProjectFolder/MyDataFolder")
+```
+*    Load Seeds data - Add the name of the data file (csv file)
+```
+mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
+```
+*    Filter the data will be used to calculate the model.
+```
+mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
+```
+*    Reference the filtered data to the RawModelDt data table. 
+```
+mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
+```
+
+
+
+
+
+
 
 ```{r pressure, echo=FALSE}
 plot(pressure)

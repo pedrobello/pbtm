@@ -3,11 +3,12 @@ install.packages("devtools")
 install.packages("roxygen2")
 install.packages("usethis")
 
+devtools::install_github("pedrobello/PBTM")
+
 library("devtools")
 library("roxygen2")
 library("usethis")
 
-install_github("pedrobello/PBTM")
 library("PBTM")
 
 #Population-based Threshold Models Calculator ------------------------------------------------------
@@ -52,7 +53,7 @@ SeedData <- mydata
 CalcT50nGR50()
 
 #Plot germination rates over temperature
-#After CalcT50nGR50() 
+#After CalcT50nGR50()
 PlotGR50vsTemp()
 
 #Choose the model that you want to work on
