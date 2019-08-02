@@ -33,7 +33,23 @@ library("PBTM")
 Before using the PBTM package, data preparation and selection is required. Main steps are described below.
 
 *    Download the template file (download PBTM-R-Data-Empty.csv or the example file PBTM-R-Data-Sample.csv).
-*    Enter your data on the proper columns and leave unsed columns in blank.
+*    Enter your data in the proper field and leave unsed columns in blank. Template fields description below.
+
+```{r include=FALSE}
+library(knitr)
+library("PBTM")
+library(dplyr)
+library(kableExtra)
+```
+
+```{r echo=FALSE}
+data(DatasetDesc)
+kable(DatasetDesc) %>%
+  kable_styling() %>%
+  scroll_box(width = "100%", height = "200px")
+
+```
+
 *    Inform your working folder in R. Add the folder location of your data files.
 ```
 setwd("~/MyProjectFolder/MyDataFolder")
@@ -42,7 +58,7 @@ setwd("~/MyProjectFolder/MyDataFolder")
 ```
 mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
 ```
-*    Filter the data will be used to calculate the model.
+*    In case the data file has treatments the will be used in certain models, filter the data that will be used to calculate that particular model.
 ```
 mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
 ```

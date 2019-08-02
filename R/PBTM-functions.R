@@ -9,12 +9,12 @@
 CalcT50nGR50 <- function()
 {
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
-  Treatments <<- SeedData %>% group_by(Seed.lot, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage) %>%
+  Treatments <<- SeedData %>% group_by(Treat.ID, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage) %>%
     dplyr::mutate(T50 = approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y,
                   GR50 = 1/approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y)
 
   # Separate all treatments without germination time courses
-  Treatments <<- Treatments %>% group_by(Seed.lot, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage, T50, GR50) %>% tally()
+  Treatments <<- Treatments %>% group_by(Treat.ID, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage, T50, GR50) %>% tally()
 }
 
 
@@ -92,8 +92,8 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 2
 
     #Sort data with higher wp
-    SeedData <<- SeedData[order(SeedData$Seed.lot,-SeedData$Germ.wp, SeedData$Germ.time.hours),]
-    Treatments <<- Treatments[order(Treatments$Seed.lot,-Treatments$Germ.wp),]
+    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.wp),]
 
     #Treatment factor for plot
     TreatFactor1 <<- (as.factor(SeedData$Germ.wp))
@@ -125,8 +125,8 @@ DefineModel <- function(ModelCode)
     DefinedHTo <<- FALSE
 
     #Sort data with higher wp
-    SeedData <<- SeedData[order(SeedData$Seed.lot,-SeedData$Germ.wp, SeedData$Germ.time.hours),]
-    Treatments <<- Treatments[order(Treatments$Seed.lot,-Treatments$Germ.wp),]
+    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.wp),]
 
     #Treatment factor for plot
     TreatFactor1 <<- (as.factor(SeedData$Germ.wp))
@@ -156,8 +156,8 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 3
 
     #Sort data with higher temperature
-    SeedData <<- SeedData[order(SeedData$Seed.lot,-SeedData$Germ.temp, SeedData$Germ.time.hours),]
-    Treatments <<- Treatments[order(Treatments$Seed.lot,-Treatments$Germ.temp),]
+    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.temp, SeedData$Germ.time.hours),]
+    Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp),]
 
     #Treatment factor for plot
     TreatFactor1 <<- (as.factor(SeedData$Germ.temp))
@@ -187,8 +187,8 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 4
 
     #Sort data with higher temperature and higher wp
-    SeedData <<- SeedData[order(SeedData$Seed.lot,-SeedData$Germ.temp, -SeedData$Germ.wp, SeedData$Germ.time.hours),]
-    Treatments <<- Treatments[order(Treatments$Seed.lot,-Treatments$Germ.temp, -Treatments$Germ.wp),]
+    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.temp, -SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp, -Treatments$Germ.wp),]
 
     #Treatment factor for plot
     TreatFactor1 <<- (as.factor(SeedData$Germ.temp))
@@ -225,8 +225,8 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 5
 
     #Sort data with higher temperature and higher wp
-    SeedData <<- SeedData[order(SeedData$Seed.lot,-SeedData$Germ.temp, -SeedData$Germ.wp, SeedData$Germ.time.hours),]
-    Treatments <<- Treatments[order(Treatments$Seed.lot,-Treatments$Germ.temp, -Treatments$Germ.wp),]
+    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.temp, -SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp, -Treatments$Germ.wp),]
 
     #Treatment factor for plot
     TreatFactor1 <<- (as.factor(SeedData$Germ.temp))
@@ -316,7 +316,7 @@ CALCnPLOTModel <- function()
 #' @examples DefineMaxGerm()
 #' DefineMaxGerm()
 DefineMaxGerm <- function(SeedLot, GermWP, GermTEMP){
-  DtSet <<- subset(mydata, Seed.lot == SeedLot & Germ.wp == GermWP & Germ.temp == GermTEMP)
+  DtSet <<- subset(mydata, Treat.ID == SeedLot & Germ.wp == GermWP & Germ.temp == GermTEMP)
   MaxGerm <<- DtSet$Germ.fraction[which.max(DtSet$Germ.fraction)]
   print(paste0("Maximum germination to be used is ", MaxGerm))
 }
@@ -332,7 +332,7 @@ DefineMaxGerm <- function(SeedLot, GermWP, GermTEMP){
 #' CleanGermData()
 CleanGermData <- function() {
   #Clean Repetitive Percentages (keeps only initial presence of value)
-  SeedDataClean <<- distinct(SeedData, Seed.lot, Germ.temp, Germ.wp, Germ.fraction, .keep_all = TRUE)
+  SeedDataClean <<- distinct(SeedData, Treat.ID, Germ.temp, Germ.wp, Germ.fraction, .keep_all = TRUE)
 
   #Pass clean data for model parameters
   Temp <<- SeedDataClean$Germ.temp

@@ -2,26 +2,44 @@
 install.packages("devtools")
 install.packages("roxygen2")
 install.packages("usethis")
+install.packages("kableExtra")
 
 devtools::install_github("pedrobello/PBTM")
 
 library("devtools")
 library("roxygen2")
 library("usethis")
+library("kableExtra")
 
 library("PBTM")
+
+
+devtools::document()
 
 #Population-based Threshold Models Calculator ------------------------------------------------------
 #Set working folder - Add the folder location of your data files
 
+setwd("~/Dropbox/01-UCDavis/PBTM/PBTM-RPackage/Data")
 setwd("~/Dropbox/01-UCDavis/PBTM")
 
 #Load Seeds data - Add the name of the data file (csv file)
 mydata <- read.csv("PBTM-Datasets-R.csv", header=T)
+mydata <- read.csv("PBTM-Datasets-R-Empty.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-Priming.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-AfricanR.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Q2Paper.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Chicory.csv", header=T)
+
+TomatoQ2 <- read.csv("PBTM-R-Dt-Q2Paper.csv", header=T)
+DatasetDesc <- read.csv("DatasetDescription.csv", header=T)
+
+#Save mydata to .RData files
+save(mydata, file="data/mydata.RData")
+
+save(DatasetDesc, file="DatasetDesc.RData")
+save(TomatoQ2, file="TomatoQ2.RData")
+
+
 
 #Filter the data to be used on models
 #All data inside the table SeedData will be used on the models
