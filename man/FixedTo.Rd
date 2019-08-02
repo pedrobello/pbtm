@@ -6,6 +6,9 @@
 \usage{
 FixedTo(To1)
 }
+\arguments{
+\item{FixedTo(22.5)}{will fix optimal temperature to 22.5C for further model calculation.}
+}
 \description{
 This function defines the To value and avoid it to be calculated together with other values.
 }

@@ -6,6 +6,9 @@
 \usage{
 PlotCleanData()
 }
+\arguments{
+\item{PlotCleanData()}{will plot cleaned cumulative curves over time.}
+}
 \description{
 This function plots the cleaned data previously selected after removing repetitive percentages. Only intial presence of the percentage is displayed.
 }

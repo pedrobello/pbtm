@@ -6,6 +6,9 @@
 \usage{
 PlotRawData()
 }
+\arguments{
+\item{PlotRawData()}{will plot raw cumulative curves over time.}
+}
 \description{
 This function plots the raw data previously selected.
 }
