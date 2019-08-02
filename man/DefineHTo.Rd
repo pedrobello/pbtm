@@ -6,6 +6,9 @@
 \usage{
 DefineHTo(HTo1)
 }
+\arguments{
+\item{DefineHTo(50)}{will define hydrotime constant to 50 for further supra-optimal hydrotime model calculation.}
+}
 \description{
 This function defines the HTo value and avoid it to be calculated together with other values.
 }

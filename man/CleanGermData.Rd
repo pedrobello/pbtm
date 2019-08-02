@@ -6,6 +6,9 @@
 \usage{
 CleanGermData()
 }
+\arguments{
+\item{CleanGermData()}{will remove repetitive points}
+}
 \description{
 This function removes repetitive percentages, keeping only the intial presence of the value
 }

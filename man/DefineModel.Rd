@@ -7,7 +7,11 @@
 DefineModel(ModelCode)
 }
 \arguments{
-\item{ModelCode}{a number that represents the selected model}
+\item{DefineModel(1)}{selects the Hydropriming Model}
+
+\item{DefineModel(1.5)}{selects the Hydrothernal priming Model}
+
+\item{DefineModel(2)}{selects the Suboptimal Hydrotime Model}
 }
 \value{
 Sets up the package and print the selected model.

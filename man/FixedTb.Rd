@@ -6,6 +6,9 @@
 \usage{
 FixedTb(Tb1)
 }
+\arguments{
+\item{FixedTb(11)}{will fix the Tb to 11C for further calculation of the model.}
+}
 \description{
 This function defines the Tb value and avoid it to be calculated together with other values.
 }

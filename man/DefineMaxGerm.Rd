@@ -4,7 +4,10 @@
 \alias{DefineMaxGerm}
 \title{A Function to get maximum germination percentage on dataset.}
 \usage{
-DefineMaxGerm(SeedLot, GermWP, GermTEMP)
+DefineMaxGerm(TreatID, GermWP, GermTEMP)
+}
+\arguments{
+\item{DefineMaxGerm(0.85)}{will define germination to a max. limit of 85%}
 }
 \description{
 This function normalizes all data to the percentage informed here. This is useful when a known fraction of the population is not viable.

@@ -6,6 +6,9 @@
 \usage{
 CALCnPLOTModel()
 }
+\arguments{
+\item{CALCnPLOTModel()}{calculates the selected model}
+}
 \description{
 This function triggers the model calculation and outputs calculated parameters and graph prediction.
 }

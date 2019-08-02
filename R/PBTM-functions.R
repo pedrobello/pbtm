@@ -1,7 +1,7 @@
 #' A T50 and GR50 Function
 #'
 #' This function allows you to calculate the time to 50% germination (T50) and respective germination rate (GR50).
-#' @param
+#' @param CalcT50nGR50() to calculate T50 and GR50 on the TreatData dataset.
 #' @keywords T50, GR50, germination speed, germination rate
 #' @export
 #' @examples
@@ -9,7 +9,7 @@
 CalcT50nGR50 <- function()
 {
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
-  Treatments <<- SeedData %>% group_by(Treat.ID, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage) %>%
+  Treatments <<- TreatData %>% group_by(Treat.ID, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage) %>%
     dplyr::mutate(T50 = approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y,
                   GR50 = 1/approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y)
 
@@ -21,7 +21,9 @@ CalcT50nGR50 <- function()
 #' A Function to define the population-based threshold model(PBTM) you want to work with.
 #'
 #' This function allows you to choose the PBT model to be calculated. Choose the model that you want to work on (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime; (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time.
-#' @param ModelCode a number that represents the selected model
+#' @param DefineModel(1) selects the Hydropriming Model
+#' @param DefineModel(1.5) selects the Hydrothernal priming Model
+#' @param DefineModel(2) selects the Suboptimal Hydrotime Model
 #' @keywords PBTM
 #' @return Sets up the package and print the selected model.
 #' @export
@@ -39,9 +41,9 @@ DefineModel <- function(ModelCode)
     LegendTitleFactor3 <<- NA
 
     #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(SeedData$Treat.priming.wp))
+    TreatFactor1 <<- (as.factor(TreatData$Treat.priming.wp))
     TreatFactorSum1 <<- (as.factor(Treatments$Treat.priming.wp))
-    TreatFactor2 <<- (as.factor(SeedData$Treat.priming.duration))
+    TreatFactor2 <<- (as.factor(TreatData$Treat.priming.duration))
     TreatFactorSum2 <<- (as.factor(Treatments$Treat.priming.duration))
     TreatFactor3 <<- NA
     TreatFactorSum3 <<- NA
@@ -59,7 +61,7 @@ DefineModel <- function(ModelCode)
 
     print("Hydropriming model selected")
 
-  } else if (ModelCode == 1.5) { #Hydropriming Model Selected
+  } else if (ModelCode == 1.5) { #Hydrothernal priming Model Selected
     ActiveModel <<- 1.5
 
     #Label for legends
@@ -68,11 +70,11 @@ DefineModel <- function(ModelCode)
     LegendTitleFactor3 <<- "Priming\nDuration"
 
     #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(SeedData$Treat.priming.wp))
+    TreatFactor1 <<- (as.factor(TreatData$Treat.priming.wp))
     TreatFactorSum1 <<- (as.factor(Treatments$Treat.priming.wp))
-    TreatFactor2 <<- (as.factor(SeedData$Treat.priming.temp))
+    TreatFactor2 <<- (as.factor(TreatData$Treat.priming.temp))
     TreatFactorSum2 <<- (as.factor(Treatments$Treat.priming.temp))
-    TreatFactor3 <<- (as.factor(SeedData$Treat.priming.duration))
+    TreatFactor3 <<- (as.factor(TreatData$Treat.priming.duration))
     TreatFactorSum3 <<- (as.factor(Treatments$Treat.priming.duration))
 
     #Calculates how many temp and wp treatments for plotting purposes
@@ -92,11 +94,11 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 2
 
     #Sort data with higher wp
-    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.wp, TreatData$Germ.time.hours),]
     Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.wp),]
 
     #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(SeedData$Germ.wp))
+    TreatFactor1 <<- (as.factor(TreatData$Germ.wp))
     TreatFactor2 <<- NA
     TreatFactor3 <<- NA
     TreatFactorSum3 <<- NA
@@ -125,11 +127,11 @@ DefineModel <- function(ModelCode)
     DefinedHTo <<- FALSE
 
     #Sort data with higher wp
-    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.wp, TreatData$Germ.time.hours),]
     Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.wp),]
 
     #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(SeedData$Germ.wp))
+    TreatFactor1 <<- (as.factor(TreatData$Germ.wp))
     TreatFactor2 <<- NA
     TreatFactor3 <<- NA
 
@@ -156,11 +158,11 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 3
 
     #Sort data with higher temperature
-    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.temp, SeedData$Germ.time.hours),]
+    TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, TreatData$Germ.time.hours),]
     Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp),]
 
     #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(SeedData$Germ.temp))
+    TreatFactor1 <<- (as.factor(TreatData$Germ.temp))
     TreatFactor2 <<- NA
     TreatFactor3 <<- NA
 
@@ -187,12 +189,12 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 4
 
     #Sort data with higher temperature and higher wp
-    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.temp, -SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
     Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp, -Treatments$Germ.wp),]
 
     #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(SeedData$Germ.temp))
-    TreatFactor2 <<- (as.factor(SeedData$Germ.wp))
+    TreatFactor1 <<- (as.factor(TreatData$Germ.temp))
+    TreatFactor2 <<- (as.factor(TreatData$Germ.wp))
     TreatFactor3 <<- NA
 
     #Label for legends
@@ -225,12 +227,12 @@ DefineModel <- function(ModelCode)
     ActiveModel <<- 5
 
     #Sort data with higher temperature and higher wp
-    SeedData <<- SeedData[order(SeedData$Treat.ID,-SeedData$Germ.temp, -SeedData$Germ.wp, SeedData$Germ.time.hours),]
+    TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
     Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp, -Treatments$Germ.wp),]
 
     #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(SeedData$Germ.temp))
-    TreatFactor2 <<- (as.factor(SeedData$Germ.wp))
+    TreatFactor1 <<- (as.factor(TreatData$Germ.temp))
+    TreatFactor2 <<- (as.factor(TreatData$Germ.wp))
     TreatFactor3 <<- NA
 
 
@@ -268,7 +270,7 @@ DefineModel <- function(ModelCode)
 #' A Function to calculate and plot the PBTM selected.
 #'
 #' This function triggers the model calculation and outputs calculated parameters and graph prediction.
-#' @param
+#' @param CALCnPLOTModel() calculates the selected model
 #' @keywords PBTM
 #' @export
 #' @examples
@@ -310,13 +312,13 @@ CALCnPLOTModel <- function()
 #' A Function to get maximum germination percentage on dataset.
 #'
 #' This function normalizes all data to the percentage informed here. This is useful when a known fraction of the population is not viable.
-#' @param
+#' @param DefineMaxGerm(0.85) will define germination to a max. limit of 85%
 #' @keywords Maximum germination
 #' @export
 #' @examples DefineMaxGerm()
 #' DefineMaxGerm()
-DefineMaxGerm <- function(SeedLot, GermWP, GermTEMP){
-  DtSet <<- subset(mydata, Treat.ID == SeedLot & Germ.wp == GermWP & Germ.temp == GermTEMP)
+DefineMaxGerm <- function(TreatID, GermWP, GermTEMP){
+  DtSet <<- subset(mydata, Treat.ID == TreatID & Germ.wp == GermWP & Germ.temp == GermTEMP)
   MaxGerm <<- DtSet$Germ.fraction[which.max(DtSet$Germ.fraction)]
   print(paste0("Maximum germination to be used is ", MaxGerm))
 }
@@ -325,56 +327,56 @@ DefineMaxGerm <- function(SeedLot, GermWP, GermTEMP){
 #' A Function to clean cumulative curves on dataset.
 #'
 #' This function removes repetitive percentages, keeping only the intial presence of the value
-#' @param
+#' @param CleanGermData() will remove repetitive points
 #' @keywords Clean germination repetitive percentage
 #' @export
 #' @examples CleanGermData()
 #' CleanGermData()
 CleanGermData <- function() {
   #Clean Repetitive Percentages (keeps only initial presence of value)
-  SeedDataClean <<- distinct(SeedData, Treat.ID, Germ.temp, Germ.wp, Germ.fraction, .keep_all = TRUE)
+  TreatDataClean <<- distinct(TreatData, Treat.ID, Germ.temp, Germ.wp, Germ.fraction, .keep_all = TRUE)
 
   #Pass clean data for model parameters
-  Temp <<- SeedDataClean$Germ.temp
-  WP <<- SeedDataClean$Germ.wp
-  Time.hours <<- SeedDataClean$Germ.time.hours
-  Germ <<- SeedDataClean$Germ.fraction
+  Temp <<- TreatDataClean$Germ.temp
+  WP <<- TreatDataClean$Germ.wp
+  Time.hours <<- TreatDataClean$Germ.time.hours
+  Germ <<- TreatDataClean$Germ.fraction
 
       if (ActiveModel == 1) { #Hydropriming Model Selected
         #Treatment factor for plot
-        CleanTreatFactor1 <<- (as.factor(SeedDataClean$Treat.priming.wp))
-        CleanTreatFactor2 <<- (as.factor(SeedDataClean$Treat.priming.duration))
+        CleanTreatFactor1 <<- (as.factor(TreatDataClean$Treat.priming.wp))
+        CleanTreatFactor2 <<- (as.factor(TreatDataClean$Treat.priming.duration))
 
       } else if (ActiveModel == 1.5) { #Hydrothermal priming Model Selected
         #Treatment factor for plot
-        CleanTreatFactor1 <<- (as.factor(SeedDataClean$Treat.priming.wp))
-        CleanTreatFactor2 <<- (as.factor(SeedDataClean$Treat.priming.temp))
-        CleanTreatFactor3 <<- (as.factor(SeedDataClean$Treat.priming.duration))
+        CleanTreatFactor1 <<- (as.factor(TreatDataClean$Treat.priming.wp))
+        CleanTreatFactor2 <<- (as.factor(TreatDataClean$Treat.priming.temp))
+        CleanTreatFactor3 <<- (as.factor(TreatDataClean$Treat.priming.duration))
 
       } else if (ActiveModel == 2) { #Hydrotime Model Selected
         #Treatment factor for plot
-        CleanTreatFactor1 <<- (as.factor(SeedDataClean$Germ.wp))
+        CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.wp))
         CleanTreatFactor2 <<- NA
 
       } else if (ActiveModel == 2.5) { #Supra-optimal Hydrotime Model Selected
         #Treatment factor for plot
-        CleanTreatFactor1 <<- (as.factor(SeedDataClean$Germ.wp))
+        CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.wp))
         CleanTreatFactor2 <<- NA
 
       } else if (ActiveModel == 3) { #Thermaltime Model Selected
         #Treatment factor for plot
-        CleanTreatFactor1 <<- (as.factor(SeedDataClean$Germ.temp))
+        CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.temp))
         CleanTreatFactor2 <<- NA
 
       } else if (ActiveModel == 4) { #Hydrothermal time Model Selected
         #Treatment factor for plot
-        CleanTreatFactor1 <<- (as.factor(SeedDataClean$Germ.temp))
-        CleanTreatFactor2 <<- (as.factor(SeedDataClean$Germ.wp))
+        CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.temp))
+        CleanTreatFactor2 <<- (as.factor(TreatDataClean$Germ.wp))
 
       } else if (ActiveModel == 5) { #Supra-optimal Hydrothermal time Model Selected
         #Treatment factor for plot
-        CleanTreatFactor1 <<- (as.factor(SeedDataClean$Germ.temp))
-        CleanTreatFactor2 <<- (as.factor(SeedDataClean$Germ.wp))
+        CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.temp))
+        CleanTreatFactor2 <<- (as.factor(TreatDataClean$Germ.wp))
 
       } else {
         ActiveModel <<- 0
@@ -386,7 +388,7 @@ CleanGermData <- function() {
 #' A Function to manually define the temperature base (Tb) for model calculation.
 #'
 #' This function defines the Tb value and avoid it to be calculated together with other values.
-#' @param
+#' @param FixedTb(11) will fix the Tb to 11C for further calculation of the model.
 #' @keywords Known temperature base fixed Tb
 #' @export
 #' @examples FixedTb(11)
@@ -401,7 +403,7 @@ FixedTb <- function(Tb1)
 #' A Function to manually define the optimal temperature (To) for model calculation.
 #'
 #' This function defines the To value and avoid it to be calculated together with other values.
-#' @param
+#' @param FixedTo(22.5) will fix optimal temperature to 22.5C for further model calculation.
 #' @keywords Known otpimal temperature fixed To
 #' @export
 #' @examples FixedTo(22.5)
@@ -416,7 +418,7 @@ FixedTo <- function(To1)
 #' A Function to manually define the Hydrotime constant at optimal temperature (HTo) for model calculation.
 #'
 #' This function defines the HTo value and avoid it to be calculated together with other values.
-#' @param
+#' @param DefineHTo(50) will define hydrotime constant to 50 for further supra-optimal hydrotime model calculation.
 #' @keywords Known Hydrotime constant supra-optimal hydrotime temperature fixed HTo
 #' @export
 #' @examples DefineHTo(50)
@@ -451,19 +453,19 @@ theme_scatter_plot <- theme(
 #' A Function to plot the raw data selected.
 #'
 #' This function plots the raw data previously selected.
-#' @param
+#' @param PlotRawData() will plot raw cumulative curves over time.
 #' @keywords plot raw data
 #' @export
 #' @examples PlotRawData()
 #' PlotRawData()
 PlotRawData <- function()
 {
-  MaxTime <<- SeedData$Germ.time.hours[which.max(SeedData$Germ.time.hours)]
+  MaxTime <<- TreatData$Germ.time.hours[which.max(TreatData$Germ.time.hours)]
   PlotTime <<- ceiling(MaxTime/5)*5
   Increment <<- round(PlotTime/5, digits = 0)
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pRaw <<- ggplot(data=SeedData, aes(x=Germ.time.hours, y=Germ.fraction, color=TreatFactor1, alpha = TreatFactor2, shape = TreatFactor3)) +
+  pRaw <<- ggplot(data=TreatData, aes(x=Germ.time.hours, y=Germ.fraction, color=TreatFactor1, alpha = TreatFactor2, shape = TreatFactor3)) +
     geom_point(shape=19, size=2) + geom_line() + xlab("Time (hours)") + ylab("Germination (%)") + my_colors + scale_alpha_discrete(range = c(0.3, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
@@ -480,19 +482,19 @@ PlotRawData <- function()
 #' A Function to plot the cleaned data selected.
 #'
 #' This function plots the cleaned data previously selected after removing repetitive percentages. Only intial presence of the percentage is displayed.
-#' @param
+#' @param PlotCleanData() will plot cleaned cumulative curves over time.
 #' @keywords plot cleaned data
 #' @export
 #' @examples PlotCleanData()
 #' PlotCleanData()
 PlotCleanData <- function()
 {
-  CleanMaxTime <<- SeedDataClean$Germ.time.hours[which.max(SeedDataClean$Germ.time.hours)]
+  CleanMaxTime <<- TreatDataClean$Germ.time.hours[which.max(TreatDataClean$Germ.time.hours)]
   CleanPlotTime <<- ceiling(CleanMaxTime/5)*5
   CleanIncrement <<- round(CleanPlotTime/5, digits = 0)
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pClean <<- ggplot(data=SeedDataClean, aes(x=Germ.time.hours, y=Germ.fraction, color=CleanTreatFactor1, alpha = CleanTreatFactor2)) +
+  pClean <<- ggplot(data=TreatDataClean, aes(x=Germ.time.hours, y=Germ.fraction, color=CleanTreatFactor1, alpha = CleanTreatFactor2)) +
     geom_point(shape=19, size=2) + geom_line() + xlab("Time (hours)") + ylab("Germination (%)") + my_colors + scale_alpha_discrete(range = c(0.3, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,CleanPlotTime+(CleanIncrement/5))) +
@@ -538,7 +540,7 @@ PlotPrimingModel <- function ()
 PlotPBTMModel <- function ()
 {
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  p <- ggplot(data=SeedData, aes(x=Germ.time.hours, y=Germ.fraction,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
+  p <- ggplot(data=TreatData, aes(x=Germ.time.hours, y=Germ.fraction,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
     modellines + my_colors + scale_alpha_discrete(range = c(0.5, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
@@ -564,7 +566,7 @@ PlotPBTMModel <- function ()
 PlotCleanModel <- function ()
 {
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  p <- ggplot(data=SeedDataClean, aes(x=Germ.time.hours, y=Germ.fraction,color=CleanTreatFactor1, alpha = CleanTreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
+  p <- ggplot(data=TreatDataClean, aes(x=Germ.time.hours, y=Germ.fraction,color=CleanTreatFactor1, alpha = CleanTreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
     modellines + my_colors + scale_alpha_discrete(range = c(0.5, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,CleanPlotTime+(CleanIncrement/5))) +
@@ -624,11 +626,11 @@ PlotPsib50vsTemp <- function ()
 #' PlotActualvsModelPredictedTreatments()
 PlotActualvsModelPredictedTreatments <- function ()
 {
-  FitActualPredicted <- lm(Germ.fraction ~ ModelPredicted, data = SeedDataClean)
+  FitActualPredicted <- lm(Germ.fraction ~ ModelPredicted, data = TreatDataClean)
   summary(FitActualPredicted)
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pM <- ggplot(data=SeedDataClean, aes(x=Germ.fraction, y=ModelPredicted,color=CleanTreatFactor1, alpha = CleanTreatFactor2)) + geom_point(shape=19, size=2) + xlab("Actual Germination (%)") + ylab("Model Prediction (%)") +
+  pM <- ggplot(data=TreatDataClean, aes(x=Germ.fraction, y=ModelPredicted,color=CleanTreatFactor1, alpha = CleanTreatFactor2)) + geom_point(shape=19, size=2) + xlab("Actual Germination (%)") + ylab("Model Prediction (%)") +
     my_colors + scale_alpha_discrete(range = c(0.5, 1.0)) + theme_scatter_plot + abline(FitActualPredicted)
   pM
 }
@@ -645,11 +647,11 @@ PlotActualvsModelPredicted <- function ()
 {
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pM <- ggplot(data=SeedDataClean, aes(x=Germ.fraction, y=ModelPredicted)) + geom_point(shape=19, size=2) + xlab("Actual Germination (%)") + ylab("Model Prediction (%)") +
+  pM <- ggplot(data=TreatDataClean, aes(x=Germ.fraction, y=ModelPredicted)) + geom_point(shape=19, size=2) + xlab("Actual Germination (%)") + ylab("Model Prediction (%)") +
     my_colors + scale_alpha_discrete(range = c(0.5, 1.0)) + theme_scatter_plot +stat_summary(fun.data=mean_cl_normal) +
     geom_smooth(method='lm',formula=y~x) +
     annotate(x=0.2, y=0.9,
-           label=paste("R^2 == ", round(cor(SeedDataClean$Germ.fraction, SeedDataClean$ModelPredicted)^2,2)),
+           label=paste("R^2 == ", round(cor(TreatDataClean$Germ.fraction, TreatDataClean$ModelPredicted)^2,2)),
            geom="text", size=4, parse = TRUE)
   pM
 }
@@ -666,7 +668,7 @@ PlotNormalizedTime <- function ()
 {
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pM <- ggplot(data=SeedDataClean, aes(x=NormalizedTime, y=Germ.fraction)) + geom_point(shape=19, size=2) + xlab(NormalizedAxisTitle) + ylab("Germination (%)") +
+  pM <- ggplot(data=TreatDataClean, aes(x=NormalizedTime, y=Germ.fraction)) + geom_point(shape=19, size=2) + xlab(NormalizedAxisTitle) + ylab("Germination (%)") +
     my_colors + scale_alpha_discrete(range = c(0.5, 1.0)) + theme_scatter_plot + xlim(0, NA) +
     modelNormalized
   pM
@@ -704,10 +706,10 @@ CalcHTModel <- function()
   Correlation <<- cor(Germ,predict(HTModel))^2
 
   #Hydrotime Model - Create table to plot treatments with predicted model lines
-  SeedData$WPFactor <<- with(SeedData, (as.factor(SeedData$Germ.wp)))
-  Factor1 <<- SeedData$WPFactor
+  TreatData$WPFactor <<- with(TreatData, (as.factor(TreatData$Germ.wp)))
+  Factor1 <<- TreatData$WPFactor
   Factor1Title <<- "Water \n Potential"
-  TreatmentsWP <<- distinct(SeedData, Germ.wp, .keep_all = FALSE)
+  TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
 
   #Passing fitted Hydrotime Model Parameters
   HT <<- summary(HTModel)$coefficients[[1]]
@@ -735,8 +737,8 @@ CalcHTModel <- function()
       stat_function(fun=function(x){pnorm(WP-(HT/(x)),Psib50,Sigma,log=FALSE)*MaxGerm}, aes_(colour = factor(WP)))
     })
 
-  #Create columns on SeedDataClean with predicted values and Normalized time from model
-  SeedDataClean <<-SeedDataClean %>% as_tibble() %>% mutate(
+  #Create columns on TreatDataClean with predicted values and Normalized time from model
+  TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
     ModelPredicted = pnorm(Germ.wp-(HT/(Germ.time.hours)),Psib50,Sigma,log=FALSE)*MaxGerm,
     NormalizedTime = (1-(Germ.wp/(Germ.wp-(HT/Germ.time.hours))))*Germ.time.hours
   )
@@ -783,10 +785,10 @@ CalcSupraHTModel <- function()
   Correlation <<- cor(Germ,predict(SupraHTModel))^2
 
   #Hydrotime Model - Create table to plot treatments with predicted model lines
-  SeedData$WPFactor <<- with(SeedData, (as.factor(SeedData$Germ.wp)))
-  Factor1 <<- SeedData$WPFactor
+  TreatData$WPFactor <<- with(TreatData, (as.factor(TreatData$Germ.wp)))
+  Factor1 <<- TreatData$WPFactor
   Factor1Title <<- "Water \n Potential"
-  TreatmentsWP <<- distinct(SeedData, Germ.wp, .keep_all = FALSE)
+  TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
 
   #Passing fitted Hydrotime Model Parameters
   HT <<- HTo
@@ -814,8 +816,8 @@ CalcSupraHTModel <- function()
       stat_function(fun=function(x){pnorm(WP-(HTo/(x)),Psib50,Sigma,log=FALSE)*MaxGerm}, aes_(colour = factor(WP)))
     })
 
-  #Create columns on SeedDataClean with predicted values and Normalized time from model
-  SeedDataClean <<-SeedDataClean %>% as_tibble() %>% mutate(
+  #Create columns on TreatDataClean with predicted values and Normalized time from model
+  TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
     ModelPredicted = pnorm(Germ.wp-(HTo/(Germ.time.hours)),Psib50,Sigma,log=FALSE)*MaxGerm,
     NormalizedTime = (1-(Germ.wp/(Germ.wp-(HTo/Germ.time.hours))))*Germ.time.hours
   )
@@ -1010,10 +1012,10 @@ CalcTTSubOModel <- function()
   Correlation <<- cor(Germ,predict(TTSubOModel))^2
 
   #Thermaltime Suboptimal Model - Create table to plot treatments with predicted model lines
-  SeedData$TempFactor <<- with(SeedData, (as.factor(SeedData$Germ.temp)))
-  Factor1 <<- SeedData$TempFactor
+  TreatData$TempFactor <<- with(TreatData, (as.factor(TreatData$Germ.temp)))
+  Factor1 <<- TreatData$TempFactor
   Factor1Title <<- "Temperature"
-  TreatmentsTemp <<- distinct(SeedData, Germ.temp, .keep_all = FALSE)
+  TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
 
   #Passing fitted Hydrotime Model Parameters
   Tb <<- summary(TTSubOModel)$coefficients[[1]]
@@ -1040,8 +1042,8 @@ CalcTTSubOModel <- function()
       stat_function(fun=function(x){pnorm(log(x, base = 10),θT50-log(Temp-Tb, base = 10),Sigma,log=FALSE)*MaxGerm}, aes_(colour = factor(Temp)))
     })
 
-  #Create column on SeedDataClean with predicted values from model
-  SeedDataClean <<-SeedDataClean %>% as_tibble() %>% mutate(
+  #Create column on TreatDataClean with predicted values from model
+  TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
     ModelPredicted = pnorm(log(Germ.time.hours, base = 10),θT50-log(Germ.temp-Tb, base = 10),Sigma,log=FALSE)*MaxGerm,
     NormalizedTime = (Germ.temp-Tb)*Germ.time.hours
   )
@@ -1108,15 +1110,15 @@ CalcHTTModel <- function()
   Correlation <<- cor(Germ,predict(HTTModel))^2
 
   #Hydrothermal time Model - Create table to plot treatments with predicted model lines
-  SeedData$WPFactor <<- with(SeedData, (as.factor(SeedData$Germ.wp)))
-  Factor1 <<- SeedData$WPFactor
+  TreatData$WPFactor <<- with(TreatData, (as.factor(TreatData$Germ.wp)))
+  Factor1 <<- TreatData$WPFactor
   Factor1Title <<- "Water \n Potential"
-  TreatmentsWP <<- distinct(SeedData, Germ.wp, .keep_all = FALSE)
-  SeedData$TempFactor <<- with(SeedData, (as.factor(SeedData$Germ.temp)))
-  Factor2 <<- SeedData$TempFactor
+  TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
+  TreatData$TempFactor <<- with(TreatData, (as.factor(TreatData$Germ.temp)))
+  Factor2 <<- TreatData$TempFactor
   Factor2Title <<- "Temperature"
-  TreatmentsTemp <<- distinct(SeedData, Germ.temp, .keep_all = FALSE)
-  TreatmentHTT <<- distinct(SeedData, Germ.temp, Germ.wp, .keep_all = FALSE)
+  TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+  TreatmentHTT <<- distinct(TreatData, Germ.temp, Germ.wp, .keep_all = FALSE)
 
 
   #Passing fitted Hydrotime Model Parameters for plot legend
@@ -1142,8 +1144,8 @@ CalcHTTModel <- function()
       stat_function(fun=function(x){pnorm((+WP1-(HT/((Temp1-Tb)*x))),Psib50,Sigma, log= FALSE)*MaxGerm}, aes_(colour = factor(Temp1), alpha = factor(WP1)))
     }, tmps, wps)
 
-  #Create columns on SeedDataClean with predicted and Normalized time values from model
-  SeedDataClean <<-SeedDataClean %>% as_tibble() %>% mutate(
+  #Create columns on TreatDataClean with predicted and Normalized time values from model
+  TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
     ModelPredicted = pnorm((+Germ.wp-(HT/((Germ.temp-Tb)*Germ.time.hours))),Psib50,Sigma, log= FALSE)*MaxGerm,
     NormalizedTime = +((1-Germ.wp/(+Germ.wp-(HT/(Germ.time.hours*(Germ.temp-Tb)))))*Germ.time.hours*(Germ.temp-Tb))
   )
@@ -1216,15 +1218,15 @@ CalcHTTModelSupra <- function()
   Correlation <<- cor(Germ,predict(HTTModelSupra))^2
 
   #Hydrothermaltime Supra-optimal Model - Create table to plot treatments with predicted model lines
-  SeedData$WPFactor <<- with(SeedData, (as.factor(SeedData$Germ.wp)))
-  Factor1 <<- SeedData$WPFactor
+  TreatData$WPFactor <<- with(TreatData, (as.factor(TreatData$Germ.wp)))
+  Factor1 <<- TreatData$WPFactor
   Factor1Title <<- "Water \n Potential"
-  TreatmentsWP <<- distinct(SeedData, Germ.wp, .keep_all = FALSE)
-  SeedData$TempFactor <<- with(SeedData, (as.factor(SeedData$Germ.temp)))
-  Factor2 <<- SeedData$TempFactor
+  TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
+  TreatData$TempFactor <<- with(TreatData, (as.factor(TreatData$Germ.temp)))
+  Factor2 <<- TreatData$TempFactor
   Factor2Title <<- "Temperature"
-  TreatmentsTemp <<- distinct(SeedData, Germ.temp, .keep_all = FALSE)
-  TreatmentHTT <<- distinct(SeedData, Germ.temp, Germ.wp, .keep_all = FALSE)
+  TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+  TreatmentHTT <<- distinct(TreatData, Germ.temp, Germ.wp, .keep_all = FALSE)
 
   #Passing fitted Hydrothermaltime Supra-optimal Model Parameters for plot legend
   ModPar1Label <<- "HT =="
@@ -1249,8 +1251,8 @@ CalcHTTModelSupra <- function()
       stat_function(fun=function(x){pnorm(((+WP1-Kt*(Temp1-To))-(HT/((Temp1-MyTb)*x))),Psib50,Sigma,log=FALSE)*MaxGerm}, aes_(colour = factor(Temp1), alpha = factor(WP1)))
     }, tmps, wps)
 
-  #Create column on SeedDataClean with predicted and normalized values from model
-  SeedDataClean <<-SeedDataClean %>% as_tibble() %>% mutate(
+  #Create column on TreatDataClean with predicted and normalized values from model
+  TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
     ModelPredicted = pnorm(((+Germ.wp-Kt*(Germ.temp-To))-(HT/((Germ.temp-MyTb)*Germ.time.hours))),Psib50,Sigma, log= FALSE)*MaxGerm,
     NormalizedTime = +((1-Germ.wp/(+Germ.wp-(HT/(Germ.time.hours*(Germ.temp-Tb)))))*Germ.time.hours*(Germ.temp-Tb))
     )
