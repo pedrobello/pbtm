@@ -32,7 +32,7 @@ DefineModel <- function(ModelCode)
 {
   CalcT50nGR50()
 
-  if (ModelCode == 1.1) { #Thermaltime Suboptimal Model Selected
+  if (ModelCode == 1.1) { #Thermal time suboptimal Model Selected
   ActiveModel <<- 1.1
 
   #Sort data with higher temperature
@@ -60,10 +60,10 @@ DefineModel <- function(ModelCode)
     my_colors <<- scale_colour_brewer(palette = "Spectral")
   }
 
-  print("Thermaltime Suboptimal model selected")
+  print("Thermal time suboptimal model selected")
 
 
-  } else if (ModelCode == 2.1) { #Suboptimal Hydrotime Model Selected
+  } else if (ModelCode == 2.1) { #Hydrotime suboptimal model selected
     ActiveModel <<- 2.1
 
     #Sort data with higher wp
@@ -92,9 +92,9 @@ DefineModel <- function(ModelCode)
       my_colors <<- scale_colour_brewer(palette = "Spectral")
       }
 
-    print("Suboptimal Hydrotime model selected")
+    print("Hydrotime suboptimal model selected")
 
-  } else if (ModelCode == 2.2) { #Hydrotime supra-optimal Model Selected
+  } else if (ModelCode == 2.2) { #Hydrotime supra-optimal model selected
     ActiveModel <<- 2.2
 
     DefinedHTo <<- FALSE
@@ -125,9 +125,9 @@ DefineModel <- function(ModelCode)
       my_colors <<- scale_colour_brewer(palette = "Spectral")
     }
 
-    print("Supra-optimal Hydrotime model selected")
+    print("Hydrotime supra-optimal model selected")
 
-  } else if (ModelCode == 3.1) { #Hydrothermal time Suboptimal Model Selected
+  } else if (ModelCode == 3.1) { #Hydrothermal time suboptimal model selected
     ActiveModel <<- 3.1
 
     #Sort data with higher temperature and higher wp
@@ -161,11 +161,9 @@ DefineModel <- function(ModelCode)
       my_colors <<- scale_colour_brewer(palette = "Spectral")
     }
 
-    print("Hydrothermal time Suboptimal model selected")
-    #Dahal P. & Bradford K.J. (1994) Seed Science Research 4, 71–80.
-    #Dahal P. & Bradford K.J. (1994) Hydrothermal time analysis of tomato seed germination at suboptimal temperature and reduced water potential. Seed Science Research 4, 71–80.
+    print("Hydrothermal time suboptimal model selected")
 
-  } else if (ModelCode == 3.2) { #Hydrothermal time Supra-Optimal Model Selected
+  } else if (ModelCode == 3.2) { #Hydrothermal time supra-optimal model selected
     ActiveModel <<- 3.2
 
     #Sort data with higher temperature and higher wp
@@ -200,11 +198,9 @@ DefineModel <- function(ModelCode)
       my_colors <<- scale_colour_brewer(palette = "Spectral")
     }
 
-    print("Hydrothermal time Supra-optimal model selected")
-    #Alvarado V. & Bradford K.J. (2002) Plant, Cell and Environment 25, 1061–1069.
-    #Alvarado V. & Bradford K.J. (2002) A hydrothermal time model explains the cardinal temperatures for seed germination. Plant, Cell and Environment 25, 1061–1069.
+    print("Hydrothermal time supra-optimal model selected")
 
-  } else if (ModelCode == 6.1) { #Hydropriming Model Selected
+  } else if (ModelCode == 6.1) { #Hydropriming model selected
       ActiveModel <<- 6.1
 
       #Label for legends
@@ -233,7 +229,7 @@ DefineModel <- function(ModelCode)
 
       print("Hydropriming model selected")
 
-    } else if (ModelCode == 6.2) { #Hydrothernal priming Model Selected
+    } else if (ModelCode == 6.2) { #HydrotherMal priming model selected
       ActiveModel <<- 6.2
 
       #Label for legends

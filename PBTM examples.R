@@ -65,7 +65,10 @@ TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24)
 TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24 & Germ.temp!=16 & Germ.temp!=16)
 TreatData <- subset(mydata, Germ.temp>7 & Germ.temp<24 & Germ.temp!=16 & Germ.wp==0)
 
+Data(TomatoQ2)
+
 TreatData <- mydata
+TreatData <- TomatoQ2
 
 #Calculates the time to 50% germination (T50) and the germination rate (GR50).
 #Function separates the treatments and adds data to the Treatments table.
@@ -79,7 +82,7 @@ PlotGR50vsTemp()
 #Choose the model that you want to work on
 # (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime;
 # (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time
-DefineModel(3)
+DefineModel(1.1)
 
 #Define maximum germination percentage when seed lot does not germinate at optimum temperature and water potential.
 #Identify the correspondent treatment on the function. Use this function at your own discretion.
