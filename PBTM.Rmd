@@ -32,8 +32,8 @@ library("PBTM")
 
 Before using the PBTM package, data preparation and selection is required. Main steps are described below.
 
-*    Download the template file (download <a href="https://raw.githubusercontent.com/pedrobello/PBTM/blob/master/data/PBTM-R-Dt-Empty.csv">PBTM-R-Data-Empty.csv</a> or the example file PBTM-R-Data-Sample.csv).
-*    Enter your data in the proper field and leave unsed columns in blank. Description of all fields present in the template file in the table below.
+*    Download the template file (download <a href="https://raw.githubusercontent.com/pedrobello/PBTM/master/data/PBTM-R-Dt-Empty.csv" download> PBTM-R-Dt-Empty.csv </a> or the example file <a href="https://raw.githubusercontent.com/pedrobello/PBTM/master/data/PBTM-R-Dt-Sample.csv">PBTM-R-Dt-Sample.csv</a>).
+*    Enter your data in the proper field and leave unsed columns in blank. Repeat the treatment information for all data points of that treatment. Description of all fields present in the template file in the table below.
 
 ```{r include=FALSE}
 library(knitr)
@@ -52,28 +52,70 @@ kable(DatasetDesc) %>%
 
 <br>
 
-*    Inform your working folder in R. Add the folder location of your data files.
+* Inform your working folder in R. Add the folder location of your data files.
 ```
 setwd("~/MyProjectFolder/MyDataFolder")
 ```
-*    Load Seeds data - Add the name of the data file (csv file)
+* Load Seeds data - Add the name of the data file (csv file)
 ```
 mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
 ```
-*    In case the data file has treatments the will be used in certain models, filter the data that will be used to calculate that particular model.
+* In case the data file has more treatments than you wish to use on a partiular model calculation, filter only the data that will be used to calculate that particular model.
+Some examples:
+    + Thermal time model: Select only treatments with germination tested in water (wp = 0) for a particular seed lot (Treat.ID = 1)
+      ``` 
+      TreatData <- subset(mydata, Treat.ID == 1 & Germ.wp==0)
+      ```
+    + Hydrotime model: Select only treatments with germination tested in a certain temperature (temp = 25C) for a particular seed lot (Treat.ID = 1)
+      ``` 
+      TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp==25)
+      ```
+    + Hydrothermal time suboptimal model: Select only treatments with germination tested in a certain temperature range (temp < 26C) for a particular seed lot (Treat.ID = 1)
+      ``` 
+      TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp < 26)
+      ```
+*    Whenever the data file is already filtered only with the data to be used in the model calculation, reference the filtered data to the TreatData data table (step already perfomed above when data filtering is required).
 ```
-mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
-```
-*    Reference the filtered data to the RawModelDt data table. 
-```
-mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
+TreatData <- mydata
 ```
 
+## Model Selection 
+
+After the data to be used in the model calculation is passed to the TreatData table, now define the model to be calculated. At this time the following models are available for calculation: (1) Hydropriming; () 
+
+if (ActiveModel == 1) {
+    #Calculate and Plot Hydropriming Model
+    CalcHPModel()
+
+  } else if (ActiveModel == 1.5) {
+    #Calculate and Plot Hydrothermal priming Model
+    CalcHTPModel()
+
+  } else if (ActiveModel == 2) {
+    #Calculate and Plot Hydrotime Model
+    CalcHTModel()
+
+  } else if (ActiveModel == 2.5) {
+    #Calculate and Plot Supra-optimal Hydrotime Model
+    CalcSupraHTModel()
+
+  } else if (ActiveModel == 3) {
+    #Calculate and Plot Thermaltime Model
+    CalcTTSubOModel()
+
+  } else if (ActiveModel == 4) {
+    #Calculate and Plot Hydrothermal time Model
+    CalcHTTModel()
+
+  } else if (ActiveModel == 5) {
+    #Calculate and Plot Supra-optimal Hydrothermal time Model
+    CalcHTTModelSupra()
 
 
-
-
-
+#Choose the model that you want to work on
+# (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime;
+# (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time
+DefineModel(3)
 
 ```{r pressure, echo=FALSE}
 plot(pressure)

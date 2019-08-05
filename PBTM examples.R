@@ -33,42 +33,43 @@ mydata <- read.csv("PBTM-Datasets-R-Chicory.csv", header=T)
 
 TomatoQ2 <- read.csv("PBTM-R-Dt-Q2Paper.csv", header=T)
 DatasetDesc <- read.csv("DatasetDescription.csv", header=T)
+Models <- read.csv("Models.csv", header=T)
 
 #Save mydata to .RData files
 save(mydata, file="data/mydata.RData")
 
 save(DatasetDesc, file="DatasetDesc.RData")
 save(TomatoQ2, file="TomatoQ2.RData")
-
+save(Models, file="Models.RData")
 
 
 #Filter the data to be used on models
-#All data inside the table SeedData will be used on the models
-SeedData <- subset(mydata, Seed.lot=="26" & Germ.temp=="25")
-SeedData <- subset(mydata, Seed.lot=="26" & Germ.temp=="25" & Germ.time.hours<25)
-SeedData <- subset(mydata, Seed.lot=="27" & Germ.wp=="0" & Germ.temp<26)
-SeedData <- subset(mydata, Treat.ID < 40 )
-SeedData <- subset(mydata, Germ.temp > 24)
-SeedData <- subset(mydata, Germ.temp > 19)
-SeedData <- subset(mydata, Seed.lot > 0 & Treat.priming.temp == 20)
-SeedData <- subset(mydata, Seed.lot > 0)
-SeedData <- subset(mydata, Treat.ID == 1 & Germ.wp==0)
-SeedData <- subset(mydata, Seed.lot == 1 & Germ.temp<24 & Germ.wp==0)
-SeedData <- subset(mydata, Seed.lot == 1 & Germ.temp>19 & Germ.wp==0)
-SeedData <- subset(mydata, Seed.lot == 1 & Germ.temp<21 & Germ.temp>10)
-SeedData <- subset(mydata, Seed.lot == 1 & Germ.temp<24 & Germ.wp>-0.8 & Germ.wp==0)
-SeedData <- subset(mydata, Germ.temp==40)
-SeedData <- subset(mydata[ which( mydata$Germ.wp == 0 | mydata$Germ.wp < -0.8) , ], Seed.lot == 1 & Germ.temp==12)
+#All data inside the table TreatData will be used on the models
+TreatData <- subset(mydata, Seed.lot=="26" & Germ.temp=="25")
+TreatData <- subset(mydata, Seed.lot=="26" & Germ.temp=="25" & Germ.time.hours<25)
+TreatData <- subset(mydata, Seed.lot=="27" & Germ.wp=="0" & Germ.temp<26)
+TreatData <- subset(mydata, Treat.ID < 40 )
+TreatData <- subset(mydata, Germ.temp > 24)
+TreatData <- subset(mydata, Germ.temp > 19)
+TreatData <- subset(mydata, Seed.lot > 0 & Treat.priming.temp == 20)
+TreatData <- subset(mydata, Seed.lot > 0)
+TreatData <- subset(mydata, Treat.ID == 1 & Germ.wp==0)
+TreatData <- subset(mydata, Seed.lot == 1 & Germ.temp<24 & Germ.wp==0)
+TreatData <- subset(mydata, Seed.lot == 1 & Germ.temp>19 & Germ.wp==0)
+TreatData <- subset(mydata, Seed.lot == 1 & Germ.temp<21 & Germ.temp>10)
+TreatData <- subset(mydata, Seed.lot == 1 & Germ.temp<24 & Germ.wp>-0.8 & Germ.wp==0)
+TreatData <- subset(mydata, Germ.temp==40)
+TreatData <- subset(mydata[ which( mydata$Germ.wp == 0 | mydata$Germ.wp < -0.8) , ], Seed.lot == 1 & Germ.temp==12)
 
-SeedData <- subset(mydata, Germ.temp>8 & Germ.temp<24)
-SeedData <- subset(mydata, Germ.temp>8 & Germ.temp<24 & Germ.temp!=16 & Germ.temp!=16)
-SeedData <- subset(mydata, Germ.temp>7 & Germ.temp<24 & Germ.temp!=16 & Germ.wp==0)
+TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24)
+TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24 & Germ.temp!=16 & Germ.temp!=16)
+TreatData <- subset(mydata, Germ.temp>7 & Germ.temp<24 & Germ.temp!=16 & Germ.wp==0)
 
-SeedData <- mydata
+TreatData <- mydata
 
 #Calculates the time to 50% germination (T50) and the germination rate (GR50).
 #Function separates the treatments and adds data to the Treatments table.
-#Functions uses SeedData as data source.
+#Functions uses TreatData as data source.
 CalcT50nGR50()
 
 #Plot germination rates over temperature
@@ -90,7 +91,7 @@ MaxGerm <- 1
 PlotRawData()
 
 #Clean Repetitive Percentages for models(keeps only initial germination observation and remove extra points without increase)
-#Adds processed data to Table SeedDataClean
+#Adds processed data to Table TreatDataClean
 CleanGermData()
 
 #Calculate model parameters and plot raw and predicted data

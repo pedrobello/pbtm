@@ -20,78 +20,51 @@ CalcT50nGR50 <- function()
 
 #' A Function to define the population-based threshold model(PBTM) you want to work with.
 #'
-#' This function allows you to choose the PBT model to be calculated. Choose the model that you want to work on (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime; (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time.
-#' @param DefineModel(1) selects the Hydropriming Model
-#' @param DefineModel(1.5) selects the Hydrothernal priming Model
-#' @param DefineModel(2) selects the Suboptimal Hydrotime Model
+#' This function allows you to choose the PBT model to be calculated. Choose the model that you want to work on (6.1)Hydropriming model; (2.1)Suboptimal Hydrotime; (2.2)Supra-optimal Hydrotime; (1.1)Thermaltime; (3.1)Suboptimal Hydrothermal Time; (3.2)Supra-optimal Hydrothermal Time.
+#' @param DefineModel(1.1) selects the Thermal time Sub-optimal Model
+#' @param DefineModel(2.1) selects the Suboptimal Hydrotime Model
 #' @keywords PBTM
 #' @return Sets up the package and print the selected model.
 #' @export
 #' @examples
-#' DefineModel(1.5)
+#' DefineModel(2.1)
 DefineModel <- function(ModelCode)
 {
   CalcT50nGR50()
-  if (ModelCode == 1) { #Hydropriming Model Selected
-    ActiveModel <<- 1
 
-    #Label for legends
-    LegendTitleFactor1 <<- "Priming\nWater\nPotential"
-    LegendTitleFactor2 <<- "Priming\nDuration"
-    LegendTitleFactor3 <<- NA
+  if (ModelCode == 1.1) { #Thermaltime Suboptimal Model Selected
+  ActiveModel <<- 1.1
 
-    #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(TreatData$Treat.priming.wp))
-    TreatFactorSum1 <<- (as.factor(Treatments$Treat.priming.wp))
-    TreatFactor2 <<- (as.factor(TreatData$Treat.priming.duration))
-    TreatFactorSum2 <<- (as.factor(Treatments$Treat.priming.duration))
-    TreatFactor3 <<- NA
-    TreatFactorSum3 <<- NA
+  #Sort data with higher temperature
+  TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, TreatData$Germ.time.hours),]
+  Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp),]
 
-    #Calculates how many temp and wp treatments for plotting purposes
-    WPTreatNumber <<- length(unique(Treatments$Treat.priming.wp))
-    if (WPTreatNumber < 5)
-    {
-      my_colors <<- scale_colour_manual(values=rev(c("blue3", "forestgreen", "darkorange", "red")))
-    }
-    else
-    {
-      my_colors <<- scale_colour_brewer(palette = "Spectral")
-    }
+  #Treatment factor for plot
+  TreatFactor1 <<- (as.factor(TreatData$Germ.temp))
+  TreatFactor2 <<- NA
+  TreatFactor3 <<- NA
 
-    print("Hydropriming model selected")
+  #Label for legends
+  LegendTitleFactor1 <<- "Temperature"
+  LegendTitleFactor2 <<- NA
+  LegendTitleFactor3 <<- NA
 
-  } else if (ModelCode == 1.5) { #Hydrothernal priming Model Selected
-    ActiveModel <<- 1.5
+  #Calculates how many temp and wp treatments for plotting purposes
+  TempTreatNumber <<- length(unique(Treatments$Germ.temp))
+  if (TempTreatNumber < 5)
+  {
+    my_colors <<- scale_colour_manual(values=rev(c("red", "darkorange","forestgreen","blue3")))
+  }
+  else
+  {
+    my_colors <<- scale_colour_brewer(palette = "Spectral")
+  }
 
-    #Label for legends
-    LegendTitleFactor1 <<- "Priming\nWater\nPotential"
-    LegendTitleFactor2 <<- "Priming\nTemperature"
-    LegendTitleFactor3 <<- "Priming\nDuration"
+  print("Thermaltime Suboptimal model selected")
 
-    #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(TreatData$Treat.priming.wp))
-    TreatFactorSum1 <<- (as.factor(Treatments$Treat.priming.wp))
-    TreatFactor2 <<- (as.factor(TreatData$Treat.priming.temp))
-    TreatFactorSum2 <<- (as.factor(Treatments$Treat.priming.temp))
-    TreatFactor3 <<- (as.factor(TreatData$Treat.priming.duration))
-    TreatFactorSum3 <<- (as.factor(Treatments$Treat.priming.duration))
 
-    #Calculates how many temp and wp treatments for plotting purposes
-    WPTreatNumber <<- length(unique(Treatments$Treat.priming.wp))
-    if (WPTreatNumber < 5)
-    {
-      my_colors <<- scale_colour_manual(values=rev(c("blue3", "forestgreen", "darkorange", "red")))
-    }
-    else
-    {
-      my_colors <<- scale_colour_brewer(palette = "Spectral")
-    }
-
-    print("Hydrothermal priming model selected")
-
-  } else if (ModelCode == 2) { #Suboptimal Hydrotime Model Selected
-    ActiveModel <<- 2
+  } else if (ModelCode == 2.1) { #Suboptimal Hydrotime Model Selected
+    ActiveModel <<- 2.1
 
     #Sort data with higher wp
     TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.wp, TreatData$Germ.time.hours),]
@@ -121,8 +94,8 @@ DefineModel <- function(ModelCode)
 
     print("Suboptimal Hydrotime model selected")
 
-  } else if (ModelCode == 2.5) { #Hydrotime Model Selected
-    ActiveModel <<- 2.5
+  } else if (ModelCode == 2.2) { #Hydrotime supra-optimal Model Selected
+    ActiveModel <<- 2.2
 
     DefinedHTo <<- FALSE
 
@@ -154,39 +127,8 @@ DefineModel <- function(ModelCode)
 
     print("Supra-optimal Hydrotime model selected")
 
-  } else if (ModelCode == 3) { #Thermaltime Model Selected
-    ActiveModel <<- 3
-
-    #Sort data with higher temperature
-    TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, TreatData$Germ.time.hours),]
-    Treatments <<- Treatments[order(Treatments$Treat.ID,-Treatments$Germ.temp),]
-
-    #Treatment factor for plot
-    TreatFactor1 <<- (as.factor(TreatData$Germ.temp))
-    TreatFactor2 <<- NA
-    TreatFactor3 <<- NA
-
-    #Label for legends
-    LegendTitleFactor1 <<- "Temperature"
-    LegendTitleFactor2 <<- NA
-    LegendTitleFactor3 <<- NA
-
-    #Calculates how many temp and wp treatments for plotting purposes
-    TempTreatNumber <<- length(unique(Treatments$Germ.temp))
-    if (TempTreatNumber < 5)
-    {
-      my_colors <<- scale_colour_manual(values=rev(c("red", "darkorange","forestgreen","blue3")))
-    }
-    else
-    {
-      my_colors <<- scale_colour_brewer(palette = "Spectral")
-    }
-
-    print("Thermaltime Suboptimal model selected")
-
-
-  } else if (ModelCode == 4) { #Hydrothermal time Model Selected
-    ActiveModel <<- 4
+  } else if (ModelCode == 3.1) { #Hydrothermal time Suboptimal Model Selected
+    ActiveModel <<- 3.1
 
     #Sort data with higher temperature and higher wp
     TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
@@ -223,8 +165,8 @@ DefineModel <- function(ModelCode)
     #Dahal P. & Bradford K.J. (1994) Seed Science Research 4, 71–80.
     #Dahal P. & Bradford K.J. (1994) Hydrothermal time analysis of tomato seed germination at suboptimal temperature and reduced water potential. Seed Science Research 4, 71–80.
 
-  } else if (ModelCode == 5) { #Hydrothermal time Supra-Optimal Model Selected
-    ActiveModel <<- 5
+  } else if (ModelCode == 3.2) { #Hydrothermal time Supra-Optimal Model Selected
+    ActiveModel <<- 3.2
 
     #Sort data with higher temperature and higher wp
     TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
@@ -262,6 +204,64 @@ DefineModel <- function(ModelCode)
     #Alvarado V. & Bradford K.J. (2002) Plant, Cell and Environment 25, 1061–1069.
     #Alvarado V. & Bradford K.J. (2002) A hydrothermal time model explains the cardinal temperatures for seed germination. Plant, Cell and Environment 25, 1061–1069.
 
+  } else if (ModelCode == 6.1) { #Hydropriming Model Selected
+      ActiveModel <<- 6.1
+
+      #Label for legends
+      LegendTitleFactor1 <<- "Priming\nWater\nPotential"
+      LegendTitleFactor2 <<- "Priming\nDuration"
+      LegendTitleFactor3 <<- NA
+
+      #Treatment factor for plot
+      TreatFactor1 <<- (as.factor(TreatData$Treat.priming.wp))
+      TreatFactorSum1 <<- (as.factor(Treatments$Treat.priming.wp))
+      TreatFactor2 <<- (as.factor(TreatData$Treat.priming.duration))
+      TreatFactorSum2 <<- (as.factor(Treatments$Treat.priming.duration))
+      TreatFactor3 <<- NA
+      TreatFactorSum3 <<- NA
+
+      #Calculates how many temp and wp treatments for plotting purposes
+      WPTreatNumber <<- length(unique(Treatments$Treat.priming.wp))
+      if (WPTreatNumber < 5)
+      {
+        my_colors <<- scale_colour_manual(values=rev(c("blue3", "forestgreen", "darkorange", "red")))
+      }
+      else
+      {
+        my_colors <<- scale_colour_brewer(palette = "Spectral")
+      }
+
+      print("Hydropriming model selected")
+
+    } else if (ModelCode == 6.2) { #Hydrothernal priming Model Selected
+      ActiveModel <<- 6.2
+
+      #Label for legends
+      LegendTitleFactor1 <<- "Priming\nWater\nPotential"
+      LegendTitleFactor2 <<- "Priming\nTemperature"
+      LegendTitleFactor3 <<- "Priming\nDuration"
+
+      #Treatment factor for plot
+      TreatFactor1 <<- (as.factor(TreatData$Treat.priming.wp))
+      TreatFactorSum1 <<- (as.factor(Treatments$Treat.priming.wp))
+      TreatFactor2 <<- (as.factor(TreatData$Treat.priming.temp))
+      TreatFactorSum2 <<- (as.factor(Treatments$Treat.priming.temp))
+      TreatFactor3 <<- (as.factor(TreatData$Treat.priming.duration))
+      TreatFactorSum3 <<- (as.factor(Treatments$Treat.priming.duration))
+
+      #Calculates how many temp and wp treatments for plotting purposes
+      WPTreatNumber <<- length(unique(Treatments$Treat.priming.wp))
+      if (WPTreatNumber < 5)
+      {
+        my_colors <<- scale_colour_manual(values=rev(c("blue3", "forestgreen", "darkorange", "red")))
+      }
+      else
+      {
+        my_colors <<- scale_colour_brewer(palette = "Spectral")
+      }
+
+      print("Hydrothermal priming model selected")
+
   } else {
     ActiveModel <<- 0
     print("No model selected") }
@@ -276,33 +276,33 @@ DefineModel <- function(ModelCode)
 #' @examples
 CALCnPLOTModel <- function()
 {
-  if (ActiveModel == 1) {
-    #Calculate and Plot Hydropriming Model
-    CalcHPModel()
-
-  } else if (ActiveModel == 1.5) {
-    #Calculate and Plot Hydrothermal priming Model
-    CalcHTPModel()
-
-  } else if (ActiveModel == 2) {
-    #Calculate and Plot Hydrotime Model
-    CalcHTModel()
-
-  } else if (ActiveModel == 2.5) {
-    #Calculate and Plot Supra-optimal Hydrotime Model
-    CalcSupraHTModel()
-
-  } else if (ActiveModel == 3) {
+  if (ActiveModel == 1.1) {
     #Calculate and Plot Thermaltime Model
     CalcTTSubOModel()
 
-  } else if (ActiveModel == 4) {
+  } else if (ActiveModel == 2.1) {
+    #Calculate and Plot Hydrotime Model
+    CalcHTModel()
+
+  } else if (ActiveModel == 2.2) {
+    #Calculate and Plot Supra-optimal Hydrotime Model
+    CalcSupraHTModel()
+
+  } else if (ActiveModel == 3.1) {
     #Calculate and Plot Hydrothermal time Model
     CalcHTTModel()
 
-  } else if (ActiveModel == 5) {
+  } else if (ActiveModel == 3.2) {
     #Calculate and Plot Supra-optimal Hydrothermal time Model
     CalcHTTModelSupra()
+
+  } else if (ActiveModel == 6.1) {
+    #Calculate and Plot Hydropriming Model
+    CalcHPModel()
+
+  } else if (ActiveModel == 6.2) {
+    #Calculate and Plot Hydrothermal priming Model
+    CalcHTPModel()
 
   } else {
     print("No model selected") }
@@ -342,38 +342,38 @@ CleanGermData <- function() {
   Time.hours <<- TreatDataClean$Germ.time.hours
   Germ <<- TreatDataClean$Germ.fraction
 
-      if (ActiveModel == 1) { #Hydropriming Model Selected
+      if (ActiveModel == 6.1) { #Hydropriming Model Selected
         #Treatment factor for plot
         CleanTreatFactor1 <<- (as.factor(TreatDataClean$Treat.priming.wp))
         CleanTreatFactor2 <<- (as.factor(TreatDataClean$Treat.priming.duration))
 
-      } else if (ActiveModel == 1.5) { #Hydrothermal priming Model Selected
+      } else if (ActiveModel == 6.2) { #Hydrothermal priming Model Selected
         #Treatment factor for plot
         CleanTreatFactor1 <<- (as.factor(TreatDataClean$Treat.priming.wp))
         CleanTreatFactor2 <<- (as.factor(TreatDataClean$Treat.priming.temp))
         CleanTreatFactor3 <<- (as.factor(TreatDataClean$Treat.priming.duration))
 
-      } else if (ActiveModel == 2) { #Hydrotime Model Selected
+      } else if (ActiveModel == 2.1) { #Hydrotime Model Selected
         #Treatment factor for plot
         CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.wp))
         CleanTreatFactor2 <<- NA
 
-      } else if (ActiveModel == 2.5) { #Supra-optimal Hydrotime Model Selected
+      } else if (ActiveModel == 2.2) { #Supra-optimal Hydrotime Model Selected
         #Treatment factor for plot
         CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.wp))
         CleanTreatFactor2 <<- NA
 
-      } else if (ActiveModel == 3) { #Thermaltime Model Selected
+      } else if (ActiveModel == 1.1) { #Thermaltime Model Selected
         #Treatment factor for plot
         CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.temp))
         CleanTreatFactor2 <<- NA
 
-      } else if (ActiveModel == 4) { #Hydrothermal time Model Selected
+      } else if (ActiveModel == 3.1) { #Hydrothermal time Model Selected
         #Treatment factor for plot
         CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.temp))
         CleanTreatFactor2 <<- (as.factor(TreatDataClean$Germ.wp))
 
-      } else if (ActiveModel == 5) { #Supra-optimal Hydrothermal time Model Selected
+      } else if (ActiveModel == 3.2) { #Supra-optimal Hydrothermal time Model Selected
         #Treatment factor for plot
         CleanTreatFactor1 <<- (as.factor(TreatDataClean$Germ.temp))
         CleanTreatFactor2 <<- (as.factor(TreatDataClean$Germ.wp))

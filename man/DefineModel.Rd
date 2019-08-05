@@ -7,19 +7,17 @@
 DefineModel(ModelCode)
 }
 \arguments{
-\item{DefineModel(1)}{selects the Hydropriming Model}
+\item{DefineModel(1.1)}{selects the Thermal time Sub-optimal Model}
 
-\item{DefineModel(1.5)}{selects the Hydrothernal priming Model}
-
-\item{DefineModel(2)}{selects the Suboptimal Hydrotime Model}
+\item{DefineModel(2.1)}{selects the Suboptimal Hydrotime Model}
 }
 \value{
 Sets up the package and print the selected model.
 }
 \description{
-This function allows you to choose the PBT model to be calculated. Choose the model that you want to work on (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime; (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time.
+This function allows you to choose the PBT model to be calculated. Choose the model that you want to work on (6.1)Hydropriming model; (2.1)Suboptimal Hydrotime; (2.2)Supra-optimal Hydrotime; (1.1)Thermaltime; (3.1)Suboptimal Hydrothermal Time; (3.2)Supra-optimal Hydrothermal Time.
 }
 \examples{
-DefineModel(1.5)
+DefineModel(2.1)
 }
 \keyword{PBTM}
