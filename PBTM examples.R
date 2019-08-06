@@ -64,6 +64,8 @@ TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24)
 TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24 & Germ.temp!=16 & Germ.temp!=16)
 TreatData <- subset(mydata, Germ.temp>7 & Germ.temp<24 & Germ.temp!=16 & Germ.wp==0)
 
+TreatData <- subset(TomatoQ2, Treat.ID == 1 & Germ.wp==0)
+
 Data(TomatoQ2)
 
 TreatData <- mydata

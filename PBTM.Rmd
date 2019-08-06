@@ -112,7 +112,11 @@ Plot your raw data to be used on model. Cumulative germination (or other measure
 
 ```{r}
 data("TomatoQ2")
-TreatData <- TomatoQ2
+
+TreatData <- subset(TomatoQ2, Treat.ID == 1 & Germ.wp==0)
+TreatData
+SeedData <- subset(TomatoQ2, Treat.ID == 1 & Germ.wp==0)
+DefineModel(1.1)
 PlotRawData()
 ```
 
