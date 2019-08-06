@@ -111,13 +111,12 @@ The model is selected using the function "DefineModel()" with the respective cod
 Plot your raw data to be used on model. Cumulative germination (or other measured signal) curves will be plotted against time in hours. Treatments legend will be created based on the selected model. The data to be used on the models and plotted here must be referenced to the **TreatData** data table.  
 
 ```{r}
-data("TomatoQ2")
+data(TomatoQ2)
+kable(TomatoQ2[1:5, 1:6], caption = "A knitr kable.")
 
 TreatData <- subset(TomatoQ2, Treat.ID == 1 & Germ.wp==0)
 TreatData
-SeedData <- subset(TomatoQ2, Treat.ID == 1 & Germ.wp==0)
-DefineModel(1.1)
-PlotRawData()
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
