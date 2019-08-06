@@ -988,17 +988,17 @@ CalcTTSubOModel <- function()
 {
   #Inform intial and limit values for the Hydrotime Model parameters
   # Initials
-  iTb <- 6
-  iθT50 <- 3
-  iSigma <- 0.09
+  iTb <<- 6
+  iθT50 <<- 3
+  iSigma <<- 0.09
   #lower limits
-  lTb <- 0
-  lθT50 <- 0.5
-  lSigma <- 0.0001
+  lTb <<- 0
+  lθT50 <<- 0.5
+  lSigma <<- 0.0001
   #upper limits
-  uTb <- 15
-  uθT50 <- 50
-  uSigma <- 0.5
+  uTb <<- 15
+  uθT50 <<- 50
+  uSigma <<- 0.5
 
   #Calculate Thermaltime Suboptimal Model Parameters- nls plus algorithm port used to add constraints on the parameters
   TTSubOModel <<- nls(Germ ~ pnorm(log(Time.hours, base = 10),mean = θT50-log(Temp-Tb, base = 10), sd = Sigma, log= FALSE)*MaxGerm, start=list(Tb=iTb,θT50=iθT50,Sigma=iSigma),lower=list(Tb=lTb,θT50=lθT50,Sigma=lSigma),upper=list(Tb=uTb,θT50=uθT50,Sigma=uSigma), algorithm ="port")

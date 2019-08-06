@@ -124,7 +124,28 @@ Calculates the time to 50% germination (T50) and the germination rate (GR50) and
 
 ```{r warning=FALSE}
 CalcT50nGR50()
-kable(Treatments)
+```
+
+```{r echo=FALSE}
+kable(Treatments[c(1:2,7:8,11:12)], format = "html", align = "c")
+```
+
+
+### CleanGermData()
+
+Clean repetitive percentages on the cumulative curves to be used in the selected models. Data present of the **TreatData** file is processed (it keeps only initial germination observation and remove points where no increase was observed). This function sends the clean and processed data to the **TreatDataClean** data file and plots the result.
+
+```
+> CleanGermData()
+```
+
+## Model Calculation and plot
+
+### CALCnPLOTModel()
+Calculate model parameters and plot raw and curves predicted by the selected model. Additionaly, model parameters and correlations values are informed in the plot. 
+
+```{r echo=FALSE}
+CALCnPLOTModel()
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

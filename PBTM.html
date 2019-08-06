@@ -768,166 +768,104 @@ DefineModel(6.2)
 <div id="calct50ngr50" class="section level3">
 <h3>CalcT50nGR50()</h3>
 <p>Calculates the time to 50% germination (T50) and the germination rate (GR50) and separates the treatments based on the TreatData file. Treatments and calculated parameters are delivered to the <strong>Treatments</strong> data file.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">CalcT50nGR50</span>()</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">kable</span>(Treatments)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">CalcT50nGR50</span>()</a></code></pre></div>
 <table>
 <thead>
 <tr>
-<th style="text-align:right;">
+<th style="text-align:center;">
 Treat.ID
 </th>
-<th style="text-align:left;">
-Treat.aging.time
+<th style="text-align:center;">
+Treat.desc
 </th>
-<th style="text-align:left;">
-Treat.priming.wp
-</th>
-<th style="text-align:left;">
-Treat.priming.temp
-</th>
-<th style="text-align:left;">
-Treat.priming.duration
-</th>
-<th style="text-align:right;">
+<th style="text-align:center;">
 Germ.wp
 </th>
-<th style="text-align:right;">
+<th style="text-align:center;">
 Germ.temp
 </th>
-<th style="text-align:left;">
-Germ.promoter.dosage
-</th>
-<th style="text-align:left;">
-Germ.inhibitor.dosage
-</th>
-<th style="text-align:right;">
+<th style="text-align:center;">
 T50
 </th>
-<th style="text-align:right;">
+<th style="text-align:center;">
 GR50
-</th>
-<th style="text-align:right;">
-n
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:right;">
+<td style="text-align:center;">
 1
 </td>
-<td style="text-align:left;">
-NA
+<td style="text-align:center;">
+Tomato-15C-Water
 </td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 0
 </td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 15
 </td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 126.00000
 </td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 0.0079365
 </td>
-<td style="text-align:right;">
-48
-</td>
 </tr>
 <tr>
-<td style="text-align:right;">
+<td style="text-align:center;">
 1
 </td>
-<td style="text-align:left;">
-NA
+<td style="text-align:center;">
+Tomato-20C-Water
 </td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 0
 </td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 20
 </td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 87.75000
 </td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 0.0113960
-</td>
-<td style="text-align:right;">
-35
 </td>
 </tr>
 <tr>
-<td style="text-align:right;">
+<td style="text-align:center;">
 1
 </td>
-<td style="text-align:left;">
-NA
+<td style="text-align:center;">
+Tomato-25C-Water
 </td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 0
 </td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 25
 </td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 67.55989
 </td>
-<td style="text-align:right;">
+<td style="text-align:center;">
 0.0148017
-</td>
-<td style="text-align:right;">
-48
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="cleangermdata" class="section level3">
+<h3>CleanGermData()</h3>
+<p>Clean repetitive percentages on the cumulative curves to be used in the selected models. Data present of the <strong>TreatData</strong> file is processed (it keeps only initial germination observation and remove points where no increase was observed). This function sends the clean and processed data to the <strong>TreatDataClean</strong> data file and plots the result.</p>
+<pre><code>&gt; CleanGermData()</code></pre>
+</div>
+</div>
+<div id="model-calculation-and-plot" class="section level2">
+<h2>Model Calculation and plot</h2>
+<div id="calcnplotmodel" class="section level3">
+<h3>CALCnPLOTModel()</h3>
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
 </div>
 </div>
