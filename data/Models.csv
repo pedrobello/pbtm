@@ -1,12 +1,12 @@
 ﻿Code,Model,Reference,Function
 1.1,Thermal time suboptimal,"Bierhuizen and Wagenvoort (1974) Scientia Horticulturae 2, 213–219.; \n
 Garcia-Huidobro et al. (1982) Journal of Experimental Botany 33, 288–296.; \n
-Covell et al. (1986) Journal of Experimental Botany 37, 705–715.;
+Covell et al. (1986) Journal of Experimental Botany 37, 705–715.; <br>
 Dahal et al. (1990) Journal of Experimental Botany 41, 1431–1439.;
 Alvarado and Bradford (2002) Plant, Cell & Environment 25, 1061–1069.;
 Gummerson (1986) Journal of Experimental Botany 37, 729-741;
 Bradford (1990) Plant Physiology 94, 840-849.",DefineModel(1.1)
-1.2,Thermal time supra-optimal,"Alvarado and Bradford (2002) Plant, Cell and Environment 25, 1061–106;
+1.2,Thermal time supra-optimal,"Alvarado and Bradford (2002) Plant, Cell and Environment 25, 1061–106; <br>
 Rowse and Finch-Savage (2003) New Phytologist 158: 101-108.",DefineModel(1.2)
 2.1,Hydrotime suboptimal ,"Gummerson (1986) Journal of Experimental Botany 37, 729–741.;
 Bradford (1990) Plant Physiology 94, 840–849.",DefineModel(2.1)
