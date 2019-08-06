@@ -20,12 +20,12 @@ Installation of the package requires the "devtools" package.
 
 #### Install development version from Github
 ```
-devtools::install_github("pedrobello/PBTM")
+> devtools::install_github("pedrobello/PBTM")
 ```
 
 #### Load package
 ```
-library("PBTM")
+> library("PBTM")
 ```
 
 ## Data preparation steps
@@ -54,29 +54,29 @@ kable(DatasetDesc) %>%
 
 * Inform your working folder in R. Add the folder location of your data files.
 ```
-setwd("~/MyProjectFolder/MyDataFolder")
+> setwd("~/MyProjectFolder/MyDataFolder")
 ```
 * Load Seeds data - Add the name of the data file (csv file)
 ```
-mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
+> mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
 ```
 * In case the data file has more treatments than you wish to use on a partiular model calculation, filter only the data that will be used to calculate that particular model.
 Some examples:
     + Thermal time model: Select only treatments with germination tested in water (wp = 0) for a particular seed lot (Treat.ID = 1)
       ``` 
-      TreatData <- subset(mydata, Treat.ID == 1 & Germ.wp==0)
+      > TreatData <- subset(mydata, Treat.ID == 1 & Germ.wp==0)
       ```
     + Hydrotime model: Select only treatments with germination tested in a certain temperature (temp = 25C) for a particular seed lot (Treat.ID = 1)
       ``` 
-      TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp==25)
+      > TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp==25)
       ```
     + Hydrothermal time suboptimal model: Select only treatments with germination tested in a certain temperature range (temp < 26C) for a particular seed lot (Treat.ID = 1)
       ``` 
-      TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp < 26)
+      > TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp < 26)
       ```
 *    Whenever the data file is already filtered only with the data to be used in the model calculation, reference the filtered data to the TreatData data table (step already perfomed above when data filtering is required).
 ```
-TreatData <- mydata
+> TreatData <- mydata
 ```
 
 ## Model Selection 
@@ -92,12 +92,28 @@ kable(x = Models, format = "html", align = "c") %>%
 ```
 
 
-The model is selected using the function "DefineModel()" with the respective code of the model as described above, for example:
+The model is selected using the function "DefineModel()" with the respective code of the model as described above. Examples below.
 
 ```
 > DefineModel(1.1)
 
-[1] "Thermaltime Suboptimal model selected"
+[1] "Thermaltime suboptimal model selected"
+```
+```
+> DefineModel(3.1)
+
+[1] "Hydrothermal time suboptimal model selected"
+```
+
+## Basic Functions
+
+### PlotRawData()
+Plot your raw data to be used on model. Cumulative germination (or other measured signal) curves will be plotted against time in hours. Treatments legend will be created based on the selected model. The data to be used on the models and plotted here must be referenced to the **TreatData** data table.  
+
+```{r}
+data("TomatoQ2")
+TreatData <- TomatoQ2
+PlotRawData()
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

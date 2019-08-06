@@ -239,11 +239,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>Installation of the package requires the “devtools” package.</p>
 <div id="install-development-version-from-github" class="section level4">
 <h4>Install development version from Github</h4>
-<pre><code>devtools::install_github(&quot;pedrobello/PBTM&quot;)</code></pre>
+<pre><code>&gt; devtools::install_github(&quot;pedrobello/PBTM&quot;)</code></pre>
 </div>
 <div id="load-package" class="section level4">
 <h4>Load package</h4>
-<pre><code>library(&quot;PBTM&quot;)</code></pre>
+<pre><code>&gt; library(&quot;PBTM&quot;)</code></pre>
 </div>
 </div>
 <div id="data-preparation-steps" class="section level2">
@@ -461,24 +461,24 @@ All models
 <ul>
 <li>Inform your working folder in R. Add the folder location of your data files.</li>
 </ul>
-<pre><code>setwd(&quot;~/MyProjectFolder/MyDataFolder&quot;)</code></pre>
+<pre><code>&gt; setwd(&quot;~/MyProjectFolder/MyDataFolder&quot;)</code></pre>
 <ul>
 <li>Load Seeds data - Add the name of the data file (csv file)</li>
 </ul>
-<pre><code>mydata &lt;- read.csv(&quot;PBTM-R-Data-MyData.csv&quot;, header=T)</code></pre>
+<pre><code>&gt; mydata &lt;- read.csv(&quot;PBTM-R-Data-MyData.csv&quot;, header=T)</code></pre>
 <ul>
 <li>In case the data file has more treatments than you wish to use on a partiular model calculation, filter only the data that will be used to calculate that particular model. Some examples:
 <ul>
 <li><p>Thermal time model: Select only treatments with germination tested in water (wp = 0) for a particular seed lot (Treat.ID = 1)</p>
-<pre><code>TreatData &lt;- subset(mydata, Treat.ID == 1 &amp; Germ.wp==0)</code></pre></li>
+<pre><code>&gt; TreatData &lt;- subset(mydata, Treat.ID == 1 &amp; Germ.wp==0)</code></pre></li>
 <li><p>Hydrotime model: Select only treatments with germination tested in a certain temperature (temp = 25C) for a particular seed lot (Treat.ID = 1)</p>
-<pre><code>TreatData &lt;- subset(mydata, Treat.ID == 1 &amp; Germ.temp==25)</code></pre></li>
+<pre><code>&gt; TreatData &lt;- subset(mydata, Treat.ID == 1 &amp; Germ.temp==25)</code></pre></li>
 <li><p>Hydrothermal time suboptimal model: Select only treatments with germination tested in a certain temperature range (temp &lt; 26C) for a particular seed lot (Treat.ID = 1)</p>
-<pre><code>TreatData &lt;- subset(mydata, Treat.ID == 1 &amp; Germ.temp &lt; 26)</code></pre></li>
+<pre><code>&gt; TreatData &lt;- subset(mydata, Treat.ID == 1 &amp; Germ.temp &lt; 26)</code></pre></li>
 </ul></li>
 <li>Whenever the data file is already filtered only with the data to be used in the model calculation, reference the filtered data to the TreatData data table (step already perfomed above when data filtering is required).</li>
 </ul>
-<pre><code>TreatData &lt;- mydata</code></pre>
+<pre><code>&gt; TreatData &lt;- mydata</code></pre>
 </div>
 <div id="model-selection" class="section level2">
 <h2>Model Selection</h2>
@@ -659,11 +659,21 @@ DefineModel(6.2)
 </tbody>
 </table>
 </div>
-<p>The model is selected using the function “DefineModel()” with the respective code of the model as described above, for example:</p>
+<p>The model is selected using the function “DefineModel()” with the respective code of the model as described above. Examples below.</p>
 <pre><code>&gt; DefineModel(1.1)
 
-[1] &quot;Thermaltime Suboptimal model selected&quot;</code></pre>
+[1] &quot;Thermaltime suboptimal model selected&quot;</code></pre>
+<pre><code>&gt; DefineModel(3.1)
+
+[1] &quot;Hydrothermal time suboptimal model selected&quot;</code></pre>
+</div>
+<div id="basic-functions" class="section level2">
+<h2>Basic Functions</h2>
+<div id="plotrawdata" class="section level3">
+<h3>PlotRawData()</h3>
+<p>Plot your raw data to be used on model. Cumulative germination (or other measured signal) curves will be plotted against time in hours. Treatments legend will be created based on the selected model. The data to be used on the models and plotted here must be referenced to the <strong>TreatData</strong> data table.</p>
 <p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+</div>
 </div>
 
 
