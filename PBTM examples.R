@@ -30,7 +30,7 @@ mydata <- read.csv("PBTM-Datasets-R-AfricanR.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Q2Paper.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Chicory.csv", header=T)
 
-TomatoQ2 <- read.csv("PBTM-R-Dt-Q2Paper.csv", header=T)
+TomatoQ2Dt <- read.csv("PBTM-R-Dt-Q2Paper.csv", header=T)
 DatasetDesc <- read.csv("DatasetDescription.csv", header=T)
 Models <- read.csv("Models.csv", header=T)
 
@@ -38,7 +38,7 @@ Models <- read.csv("Models.csv", header=T)
 save(mydata, file="data/mydata.RData")
 
 save(DatasetDesc, file="DatasetDesc.RData")
-save(TomatoQ2, file="TomatoQ2.RData")
+save(TomatoQ2Dt, file="TomatoQ2Dt.RData")
 save(Models, file="Models.RData")
 
 
