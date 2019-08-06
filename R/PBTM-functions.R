@@ -274,7 +274,6 @@ CALCnPLOTModel <- function()
 {
   if (ActiveModel == 1.1) {
     #Calculate and Plot Thermaltime Model
-    if(is.na(MaxGerm)) {MaxGerm <<- 1}
     CalcTTSubOModel()
 
   } else if (ActiveModel == 2.1) {
