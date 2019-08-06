@@ -86,7 +86,7 @@ After the data to be used in the model calculation is passed to the TreatData ta
 ```{r echo=FALSE}
 data(Models)
 kable(Models) %>%
-  kable_styling() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
   scroll_box(width = "100%", height = "400px")
 
 ```
