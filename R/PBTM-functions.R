@@ -992,6 +992,7 @@ CalcTTSubOModel <- function()
   iTb <<- 6
   iθT50 <<- 3
   iSigma <<- 0.09
+  MaxGerm <<- 1
   #lower limits
   lTb <<- 0
   lθT50 <<- 0.5
