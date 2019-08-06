@@ -4,7 +4,7 @@
 \name{TomatoQ2}
 \alias{TomatoQ2}
 \title{Tomato seed respiration data on different combinations of temeporature and water potential}
-\format{An object of class \code{data.frame} with 0 rows and 13 columns.}
+\format{An object of class \code{data.frame} with 418 rows and 13 columns.}
 \usage{
 data(TomatoQ2)
 }
