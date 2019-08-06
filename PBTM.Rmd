@@ -145,7 +145,6 @@ Clean repetitive percentages on the cumulative curves to be used in the selected
 Calculate model parameters and plot raw and curves predicted by the selected model. Additionaly, model parameters and correlations values are informed in the plot. 
 
 ```{r echo=FALSE}
-MaxGerm <- 1
 CALCnPLOTModel()
 ```
 
