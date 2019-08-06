@@ -85,23 +85,19 @@ After the data to be used in the model calculation is passed to the TreatData ta
 
 ```{r echo=FALSE}
 data(Models)
-kable(Models) %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+kable(x = Models, format = "html", align = "c") %>%
+  kable_styling() %>%
+  column_spec(2, width = "17em", bold = T) %>%
   scroll_box(width = "100%", height = "400px")
-
 ```
 
-The model is selected using the following co
+
+The model is selected using the function "DefineModel()" with the respective code of the model as described above, for example:
 
 ```
 > DefineModel(1.1)
 
 [1] "Thermaltime Suboptimal model selected"
-```
-
-
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

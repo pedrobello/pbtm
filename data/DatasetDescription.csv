@@ -1,4 +1,4 @@
-﻿Field,Description,Type,Model Requisite
+﻿Field,Description,Type,Requirement
 Treat.ID,Treatment unique number,Sequential numeric field,All models
 Treat.desc,Description of the lot and treatment.,Text field,All models
 Treat.aging.time,Aging time,Number (0-positive),Aging Model
