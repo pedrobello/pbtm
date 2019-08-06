@@ -20,13 +20,13 @@ This R package combines existing PBTMs calculation, parameters output and respec
 Installation of the package requires the "devtools" package. 
 
 #### Install development version from Github
-```
-> devtools::install_github("pedrobello/PBTM")
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+devtools::install_github("pedrobello/PBTM")
 ```
 
 #### Load package
-```
-> library("PBTM")
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+library("PBTM")
 ```
 
 ## Data preparation steps
@@ -54,30 +54,30 @@ kable(DatasetDesc) %>%
 <br>
 
 * Inform your working folder in R. Add the folder location of your data files.
-```
-> setwd("~/MyProjectFolder/MyDataFolder")
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+setwd("~/MyProjectFolder/MyDataFolder")
 ```
 * Load Seeds data - Add the name of the data file (csv file)
-```
-> mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+mydata <- read.csv("PBTM-R-Data-MyData.csv", header=T)
 ```
 * In case the data file has more treatments than you wish to use on a partiular model calculation, filter only the data that will be used to calculate that particular model.
 Some examples:
     + Thermal time model: Select only treatments with germination tested in water (wp = 0) for a particular seed lot (Treat.ID = 1)
-      ``` 
-      > TreatData <- subset(mydata, Treat.ID == 1 & Germ.wp==0)
+      ```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+      TreatData <- subset(mydata, Treat.ID == 1 & Germ.wp==0)
       ```
     + Hydrotime model: Select only treatments with germination tested in a certain temperature (temp = 25C) for a particular seed lot (Treat.ID = 1)
-      ``` 
-      > TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp==25)
+      ```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE} 
+      TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp==25)
       ```
     + Hydrothermal time suboptimal model: Select only treatments with germination tested in a certain temperature range (temp < 26C) for a particular seed lot (Treat.ID = 1)
-      ``` 
-      > TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp < 26)
+      ```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE} 
+      TreatData <- subset(mydata, Treat.ID == 1 & Germ.temp < 26)
       ```
 *    Whenever the data file is already filtered only with the data to be used in the model calculation, reference the filtered data to the TreatData data table (step already perfomed above when data filtering is required).
-```
-> TreatData <- mydata
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+TreatData <- mydata
 ```
 
 ## Model Selection 
@@ -95,15 +95,13 @@ kable(x = Models, format = "html", align = "c") %>%
 
 The model is selected using the function "DefineModel()" with the respective code of the model as described above. Examples below.
 
+Selection of the thermal time suboptimal model:
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+DefineModel(1.1)
 ```
-> DefineModel(1.1)
-
-[1] "Thermaltime suboptimal model selected"
-```
-```
-> DefineModel(3.1)
-
-[1] "Hydrothermal time suboptimal model selected"
+Selection of the hydrothermal time suboptimal model:
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+DefineModel(3.1)
 ```
 
 ## Basic Functions
@@ -117,6 +115,7 @@ TreatData <- subset(TomatoQ2Dt, Treat.ID == 1 & Germ.wp==0)
 DefineModel(1.1)
 PlotRawData()
 ```
+Example of raw data for the thermal time model. Population oxygen depletion (POD) curves for tomato seeds at suboptimal temperatures (25, 20 and 15C). Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
 
 ### CalcT50nGR50()
 
@@ -135,17 +134,77 @@ kable(Treatments[c(1:2,7:8,11:12)], format = "html", align = "c")
 
 Clean repetitive percentages on the cumulative curves to be used in the selected models. Data present of the **TreatData** file is processed (it keeps only initial germination observation and remove points where no increase was observed). This function sends the clean and processed data to the **TreatDataClean** data file and plots the result.
 
-```
-> CleanGermData()
+```{r warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+CleanGermData()
 ```
 
-## Model Calculation and plot
+## Model Calculation and plot: Function CALCnPLOTModel()
 
-### CALCnPLOTModel()
 Calculate model parameters and plot raw and curves predicted by the selected model. Additionaly, model parameters and correlations values are informed in the plot. 
 
-```{r echo=FALSE}
-CALCnPLOTModel()
+### Thermal time suboptimal model
+```{r warning=FALSE, message=FALSE, results='hide'}
+TreatData <- subset(TomatoQ2Dt, Treat.ID == 1 & Germ.wp==0)
+DefineModel(1.1)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r warning=FALSE}
+CALCnPLOTModel()
+```
+Example of calculated thermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
+
+### Hydrotime time suboptimal model
+```{r warning=FALSE, message=FALSE, results='hide'}
+TreatData <- subset(TomatoQ2Dt, Treat.ID == 1 & Germ.temp==25)
+DefineModel(2.1)
+```
+
+```{r warning=FALSE}
+CALCnPLOTModel()
+```
+Example of calculated hydrotime model at 25C with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
+
+### Hydrotime time supra-optimal model
+```{r warning=FALSE, message=FALSE, results='hide'}
+TreatData <- subset(TomatoQ2Dt, Treat.ID == 1 & Germ.temp==25)
+DefineModel(2.1)
+```
+
+```{r warning=FALSE}
+CALCnPLOTModel()
+```
+**Example of calculated hydrotime model at 25C with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221.CHANGE**
+
+### Hydrothermal time suboptimal model
+```{r warning=FALSE, message=FALSE, results='hide'}
+TreatData <- subset(TomatoQ2Dt, Treat.ID == 1)
+DefineModel(3.1)
+```
+
+```{r warning=FALSE}
+CALCnPLOTModel()
+```
+Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
+
+### Hydropriming model
+```{r warning=FALSE, message=FALSE, results='hide'}
+TreatData <- subset(TomatoQ2Dt, Treat.ID == 1)
+DefineModel(3.1)
+```
+
+```{r warning=FALSE}
+CALCnPLOTModel()
+```
+Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
+
+### Hydrothermal priming model
+```{r warning=FALSE, message=FALSE, results='hide'}
+TreatData <- subset(TomatoQ2Dt, Treat.ID == 1)
+DefineModel(3.1)
+```
+
+```{r warning=FALSE}
+CALCnPLOTModel()
+```
+Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
+
