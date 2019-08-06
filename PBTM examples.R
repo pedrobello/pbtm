@@ -13,7 +13,6 @@ library("kableExtra")
 
 library("PBTM")
 
-
 devtools::document()
 
 #Population-based Threshold Models Calculator ------------------------------------------------------
