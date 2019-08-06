@@ -272,6 +272,7 @@ DefineModel <- function(ModelCode)
 #' @examples
 CALCnPLOTModel <- function()
 {
+  CleanGermData()
   if (ActiveModel == 1.1) {
     #Calculate and Plot Thermaltime Model
     CalcTTSubOModel()
