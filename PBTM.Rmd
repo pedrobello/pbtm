@@ -1,16 +1,22 @@
 ---
 title: "The PBTM R-Package"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{The PBTM R-Package}
-  %\VignetteEncoding{UTF-8}
+Author: "Pedro Bello and Kent Bradford"
+output:
+  rmarkdown::html_document:
+    theme: paper 
+    highlight: tango
+    toc: true
+    toc_float: true
+
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.width=7, fig.height=5) 
 ```
+
+<p style="text-align: left;"><big>Pedro Bello and Kent Bradford</big></p>
+
 
 ## Overview
 #### Population-based Threshold Models (PBTM) Calculator - beta version. 
@@ -91,7 +97,7 @@ kable(x = Models, format = "html", align = "c") %>%
   column_spec(2, width = "17em", bold = T) %>%
   scroll_box(width = "100%", height = "400px")
 ```
-
+<br>
 
 The model is selected using the function "DefineModel()" with the respective code of the model as described above. Examples below.
 
@@ -115,6 +121,7 @@ TreatData <- subset(TomatoQ2Dt, Treat.ID == 1 & Germ.wp==0)
 DefineModel(1.1)
 PlotRawData()
 ```
+<br>
 Example of raw data for the thermal time model. Population oxygen depletion (POD) curves for tomato seeds at suboptimal temperatures (25, 20 and 15C). Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
 
 ### CalcT50nGR50()
@@ -138,9 +145,9 @@ Clean repetitive percentages on the cumulative curves to be used in the selected
 CleanGermData()
 ```
 
-## Model Calculation and plot: Function CALCnPLOTModel()
+## Model Calculation and plot
 
-Calculate model parameters and plot raw and curves predicted by the selected model. Additionaly, model parameters and correlations values are informed in the plot. 
+The Function **CALCnPLOTModel()** calculates model parameters and plot raw and curves predicted by the selected model. Additionaly, model parameters and correlations values are informed in the plot. 
 
 ### Thermal time suboptimal model
 ```{r warning=FALSE, message=FALSE, results='hide'}
@@ -151,9 +158,10 @@ DefineModel(1.1)
 ```{r warning=FALSE}
 CALCnPLOTModel()
 ```
+<br>
 Example of calculated thermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
 
-### Hydrotime time suboptimal model
+### Hydrotime suboptimal model
 ```{r warning=FALSE, message=FALSE, results='hide'}
 TreatData <- subset(TomatoQ2Dt, Treat.ID == 1 & Germ.temp==25)
 DefineModel(2.1)
@@ -162,9 +170,10 @@ DefineModel(2.1)
 ```{r warning=FALSE}
 CALCnPLOTModel()
 ```
+<br>
 Example of calculated hydrotime model at 25C with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
 
-### Hydrotime time supra-optimal model
+### Hydrotime supra-optimal model
 ```{r warning=FALSE, message=FALSE, results='hide'}
 TreatData <- subset(TomatoQ2Dt, Treat.ID == 1 & Germ.temp==25)
 DefineModel(2.1)
@@ -173,6 +182,7 @@ DefineModel(2.1)
 ```{r warning=FALSE}
 CALCnPLOTModel()
 ```
+<br>
 **Example of calculated hydrotime model at 25C with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221.CHANGE**
 
 ### Hydrothermal time suboptimal model
@@ -184,6 +194,7 @@ DefineModel(3.1)
 ```{r warning=FALSE}
 CALCnPLOTModel()
 ```
+<br>
 Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
 
 ### Hydropriming model
@@ -195,6 +206,7 @@ DefineModel(3.1)
 ```{r warning=FALSE}
 CALCnPLOTModel()
 ```
+<br>
 Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
 
 ### Hydrothermal priming model
@@ -206,5 +218,6 @@ DefineModel(3.1)
 ```{r warning=FALSE}
 CALCnPLOTModel()
 ```
+<br>
 Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
 

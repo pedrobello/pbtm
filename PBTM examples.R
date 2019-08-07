@@ -25,11 +25,12 @@ setwd("~/Dropbox/01-UCDavis/PBTM")
 #Load Seeds data - Add the name of the data file (csv file)
 mydata <- read.csv("PBTM-Datasets-R.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Empty.csv", header=T)
-mydata <- read.csv("PBTM-Datasets-Priming.csv", header=T)
+mydata <- read.csv("PBTM-R-Dt-Priming.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-AfricanR.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Q2Paper.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Chicory.csv", header=T)
 
+PrimingDt <- read.csv("PBTM-R-Dt-Priming.csv", header=T)
 TomatoQ2Dt <- read.csv("PBTM-R-Dt-Q2Paper.csv", header=T)
 DatasetDesc <- read.csv("DatasetDescription.csv", header=T)
 Models <- read.csv("Models.csv", header=T)
@@ -37,6 +38,7 @@ Models <- read.csv("Models.csv", header=T)
 #Save mydata to .RData files
 save(mydata, file="data/mydata.RData")
 
+save(PrimingDt, file="PrimingDt.RData")
 save(DatasetDesc, file="DatasetDesc.RData")
 save(TomatoQ2Dt, file="TomatoQ2Dt.RData")
 save(Models, file="Models.RData")
@@ -59,6 +61,8 @@ TreatData <- subset(mydata, Seed.lot == 1 & Germ.temp<21 & Germ.temp>10)
 TreatData <- subset(mydata, Seed.lot == 1 & Germ.temp<24 & Germ.wp>-0.8 & Germ.wp==0)
 TreatData <- subset(mydata, Germ.temp==40)
 TreatData <- subset(mydata[ which( mydata$Germ.wp == 0 | mydata$Germ.wp < -0.8) , ], Seed.lot == 1 & Germ.temp==12)
+
+TreatData <- subset(mydata, Treat.priming.temp == 20 | Treat.priming.temp == 0)
 
 TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24)
 TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24 & Germ.temp!=16 & Germ.temp!=16)
@@ -83,7 +87,7 @@ PlotGR50vsTemp()
 #Choose the model that you want to work on
 # (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime;
 # (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time
-DefineModel(1.1)
+DefineModel(6.1)
 
 #Define maximum germination percentage when seed lot does not germinate at optimum temperature and water potential.
 #Identify the correspondent treatment on the function. Use this function at your own discretion.
