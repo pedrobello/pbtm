@@ -199,8 +199,14 @@ Example of calculated hydrothermal time model with raw data, predicted curves an
 
 ### Hydropriming model
 ```{r warning=FALSE, message=FALSE, results='hide'}
-TreatData <- subset(TomatoQ2Dt, Treat.ID == 1)
-DefineModel(3.1)
+data(PrimingDt)
+TreatData <- subset(PrimingDt, Treat.priming.temp == 20 | Treat.priming.temp == 0)
+DefineModel(6.1)
+```
+
+```{r include=FALSE}
+PlotRawData()
+knitr::opts_chunk$set(fig.width=9, fig.height=4) 
 ```
 
 ```{r warning=FALSE}
@@ -211,8 +217,12 @@ Example of calculated hydrothermal time model with raw data, predicted curves an
 
 ### Hydrothermal priming model
 ```{r warning=FALSE, message=FALSE, results='hide'}
-TreatData <- subset(TomatoQ2Dt, Treat.ID == 1)
-DefineModel(3.1)
+TreatData <- PrimingDt
+DefineModel(6.2)
+```
+
+```{r include=FALSE}
+PlotRawData()
 ```
 
 ```{r warning=FALSE}
