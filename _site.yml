@@ -1,0 +1,8 @@
+name: "PBTM R Package"
+navbar:
+  title: "Population-based Threshold Models Calculator"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html

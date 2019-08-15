@@ -1,0 +1,14 @@
+﻿Field,Description,Type,Requirement
+Treat.ID,Treatment unique number,Sequential numeric field,All models
+Treat.desc,Description of the lot and treatment.,Text field,All models
+Treat.aging.time,Aging time,Number (0-positive),Aging Model
+Treat.priming.wp,Measured water potential used during priming,Number (0-negative),Priming models (hydropriming and hydrothermal priming)
+Treat.priming.temp,Measured temperature during priming,Number (0-negative),Hydrothermal priming model
+Treat.priming.duration,Priming duration,Number (hours or days),Priming models (hydropriming and hydrothermal priming)
+Germ.wp,Measured germination water potential ,Number (0-negative),Hydrotime and Hydrothermal models
+Germ.temp,Measured germination temperature,Number (temperature in celsius),Thermaltime and hydrothermal models
+Germ.promoter.dosage,Measured concentration of the germination promoter,Number (0-positive),Promoter model
+Germ.inhibitor.dosage,Measured concentration of the germination inhibitor,Number (0-positive),Inhibitor model
+Germ.time.hours,Germination time,Number (hours),All models
+Germ.pct,Germination percentage,Number (percentage 0-100),All models
+Germ.fraction,Germination fraction,Number (fraction 0-1),All models

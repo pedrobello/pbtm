@@ -213,7 +213,7 @@ knitr::opts_chunk$set(fig.width=9, fig.height=4)
 CALCnPLOTModel()
 ```
 <br>
-Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
+Example of calculated hydropriming model with raw data (left panel) and germination rates (GR50) relationship with hydropriming time (right panel).
 
 ### Hydrothermal priming model
 ```{r warning=FALSE, message=FALSE, results='hide'}
@@ -229,5 +229,6 @@ PlotRawData()
 CALCnPLOTModel()
 ```
 <br>
-Example of calculated hydrothermal time model with raw data, predicted curves and calculated parameters. Bello and Bradford (2016) Seed Science Research 26(3) 199–221. 
+Example of calculated hydrothermal priming model with raw data (left panel) and germination rates (GR50) relationship with hydrothermal priming time (right panel).
+
 

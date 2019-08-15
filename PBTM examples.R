@@ -4,7 +4,11 @@ install.packages("roxygen2")
 install.packages("usethis")
 install.packages("kableExtra")
 
+
+## Or, install from GitHub
 devtools::install_github("pedrobello/PBTM")
+
+
 
 library("devtools")
 library("roxygen2")
@@ -87,7 +91,7 @@ PlotGR50vsTemp()
 #Choose the model that you want to work on
 # (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime;
 # (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time
-DefineModel(6.1)
+DefineModel(6.2)
 
 #Define maximum germination percentage when seed lot does not germinate at optimum temperature and water potential.
 #Identify the correspondent treatment on the function. Use this function at your own discretion.
