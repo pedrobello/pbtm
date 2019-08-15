@@ -135,7 +135,7 @@ CalcT50nGR50()
 ```{r echo=FALSE}
 kable(Treatments[c(1:2,7:8,11:12)], format = "html", align = "c")
 ```
-
+<br>
 
 ### CleanGermData()
 
