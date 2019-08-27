@@ -125,6 +125,7 @@ PlotActualvsModelPredictedTreatments()
 PlotNormalizedTime()
 
 TreatData <- PrimingDt
+
 CalcT50nGR50()
 
 TreatsPriming <<- Treatments %>% group_by(Treat.priming.wp, Treat.priming.temp,Treat.priming.duration, GR50) %>% tally()
@@ -150,26 +151,8 @@ Temp3 <- matrix(TreatsPrTemp3$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
 Temp4 <- matrix(TreatsPrTemp4$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
 Temp5 <- matrix(TreatsPrTemp5$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
 
-SurfPlot1 <- plot_ly(showscale = FALSE ) %>%
-  add_surface(x = PrDurs , y = PrWPs, z = Temp1, opacity = 1, colorscale = list(c(0,1),c("rgb(19,50,117)","rgb(0,183,255)")) ) %>%
-  add_surface(x = PrDurs , y = PrWPs, z = Temp2, opacity = 1, colorscale = list(c(0,1),c("rgb(23,46,17)","rgb(45,209,0)"))) %>%
-  add_surface(x = PrDurs , y = PrWPs, z = Temp3, opacity = 1, colorscale = list(c(0,1),c("rgb(232,116,49)","rgb(191,204,43)"))) %>%
-  add_surface(x = PrDurs , y = PrWPs, z = Temp4, opacity = 1, colorscale = list(c(0,1),c("rgb(23,46,17)","rgb(45,209,0)"))) %>%
-  add_surface(x = PrDurs , y = PrWPs, z = Temp5, opacity = 1, colorscale = list(c(0,1),c("rgb(232,116,49)","rgb(191,204,43)"))) %>%
 
-
-  layout(
-    ## title = "Layout options in a 3d scatter plot",
-    scene = list(
-      surfacecolor = "rgb(244, 244, 248)",
-      xaxis = list(title = "Duration"),
-      yaxis = list(title = "WP"),
-      zaxis = list(title = "GR50"),
-      camera = list(eye = list(x = 1.45, y = 1.55, z = 1.45), center = list(x = 0, y = 0, z = 0)),
-      type = "perspective"
-    ))
-
-SurfPlot2 <- plot_ly(showscale = FALSE ) %>%
+SurfPlotHTP <- plot_ly(showscale = FALSE ) %>%
   add_surface(x = PrWPs , y = PrDurs, z = Temp1, opacity = 1, colorscale = list(c(0,1),c("rgb(19,50,117)","rgb(0,183,255)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[1], "C")) %>%
   add_surface(x = PrWPs , y = PrDurs, z = Temp2, opacity = 1, colorscale = list(c(0,1),c("rgb(23,46,17)","rgb(45,209,0)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[2], "C")) %>%
   add_surface(x = PrWPs , y = PrDurs, z = Temp3, opacity = 1, colorscale = list(c(0,1),c("rgb(232,116,49)","rgb(191,204,43)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[3], "C")) %>%
@@ -183,7 +166,10 @@ SurfPlot2 <- plot_ly(showscale = FALSE ) %>%
       xaxis = list(title = "WP"),
       yaxis = list(title = "Duration"),
       zaxis = list(title = "GR50"),
-      camera = list(eye = list(x = 1.45, y = 1.55, z = 1.45), center = list(x = 0, y = 0, z = 0)),
+      camera = list(eye = list(x = -1.85, y = 1.95, z = 0.75), center = list(x = 0, y = 0, z = 0), up = list(x = 0, y = 0, z = 1)),
       type = "perspective"
     ))
+
+
+
 
