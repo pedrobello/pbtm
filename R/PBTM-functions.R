@@ -1322,7 +1322,7 @@ PlotPrimingMatrix <- function()
   Temp10 <- matrix(TreatsPrTemp10$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
 
   #Plot all priming temperature matrixes. Plotly package used here.
-  SurfPlotPriming <- plot_ly(showscale = FALSE ) %>%
+  SurfPlotPrimingMatrix <- plot_ly(showscale = FALSE ) %>%
     add_surface(x = PrWPs , y = PrDurs, z = Temp1, opacity = 1, colorscale = list(c(0,1),c("rgb(19,50,117)","rgb(0,183,255)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[1], "C")) %>%
     add_surface(x = PrWPs , y = PrDurs, z = Temp2, opacity = 1, colorscale = list(c(0,1),c("rgb(23,46,17)","rgb(45,209,0)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[2], "C")) %>%
     add_surface(x = PrWPs , y = PrDurs, z = Temp3, opacity = 1, colorscale = list(c(0,1),c("rgb(232,116,49)","rgb(191,204,43)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[3], "C")) %>%
@@ -1347,6 +1347,6 @@ PlotPrimingMatrix <- function()
 
 
   #Plot priming matrix
-  SurfPlotPriming()
+  SurfPlotPrimingMatrix
 }
 

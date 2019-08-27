@@ -124,6 +124,9 @@ PlotActualvsModelPredictedTreatments()
 #Plot normalized data
 PlotNormalizedTime()
 
+PlotPrimingMatrix()
+
+
 TreatData <- PrimingDt
 
 CalcT50nGR50()
