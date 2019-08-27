@@ -1267,3 +1267,86 @@ CalcHTTModelSupra <- function()
   PlotPBTMModel()
 }
 
+#' A Function to plots the hydropriming and hydrothermal priming models in a 3D surface graph.
+#'
+#' This function plots the germination rate (GR50) for each temperature (when more than one temperature was used) in relation to priming duration and water potential.
+#' @param
+#' @keywords priming models hydropriming hydrothermal priming 3D surface
+#' @export
+#' @examples PlotPrimingMatrix()
+#' PlotPrimingMatrix()
+#'
+PlotPrimingMatrix <- function()
+{
+  #Load treatments table and calculate GR50 in case that was not performed earlier.
+  CalcT50nGR50()
+
+  #Checking amount of priming temperatures used.
+
+
+  #Order priming treatments in a proper form for priming matrix
+  TreatsPriming <<- Treatments %>% group_by(Treat.priming.wp, Treat.priming.temp,Treat.priming.duration, GR50) %>% tally()
+  TreatsPriming <<- TreatsPriming[order(TreatsPriming$Treat.priming.temp,TreatsPriming$Treat.priming.wp,TreatsPriming$Treat.priming.duration),]
+  TreatsPriming <- subset(TreatsPriming, Treat.priming.wp < 0)
+
+  #Separate all treatments by priming temperature, water potential and duration and calculate amount of each treatment.
+  PrTemps <- unique(TreatsPriming$Treat.priming.temp)
+  PrTempAmt <- length(unique(TreatsPriming$Treat.priming.temp))
+  PrWPs <- unique(TreatsPriming$Treat.priming.wp)
+  PrWPAmt <- length(unique(TreatsPriming$Treat.priming.wp))
+  PrDurs <- unique(TreatsPriming$Treat.priming.duration)
+  PrDurAmt <- length(unique(TreatsPriming$Treat.priming.duration))
+
+  #List and load all the priming temperature used. Up to 10 at this time. (Build loop in the future)
+  TreatsPrTemp1 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[1])
+  TreatsPrTemp2 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[2])
+  TreatsPrTemp3 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[3])
+  TreatsPrTemp4 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[4])
+  TreatsPrTemp5 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[5])
+  TreatsPrTemp6 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[6])
+  TreatsPrTemp7 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[7])
+  TreatsPrTemp8 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[8])
+  TreatsPrTemp9 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[9])
+  TreatsPrTemp10 <- subset(TreatsPriming, Treat.priming.temp == unique(TreatsPriming$Treat.priming.temp)[10])
+
+  #Organize and build priming matrix for all temperatures used for priming.
+  Temp1 <- matrix(TreatsPrTemp1$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp2 <- matrix(TreatsPrTemp2$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp3 <- matrix(TreatsPrTemp3$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp4 <- matrix(TreatsPrTemp4$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp5 <- matrix(TreatsPrTemp5$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp6 <- matrix(TreatsPrTemp6$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp7 <- matrix(TreatsPrTemp7$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp8 <- matrix(TreatsPrTemp8$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp9 <- matrix(TreatsPrTemp9$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+  Temp10 <- matrix(TreatsPrTemp10$GR50, nrow = PrDurAmt, ncol = PrWPAmt)
+
+  #Plot all priming temperature matrixes. Plotly package used here.
+  SurfPlotPrimingMatrix <- plot_ly(showscale = FALSE ) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp1, opacity = 1, colorscale = list(c(0,1),c("rgb(19,50,117)","rgb(0,183,255)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[1], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp2, opacity = 1, colorscale = list(c(0,1),c("rgb(23,46,17)","rgb(45,209,0)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[2], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp3, opacity = 1, colorscale = list(c(0,1),c("rgb(232,116,49)","rgb(191,204,43)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[3], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp4, opacity = 1, colorscale = list(c(0,1),c("rgb(209,14,4","rgb(230,97,90)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[4], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp5, opacity = 1, colorscale = list(c(0,1),c("rgb(77,4,0)","rgb(161,129,127)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[5], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp6, opacity = 1, colorscale = list(c(0,1),c("rgb(19,50,117)","rgb(0,183,255)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[6], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp7, opacity = 1, colorscale = list(c(0,1),c("rgb(23,46,17)","rgb(45,209,0)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[7], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp8, opacity = 1, colorscale = list(c(0,1),c("rgb(232,116,49)","rgb(191,204,43)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[8], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp9, opacity = 1, colorscale = list(c(0,1),c("rgb(23,46,17)","rgb(45,209,0)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[9], "C")) %>%
+    add_surface(x = PrWPs , y = PrDurs, z = Temp10, opacity = 1, colorscale = list(c(0,1),c("rgb(232,116,49)","rgb(191,204,43)")), name = paste0(unique(TreatsPriming$Treat.priming.temp)[10], "C")) %>%
+
+    layout(
+      ## title = "Layout options in a 3d scatter plot",
+      scene = list(
+        surfacecolor = "rgb(244, 244, 248)",
+        xaxis = list(title = "WP"),
+        yaxis = list(title = "Duration"),
+        zaxis = list(title = "GR50"),
+        camera = list(eye = list(x = -1.85, y = 1.95, z = 0.75), center = list(x = 0, y = 0, z = 0), up = list(x = 0, y = 0, z = 1)),
+        type = "perspective"
+      ))
+
+
+  #Plot priming matrix
+  SurfPlotPrimingMatrix
+}
+
