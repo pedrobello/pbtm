@@ -1341,7 +1341,7 @@ PlotPrimingMatrix <- function()
         xaxis = list(title = "WP"),
         yaxis = list(title = "Duration"),
         zaxis = list(title = "GR50"),
-        camera = list(eye = list(x = -0.5, y = 0.5, z = 0.1), center = list(x = 0, y = 0, z = 0), up = list(x = 0, y = 0, z = 1)),
+        camera = list(eye = list(x = -0.9, y = 0.9, z = 0.1), center = list(x = 0, y = 0, z = 0), up = list(x = 0, y = 0, z = 1)),
         type = "perspective"
       ))
 
