@@ -231,7 +231,11 @@ CALCnPLOTModel()
 <br>
 Example of calculated hydrothermal priming model with raw data (left panel) and germination rates (GR50) relationship with hydrothermal priming time (right panel).
 
-Additional plot option for priming models.
+```{r include=FALSE}
+knitr::opts_chunk$set(fig.width=7, fig.height=5) 
+```
+
+####Additional plot option for priming models.
 ```{r warning=FALSE}
 PlotPrimingMatrix()
 ```
