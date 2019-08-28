@@ -14,4 +14,5 @@ Depends:
  plyr,
  dplyr,
  ggplot2,
- gridExtra
+ gridExtra,
+ plotly
