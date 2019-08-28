@@ -67,6 +67,7 @@ TreatData <- subset(mydata, Germ.temp==40)
 TreatData <- subset(mydata[ which( mydata$Germ.wp == 0 | mydata$Germ.wp < -0.8) , ], Seed.lot == 1 & Germ.temp==12)
 
 TreatData <- subset(mydata, Treat.priming.temp == 20 | Treat.priming.temp == 0)
+TreatData <- subset(mydata, Treat.priming.temp == 20)
 
 TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24)
 TreatData <- subset(mydata, Germ.temp>8 & Germ.temp<24 & Germ.temp!=16 & Germ.temp!=16)
@@ -91,7 +92,7 @@ PlotGR50vsTemp()
 #Choose the model that you want to work on
 # (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime;
 # (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time
-DefineModel(6.2)
+DefineModel(6.1)
 
 #Define maximum germination percentage when seed lot does not germinate at optimum temperature and water potential.
 #Identify the correspondent treatment on the function. Use this function at your own discretion.
@@ -169,7 +170,7 @@ SurfPlotHTP <- plot_ly(showscale = FALSE ) %>%
       xaxis = list(title = "WP"),
       yaxis = list(title = "Duration"),
       zaxis = list(title = "GR50"),
-      camera = list(eye = list(x = -1.85, y = 1.95, z = 0.75), center = list(x = 0, y = 0, z = 0), up = list(x = 0, y = 0, z = 1)),
+      camera = list(eye = list(x = -1.25, y = 1.25, z = 0.75), center = list(x = 0, y = 0, z = -0.2), up = list(x = 0, y = 0, z = 1)),
       type = "perspective"
     ))
 
