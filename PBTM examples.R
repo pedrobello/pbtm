@@ -4,11 +4,12 @@ install.packages("roxygen2")
 install.packages("usethis")
 install.packages("kableExtra")
 install.packages("plotly")
+install.packages("rlang")
 
 ## Or, install from GitHub
 devtools::install_github("pedrobello/PBTM")
 
-
+library("rlang")
 library("plotly")
 library("devtools")
 library("roxygen2")
@@ -28,11 +29,16 @@ setwd("~/Dropbox/01-UCDavis/PBTM")
 
 #Load Seeds data - Add the name of the data file (csv file)
 mydata <- read.csv("PBTM-Datasets-R.csv", header=T)
-mydata <- read.csv("PBTM-Datasets-R-Empty.csv", header=T)
+mydata <- read.csv("PBTM-R-Dt-AlvaradoBradford2002.csv", header=T)
 mydata <- read.csv("PBTM-R-Dt-Priming.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-AfricanR.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Q2Paper.csv", header=T)
 mydata <- read.csv("PBTM-Datasets-R-Chicory.csv", header=T)
+
+mydata <- read.csv("PBTM-R-Dt-AlvaradoBradford2002.csv", header=T)
+mydata <- read.csv("PBTM-R-Dt-BradfordHaigh1994.csv", header=T)
+
+TreatData <- subset(mydata, Treat.priming.temp == 20)
 
 PrimingDt <- read.csv("PBTM-R-Dt-Priming.csv", header=T)
 TomatoQ2Dt <- read.csv("PBTM-R-Dt-Q2Paper.csv", header=T)
@@ -75,6 +81,8 @@ TreatData <- subset(mydata, Germ.temp>7 & Germ.temp<24 & Germ.temp!=16 & Germ.wp
 
 TreatData <- subset(TomatoQ2, Treat.ID == 1 & Germ.wp==0)
 
+TreatData <- subset(mydata, Germ.temp == 27)
+
 Data(TomatoQ2)
 
 TreatData <- mydata
@@ -92,7 +100,7 @@ PlotGR50vsTemp()
 #Choose the model that you want to work on
 # (1)Hydropriming model; (2)Suboptimal Hydrotime; (2.5)Supra-optimal Hydrotime; (3)Thermaltime;
 # (4)Suboptimal Hydrothermal Time; (5)Supra-optimal Hydrothermal Time
-DefineModel(6.1)
+DefineModel(6.2)
 
 #Define maximum germination percentage when seed lot does not germinate at optimum temperature and water potential.
 #Identify the correspondent treatment on the function. Use this function at your own discretion.
@@ -113,7 +121,7 @@ CALCnPLOTModel()
 #Plot model predicted and cleaned raw data
 PlotCleanModel()
 
-DefineHTo(9)
+DefineHTo(130)
 FixedTb(4.8)
 FixedTo(25)
 

@@ -199,46 +199,50 @@ Example of calculated hydrothermal time model with raw data, predicted curves an
 
 ### Hydropriming model
 ```{r warning=FALSE, message=FALSE, results='hide'}
-data(PrimingDt)
-TreatData <- subset(PrimingDt, Treat.priming.temp == 20 | Treat.priming.temp == 0)
-DefineModel(6.1)
+#data(PrimingDt)
+#TreatData <- subset(PrimingDt, Treat.priming.temp == 20 | Treat.priming.temp == 0)
+#DefineModel(6.1)
 ```
 
 ```{r include=FALSE}
-PlotRawData()
+#PlotRawData()
 knitr::opts_chunk$set(fig.width=9, fig.height=4) 
 ```
 
 ```{r warning=FALSE}
-CALCnPLOTModel()
+#CALCnPLOTModel()
 ```
 <br>
 Example of calculated hydropriming model with raw data (left panel) and germination rates (GR50) relationship with hydropriming time (right panel).
 
 ### Hydrothermal priming model
 ```{r warning=FALSE, message=FALSE, results='hide'}
-TreatData <- PrimingDt
-DefineModel(6.2)
+#TreatData <- PrimingDt
+#DefineModel(6.2)
 ```
 
 ```{r include=FALSE}
-PlotRawData()
+#PlotRawData()
 ```
-
+Coming soon...
 ```{r warning=FALSE}
-CALCnPLOTModel()
+# CALCnPLOTModel()
 ```
 <br>
 Example of calculated hydrothermal priming model with raw data (left panel) and germination rates (GR50) relationship with hydrothermal priming time (right panel).
+Coming soon...
 
 <br>
 ```{r include=FALSE}
-knitr::opts_chunk$set(fig.width=7, fig.height=5) 
+# knitr::opts_chunk$set(fig.width=7, fig.height=5) 
 ```
 
 #### Additional plot option for priming models.
+
+Coming soon... 
+
 ```{r warning=FALSE}
-PlotPrimingMatrix()
+#PlotPrimingMatrix()
 ```
 Example of priming matrix with germination rates (GR50) over the priming treatments including water potential (WP), priming duration (Duration) and priming temperature (represented by the different surface colors).
 
