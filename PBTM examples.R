@@ -41,6 +41,8 @@ mydata <- read.csv("PBTM-R-Dt-BradfordHaigh1994.csv", header=T)
 TreatData <- subset(mydata, Treat.priming.temp == 20)
 
 PrimingDt <- read.csv("PBTM-R-Dt-Priming.csv", header=T)
+PrimingDt <- read.csv("PBTM-R-Dt-PrimingDummy.csv", header=T)
+PBTM-R-Dt-PrimingDummy
 TomatoQ2Dt <- read.csv("PBTM-R-Dt-Q2Paper.csv", header=T)
 DatasetDesc <- read.csv("DatasetDescription.csv", header=T)
 Models <- read.csv("Models.csv", header=T)
@@ -86,7 +88,7 @@ TreatData <- subset(mydata, Germ.temp == 27)
 Data(TomatoQ2)
 
 TreatData <- mydata
-TreatData <- TomatoQ2
+TreatData <- PrimingDt
 
 #Calculates the time to 50% germination (T50) and the germination rate (GR50).
 #Function separates the treatments and adds data to the Treatments table.
