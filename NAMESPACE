@@ -2,4 +2,5 @@
 
 export(CalcT50nGR50)
 importFrom(dplyr,group_by)
+importFrom(dplyr,tally)
 importFrom(magrittr,"%>%")
