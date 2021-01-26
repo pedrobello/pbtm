@@ -36,6 +36,8 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
     } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName)}
   } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName,",",T5ColName)}
 
+  print(TreatColNames)
+
   if (missing(TimeColName)) { #TimeColName not informed
     Germ.time.hours <- "Germ.time.hours"
   } else {
