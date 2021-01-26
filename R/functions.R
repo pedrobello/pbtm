@@ -55,8 +55,10 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
     dplyr::mutate(T50 = approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y,
                   GR50 = 1/approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y)
 
+  TreatColNames <- c(TreatColNames, "T50", "GR50")
+
   # Separate all treatments without germination time courses
-  Treatments <- Treatments %>% group_by_at(TreatColNames, "T50", "GR50") %>% tally()
+  Treatments <- Treatments %>% group_by_at(TreatColNames) %>% tally()
   return(Treatments)
 }
 
