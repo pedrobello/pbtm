@@ -3,7 +3,8 @@
 #' This function allows you to calculate the time to 50% germination (T50) and respective germination rate (GR50).
 #' @param CalcT50nGR50() to calculate T50 and GR50 on the TreatData dataset.
 #' @keywords T50, GR50, germination speed, germination rate
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>%, dplyr
+#' @importFrom dplyr group_by
 #' @export
 #' @examples
 #' CalcT50nGR50()
@@ -17,3 +18,4 @@ CalcT50nGR50 <- function()
   # Separate all treatments without germination time courses
   Treatments <<- Treatments %>% group_by(Treat.ID, Treat.desc, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage, T50, GR50) %>% tally()
 }
+
