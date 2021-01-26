@@ -2,6 +2,6 @@
 
 export(CalcT50nGR50)
 export(hello)
-importFrom(dplyr,group_by)
+importFrom(dplyr,group_by_at)
 importFrom(dplyr,tally)
 importFrom(magrittr,"%>%")

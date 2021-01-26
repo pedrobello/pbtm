@@ -16,7 +16,7 @@ hello <- function() {
 #' @param T1ColName,T2ColName,T3ColName,T4ColName,T5ColName are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here. These column names do not need to be informed in case the provided template file is used to organize the data.
 #' @param TimeColName,CumFractColName are the names of the data columns that will be used to calculate values. In the case the column names for time (Germ.time.hours) and cumulative fraction (Germ.fraction) used are equal to the template provided, these column names to not need to be provided.
 #' @keywords T50, GR50, germination speed, germination rate
-#' @importFrom dplyr group_by
+#' @importFrom dplyr group_by_at
 #' @importFrom dplyr tally
 #' @importFrom magrittr %>%
 #' @export
@@ -51,12 +51,12 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
   }
 
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
-  Treatments <- Data %>% group_by(TreatColNames) %>%
+  Treatments <- Data %>% group_by_at(TreatColNames) %>%
     dplyr::mutate(T50 = approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y,
                   GR50 = 1/approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y)
 
   # Separate all treatments without germination time courses
-  Treatments <- Treatments %>% group_by(TreatColNames, T50, GR50) %>% tally()
+  Treatments <- Treatments %>% group_by_at(TreatColNames, T50, GR50) %>% tally()
   return(Treatments)
 }
 
