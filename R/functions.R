@@ -36,13 +36,13 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
     } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName)}
   } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName,",",T5ColName)}
 
-  if (is.na(TimeColName) || TimeColName == '') { #TimeColName not informed
+  if (missing(TimeColName)) { #TimeColName not informed
     Germ.time.hours <- "Germ.time.hours"
   } else {
     Germ.time.hours <- TimeColName
   }
 
-  if (is.na(CumFractColName) || CumFractColName == '') { #CumFractColName not informed
+  if (missing(CumFractColName)) { #CumFractColName not informed
     Germ.fraction <- "Germ.fraction"
   } else {
     Germ.fraction <- CumFractColName
