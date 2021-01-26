@@ -4,7 +4,7 @@
 \alias{CalcT50nGR50}
 \title{A T50 and GR50 Function}
 \usage{
-CalcT50nGR50()
+CalcT50nGR50(TreatData)
 }
 \arguments{
 \item{CalcT50nGR50()}{to calculate T50 and GR50 on the TreatData dataset.}
