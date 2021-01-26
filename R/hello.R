@@ -2,10 +2,10 @@
 #' A Hello, world! Function
 #'
 #' This is an example function named 'hello'
-#' @param Hello()
+#' @param hello()
 #' @export
 #' @examples
-#' Hello()
+#' hello()
 hello <- function() {
   print("Hello, world!")
 }
