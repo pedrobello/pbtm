@@ -24,11 +24,11 @@ hello <- function() {
 #' CalcT50nGR50(MyData)
 CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5ColName, TimeColName, CumFractColName)
 {
-  if (is.na(T5ColName) || T5ColName == '') { #T5ColName not informed
-    if (is.na(T4ColName) || T4ColName == '') { #T4ColName not informed
-      if (is.na(T3ColName) || T3ColName == '') { #T3ColName not informed
-        if (is.na(T2ColName) || T2ColName == '') { #T2ColName not informed
-          if (is.na(T1ColName) || T1ColName == '') { #T1ColName not informed
+  if (missing(T5ColName)) { #T5ColName not informed
+    if (missing(T4ColName)) { #T4ColName not informed
+      if (missing(T3ColName)) { #T3ColName not informed
+        if (missing(T2ColName)) { #T2ColName not informed
+          if (missing(T1ColName)) { #T1ColName not informed
             TreatColNames <- "Treat.ID, Treat.desc, Treat.aging.time, Treat.priming.wp, Treat.priming.temp,Treat.priming.duration,Germ.wp,Germ.temp, Germ.promoter.dosage, Germ.inhibitor.dosage"
             } else {TreatColNames <- T1ColName}
         } else {TreatColNames <- paste(T1ColName,",",T2ColName)}
