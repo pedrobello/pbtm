@@ -73,6 +73,11 @@ PlotRateVsTreat <- function (Data, x, y)
 {
   Treatments <- Data
   Treat <- x
+  if (missing(x)) { #x/treatment not informed
+    print("Informed treatment for x axis.")
+  } else {
+    Treat <- x
+  }
   if (missing(y)) { #y/rate not informed
     rate <- "GR50"
   } else {
