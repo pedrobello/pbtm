@@ -29,11 +29,11 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
         if (missing(T2ColName)) { #T2ColName not informed
           if (missing(T1ColName)) { #T1ColName not informed
             TreatColNames <- c("Treat.ID","Treat.desc","Treat.aging.time","Treat.priming.wp","Treat.priming.temp","Treat.priming.duration","Germ.wp","Germ.temp", "Germ.promoter.dosage", "Germ.inhibitor.dosage")
-            } else {TreatColNames <- T1ColName}
-        } else {TreatColNames <- paste(T1ColName,",",T2ColName)}
-      } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName)}
-    } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName)}
-  } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName,",",T5ColName)}
+            } else {TreatColNames <- c(T1ColName)}
+        } else {TreatColNames <- c(T1ColName,,T2ColName)}
+      } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName)}
+    } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName,T4ColName)}
+  } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName,T4ColName,T5ColName)}
 
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
   Treatments <- Data %>% group_by_at(TreatColNames) %>%
