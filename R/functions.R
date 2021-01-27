@@ -133,13 +133,13 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
   if (missing(Treat2)) { #treatment not informed
     T2 <- NA
   } else {
-    eval(parse(text=paste("(as.factor(TreatData$",Treat2,"))", sep = "")))
+  #  eval(parse(text=paste("(as.factor(TreatData$",Treat2,"))", sep = "")))
     T2 <- Treat2
   }
   if (missing(Treat3)) { #treatment not informed
     T3 <- NA
   } else {
-    T3 <- eval(parse(text=paste("(as.factor(TreatData$",Treat3,"))", sep = "")))
+   # T3 <- eval(parse(text=paste("(as.factor(TreatData$",Treat3,"))", sep = "")))
     T3 <- Treat3
   }
 
