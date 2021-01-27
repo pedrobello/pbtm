@@ -88,6 +88,8 @@ CalcTxnGRx <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColNam
     dplyr::mutate(FracSpeedLbl = approx(CumFract,CumTime, xout=Frac, ties="ordered")$y,
                   FracRateLbl = 1/approx(CumFract,CumTime, xout=Frac, ties="ordered")$y)
 
+  print(Treatments)
+
   TreatColNames <- c(TreatColNames, FracSpeedLbl, FracRateLbl)
 
   # Separate all treatments without germination time courses
