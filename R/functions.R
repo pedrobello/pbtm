@@ -14,7 +14,6 @@ hello <- function() {
 #' This function allows you to calculate the time to 50% germination (T50) and respective germination rate (GR50).
 #' @param Data time course and cumulative dataset. A column with time in hours (Germ.time.hours) + a column with cumulative fractions (Germ.fraction) are required with at least one additional column for revelant treatment (e.g., germination temperature or water potential)
 #' @param T1ColName,T2ColName,T3ColName,T4ColName,T5ColName are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here. These column names do not need to be informed in case the provided template file is used to organize the data.
-#' @param TimeColName,CumFractColName are the names of the data columns that will be used to calculate values. In the case the column names for time (Germ.time.hours) and cumulative fraction (Germ.fraction) used are equal to the template provided, these column names to not need to be provided.
 #' @keywords T50, GR50, germination speed, germination rate
 #' @importFrom dplyr group_by_at
 #' @importFrom dplyr tally
@@ -22,7 +21,7 @@ hello <- function() {
 #' @export
 #' @examples
 #' CalcT50nGR50(MyData)
-CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5ColName, TimeColName, CumFractColName)
+CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5ColName)
 {
   if (missing(T5ColName)) { #T5ColName not informed
     if (missing(T4ColName)) { #T4ColName not informed
@@ -36,24 +35,10 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
     } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName)}
   } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName,",",T5ColName)}
 
-  if (missing(TimeColName)) { #TimeColName not informed
-    Germt <- c("Germ.time.hours")
-  } else {
-    Germt <- c(TimeColName)
-  }
-
-  print(Germt)
-
-  if (missing(CumFractColName)) { #CumFractColName not informed
-    Germf <- c("Germ.fraction")
-  } else {
-    Germf <- c(CumFractColName)
-  }
-
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
   Treatments <- Data %>% group_by_at(TreatColNames) %>%
-    dplyr::mutate(T50 = approx(Germf[c(1)],Germt[c(1)], xout=0.5, ties="ordered")$y,
-                  GR50 = 1/approx(Germf[c(1)],Germt[c(1)], xout=0.5, ties="ordered")$y)
+    dplyr::mutate(T50 = approx(CumFract,CumTime, xout=0.5, ties="ordered")$y,
+                  GR50 = 1/approx(CumFract,CumTime, xout=0.5, ties="ordered")$y)
 
   TreatColNames <- c(TreatColNames, "T50", "GR50")
 
