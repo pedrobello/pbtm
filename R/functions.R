@@ -127,17 +127,20 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
   if (missing(Treat1)) { #treatment not informed
     print("Informed treatment for factor.")
   } else {
-    T1 <- eval(parse(text=paste("(as.factor(TreatData$",Treat1,"))", sep = "")))
+    eval(parse(text=paste("(as.factor(TreatData$",Treat1,"))", sep = "")))
+    T1 <- Treat1
   }
   if (missing(Treat2)) { #treatment not informed
     T2 <- NA
   } else {
-    T2 <- eval(parse(text=paste("(as.factor(TreatData$",Treat2,"))", sep = "")))
+    eval(parse(text=paste("(as.factor(TreatData$",Treat2,"))", sep = "")))
+    T2 <- Treat2
   }
   if (missing(Treat3)) { #treatment not informed
     T3 <- NA
   } else {
     T3 <- eval(parse(text=paste("(as.factor(TreatData$",Treat3,"))", sep = "")))
+    T3 <- Treat3
   }
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
