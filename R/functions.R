@@ -39,13 +39,13 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
   if (missing(TimeColName)) { #TimeColName not informed
     Germ.time.hours <- "Germ.time.hours"
   } else {
-    Germ.time.hours <- TimeColName
+    Germ.time.hours <- c(TimeColName)
   }
 
   if (missing(CumFractColName)) { #CumFractColName not informed
     Germ.fraction <- "Germ.fraction"
   } else {
-    Germ.fraction <- CumFractColName
+    Germ.fraction <- c(CumFractColName)
   }
 
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
