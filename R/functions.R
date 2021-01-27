@@ -30,7 +30,7 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
           if (missing(T1ColName)) { #T1ColName not informed
             TreatColNames <- c("Treat.ID","Treat.desc","Treat.aging.time","Treat.priming.wp","Treat.priming.temp","Treat.priming.duration","Germ.wp","Germ.temp", "Germ.promoter.dosage", "Germ.inhibitor.dosage")
             } else {TreatColNames <- c(T1ColName)}
-        } else {TreatColNames <- c(T1ColName,,T2ColName)}
+        } else {TreatColNames <- c(T1ColName,T2ColName)}
       } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName)}
     } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName,T4ColName)}
   } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName,T4ColName,T5ColName)}
