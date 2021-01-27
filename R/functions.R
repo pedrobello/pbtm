@@ -61,8 +61,11 @@ CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName
 #' A Function to plot rate vs treatment temperature.
 #'
 #' This function plots rates against the desired treatment.
-#' @param
+#' @param Data should inform the table with time course data to be plotted
+#' @param x should indicate the treatment column name for the x axis.
+#' @param y should indicate the rate column name for the y axis if different than GR50.
 #' @keywords plot GR50 Temperature
+#' @importFrom ggplot2 ggplot
 #' @export
 #' @examples PlotRateVsTreat()
 #' PlotRateVsTreat()

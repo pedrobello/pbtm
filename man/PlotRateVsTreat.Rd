@@ -6,6 +6,13 @@
 \usage{
 PlotRateVsTreat(Data, x, y)
 }
+\arguments{
+\item{Data}{should inform the table with time course data to be plotted}
+
+\item{x}{should indicate the treatment column name for the x axis.}
+
+\item{y}{should indicate the rate column name for the y axis if different than GR50.}
+}
 \description{
 This function plots rates against the desired treatment.
 }
