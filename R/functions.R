@@ -127,7 +127,7 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
   if (missing(Treat1)) { #treatment not informed
     print("Informed treatment for factor.")
   } else {
-    eval(parse(text=paste("(as.factor(TreatData$",Treat1,"))", sep = "")))
+
     T1 <- Treat1
   }
   if (missing(Treat2)) { #treatment not informed
