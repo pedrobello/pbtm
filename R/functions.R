@@ -107,6 +107,47 @@ theme_scatter_plot <- theme(
 
 #----------------------New Development - Under Testing
 
+#' A Function to plot the cumulative raw data selected.
+#'
+#' This function plots the raw data previously selected. It will plot raw cumulative curves over time.
+#' @param Data with time course data for one or more treatments.
+#' @param Treat1,Treat2,Treat3 are the desired treatment factors to be informed as column names. The first informed treatment will be separated as color, the second as shape and third as alpha (transparency).
+#' @keywords plot raw data
+#' @import ggplot2
+#' @export
+#' @examples PlotRawDt(MyData)
+#' PlotRawDt(MyRawData)
+PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
+{
+  TreatData <- Data
+  MaxTime <<- TreatData$Germ.time.hours[which.max(TreatData$Germ.time.hours)] #Gets the longest time measurement in the dataset provided.
+  PlotTime <<- ceiling(MaxTime/5)*5 #make maxTime a multiple of 5
+  Increment <<- round(PlotTime/5, digits = 0) #define tick mark separation
+
+  if (missing(Treat1)) { #treatment not informed
+    print("Informed treatment for factor.")
+  } else {
+    T1 <- Treat1
+  }
+  if (missing(Treat2)) { #treatment not informed
+    T2 <- NA
+  } else {
+    T2 <- Treat2
+  }
+  if (missing(Treat3)) { #treatment not informed
+    T3 <- NA
+  } else {
+    T3 <- Treat3
+  }
+
+  #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
+  pRaw <<- ggplot(data=TreatData, aes_string(x=Germ.time.hours, y=Germ.fraction, color=T1, alpha = T2, shape = T3)) +
+    geom_point(shape=19, size=2) + geom_line() + xlab("Time (hours)") + ylab("Germination (%)") + scale_alpha_discrete(range = c(0.3, 1.0)) +
+    scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
+    scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
+    theme_scatter_plot
+  pRaw
+}
 
 
 
