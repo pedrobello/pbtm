@@ -1,6 +1,6 @@
 #' A Speed function
 #'
-#' This function allows you to calculate the time to a desired germination fraction and respective germination rateZ.
+#' This function allows you to calculate the time to a desired cumulative fraction and respective germination rate. Use this function on raw data to avoid loss of points closer to the desired cumulative fraction.
 #' @param Data time course and cumulative dataset. A column with time in hours (Germ.time.hours) + a column with cumulative fractions (Germ.fraction) are required with at least one additional column for revelant treatment (e.g., germination temperature or water potential)
 #' @param Fraction from 0 to 1 used to calculate the time required for that level to be obtained in the cumulative time course. Standard value is 0.5 (50 percent), to calculate the time to 50 percent germination (T50) and respective germination rate (GR50). Fraction level can be entered and be used for calculation and change column name.
 #' @param T1ColName,T2ColName,T3ColName,T4ColName,T5ColName are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here. These column names do not need to be informed in case the provided template file is used to organize the data.
@@ -13,6 +13,7 @@
 #' CalcSpeed(MyData)
 CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName, T5ColName)
 {
+  #Define the informed treatments (columns) to be grouped when calling the function or set standard to all columns besides CumFract and CumTime.
   if (missing(T5ColName)) { #T5ColName not informed
     if (missing(T4ColName)) { #T4ColName not informed
       if (missing(T3ColName)) { #T3ColName not informed
@@ -25,6 +26,7 @@ CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName
     } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName,T4ColName)}
   } else {TreatColNames <- c(T1ColName,T2ColName,T3ColName,T4ColName,T5ColName)}
 
+  #Define the informed fraction for time and rate calculation. Standard is 0.5 -> 50 percent. Also populates new column name base in the fraction used.
   if (missing(Fraction)) { #Fraction not informed
     Frac <- 0.5
     FracSpeedLbl <- "T50"
@@ -35,7 +37,7 @@ CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName
     FracRateLbl <- paste("GR",(Frac*100), sep = "")
   }
 
-  # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
+  # Calculate the time to the fraction selected using linear interpolation (approx function) after it calculates the inverse of time to generate the rate.
   Treatments <- Data %>% group_by_at(TreatColNames) %>%
     dplyr::mutate(Tx = approx(CumFract,CumTime, xout=Frac, ties="ordered")$y,
                   GRx = 1/approx(CumFract,CumTime, xout=Frac, ties="ordered")$y)
@@ -45,6 +47,7 @@ CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName
   # Separate all treatments without germination time courses
   Treatments <- Treatments %>% group_by_at(TreatColNames) %>% tally()
 
+  #Replaces the column name with the used fraction instead.
   names(Treatments)[names(Treatments) == "Tx"] <- FracSpeedLbl
   names(Treatments)[names(Treatments) == "GRx"] <- FracRateLbl
 
