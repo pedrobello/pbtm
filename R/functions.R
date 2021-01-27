@@ -65,7 +65,7 @@ CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName
 #' @param x should indicate the treatment column name for the x axis.
 #' @param y should indicate the rate column name for the y axis if different than GR50.
 #' @keywords plot GR50 Temperature
-#' @importFrom ggplot2 ggplot
+#' @import ggplot2
 #' @export
 #' @examples PlotRateVsTreat()
 #' PlotRateVsTreat()
