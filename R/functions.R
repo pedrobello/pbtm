@@ -127,21 +127,21 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
   if (missing(Treat1)) { #treatment not informed
     print("Informed treatment for factor.")
   } else {
-    T1 <- paste("(as.factor(TreatData$",Treat1,"))", sep = "")
+    T1 <- eval(parse(text=paste("(as.factor(TreatData$",Treat1,"))", sep = "")))
   }
   if (missing(Treat2)) { #treatment not informed
     T2 <- NA
   } else {
-    T2 <- paste("(as.factor(TreatData$",Treat2,"))", sep = "")
+    T2 <- eval(parse(text=paste("(as.factor(TreatData$",Treat2,"))", sep = "")))
   }
   if (missing(Treat3)) { #treatment not informed
     T3 <- NA
   } else {
-    T3 <- paste("(as.factor(TreatData$",Treat3,"))", sep = "")
+    T3 <- eval(parse(text=paste("(as.factor(TreatData$",Treat3,"))", sep = "")))
   }
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, alpha = T2, shape = T3)) +
+  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, alpha=T2, shape=T3)) +
     geom_point(shape=19, size=2) + geom_line() + xlab("Time (hours)") + ylab("Germination (%)") + scale_alpha_discrete(range = c(0.3, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
