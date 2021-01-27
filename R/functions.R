@@ -42,6 +42,8 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
     Germt <- c(TimeColName)
   }
 
+  print(Germt)
+
   if (missing(CumFractColName)) { #CumFractColName not informed
     Germ.fraction <- c("Germ.fraction")
   } else {
