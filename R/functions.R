@@ -75,7 +75,7 @@ CalcTxnGRx <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColNam
 
   if (missing(Fraction)) { #Fraction not informed
     Frac <- 0.5
-    FracSpeedLbl <- "T50"
+    FracSpeedLbl <- c("T50")
     FracRateLbl <- "GR50"
   } else {
     Frac <- Fraction
@@ -85,7 +85,7 @@ CalcTxnGRx <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColNam
 
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
   Treatments <- Data %>% group_by_at(TreatColNames) %>%
-    dplyr::mutate(Tx = approx(CumFract,CumTime, xout=Frac, ties="ordered")$y,
+    dplyr::mutate(FracSpeedLbl[1] = approx(CumFract,CumTime, xout=Frac, ties="ordered")$y,
                   GRx = 1/approx(CumFract,CumTime, xout=Frac, ties="ordered")$y)
 
   print(Treatments)
