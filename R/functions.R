@@ -70,7 +70,7 @@ PlotRateVsTreat <- function (Data, x, y)
 {
   Treatments <- Data
   Treat <- x
-  if (missing(Fraction)) { #y/rate not informed
+  if (missing(y)) { #y/rate not informed
     rate <- "GR50"
   } else {
     rate <- y
