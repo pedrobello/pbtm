@@ -75,7 +75,7 @@ CalcTxnGRx <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColNam
 
   if (missing(Fraction)) { #Fraction not informed
     Frac <- 0.5
-    FracSpeedLbl <- c("T50")
+    FracSpeedLbl <- "T50"
     FracRateLbl <- "GR50"
   } else {
     Frac <- Fraction
