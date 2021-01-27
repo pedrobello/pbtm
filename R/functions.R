@@ -78,8 +78,7 @@ PlotRateVsTreat <- function (Data, x, y)
   } else {
     rate <- y
   }
-  pGR <- ggplot(data=Treatments, aes_string(x=Treat, y=rate)) + geom_point(shape=19, size=2) + xlab("Temperature (°C)") +
-    ylab(bquote('Rate ('*h^-1*')')) +
+  pGR <- ggplot(data=Treatments, aes_string(x=Treat, y=rate, color=Treat)) + geom_point(shape=19, size=2) +
     expand_limits(x = 0, y = 0) + theme_scatter_plot
   pGR
 }
