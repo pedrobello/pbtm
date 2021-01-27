@@ -79,8 +79,8 @@ CalcTxnGRx <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColNam
     FracRateLbl <- "GR50"
   } else {
     Frac <- Fraction
-    FracSpeedLbl <- paste("T",(Frac*100))
-    FracRateLbl <- paste("GR",(Frac*100))
+    FracSpeedLbl <- paste("T",(Frac*100), sep = "")
+    FracRateLbl <- paste("GR",(Frac*100), sep = "")
   }
 
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
