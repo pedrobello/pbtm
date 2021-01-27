@@ -37,21 +37,21 @@ CalcT50nGR50 <- function(Data, T1ColName, T2ColName, T3ColName, T4ColName, T5Col
   } else {TreatColNames <- paste(T1ColName,",",T2ColName,",",T3ColName,",",T4ColName,",",T5ColName)}
 
   if (missing(TimeColName)) { #TimeColName not informed
-    Germ.time.hours <- "Germ.time.hours"
+    Germt <- c("Germ.time.hours")
   } else {
-    Germ.time.hours <- c(TimeColName)
+    Germt <- c(TimeColName)
   }
 
   if (missing(CumFractColName)) { #CumFractColName not informed
-    Germ.fraction <- "Germ.fraction"
+    Germ.fraction <- c("Germ.fraction")
   } else {
     Germ.fraction <- c(CumFractColName)
   }
 
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
   Treatments <- Data %>% group_by_at(TreatColNames) %>%
-    dplyr::mutate(T50 = approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y,
-                  GR50 = 1/approx(Germ.fraction,Germ.time.hours, xout=0.5, ties="ordered")$y)
+    dplyr::mutate(T50 = approx(Germ.fraction,Germt, xout=0.5, ties="ordered")$y,
+                  GR50 = 1/approx(Germ.fraction,Germt, xout=0.5, ties="ordered")$y)
 
   TreatColNames <- c(TreatColNames, "T50", "GR50")
 
