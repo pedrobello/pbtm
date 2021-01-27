@@ -85,8 +85,8 @@ CalcTxnGRx <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColNam
 
   # Calculate Time to 50% Germination (T50) (calculate on raw data to avoid loss of points closer to 50% germination) + GR50
   Treatments <- Data %>% group_by_at(TreatColNames) %>%
-    dplyr::mutate(FracSpeedLbl = approx(CumFract,CumTime, xout=Frac, ties="ordered")$y,
-                  FracRateLbl = 1/approx(CumFract,CumTime, xout=Frac, ties="ordered")$y)
+    dplyr::mutate(eval(as.symbol(FracSpeedLbl)) = approx(CumFract,CumTime, xout=Frac, ties="ordered")$y,
+                  eval(as.symbol(FracRateLbl)) = 1/approx(CumFract,CumTime, xout=Frac, ties="ordered")$y)
 
   print(Treatments)
 
