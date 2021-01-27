@@ -141,7 +141,7 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
   }
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pRaw <<- ggplot(data=TreatData, aes_string(x=CumTime, y=CumFract, color=T1, alpha = T2, shape = T3)) +
+  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, alpha = T2, shape = T3)) +
     geom_point(shape=19, size=2) + geom_line() + xlab("Time (hours)") + ylab("Germination (%)") + scale_alpha_discrete(range = c(0.3, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
