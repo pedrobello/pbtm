@@ -72,7 +72,6 @@ CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName
 PlotRateVsTreat <- function (Data, x, y)
 {
   Treatments <- Data
-  Treat <- x
   if (missing(x)) { #x/treatment not informed
     print("Informed treatment for x axis.")
   } else {
