@@ -90,7 +90,7 @@ CalcTxnGRx <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColNam
 
   print(Treatments)
 
-  TreatColNames <- c(TreatColNames, Tx, GRx)
+  TreatColNames <- c(TreatColNames, "Tx", "GRx")
 
   # Separate all treatments without germination time courses
   Treatments <- Treatments %>% group_by_at(TreatColNames) %>% tally()
