@@ -83,3 +83,22 @@ PlotRateVsTreat <- function (Data, x, y)
     expand_limits(x = 0, y = 0) + theme_scatter_plot
   pGR
 }
+
+#Plotting Settings----------------------------------------------------------------------------------
+theme_scatter_plot <- theme(
+  legend.background = element_blank(),
+  legend.key = element_blank(),
+  legend.title = element_text(size=12, color ="black"),
+  legend.text = element_text(size=12, color ="black"),
+  panel.background = element_blank(),
+  panel.grid.minor.y=element_blank(),
+  panel.grid.major.x=element_blank(),
+  panel.grid.major.y=element_blank(),
+  panel.grid.minor.x= element_blank(),
+  panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
+  strip.background = element_rect(colour="black", fill="white"),
+  axis.ticks = element_line(color = "black", size =0.5),
+  axis.text = element_text(size=12, color ="black"),
+  axis.title = element_text(size=14, color ="black",face = "bold"),
+  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
+  plot.title = element_blank())
