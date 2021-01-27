@@ -56,19 +56,17 @@ CalcSpeed <- function(Data, Fraction, T1ColName, T2ColName, T3ColName, T4ColName
   return(Treatments)
 }
 
-#----------------------New Development - Under Testing
-
-#' A Function to plot rate vs treatment temperature.
+#' A Function to plot rate vs desired treatment.
 #'
 #' This function plots rates against the desired treatment.
-#' @param Data should inform the table with time course data to be plotted
-#' @param x should indicate the treatment column name for the x axis.
-#' @param y should indicate the rate column name for the y axis if different than GR50.
-#' @keywords plot GR50 Temperature
+#' @param Data should inform the table that resulted from the CalcSpeed function. It should have the summarized treatments and respective GR values.
+#' @param x should indicate the treatment column name for the x axis (e.g., "Germ.temp", "Germ.wp" or others).
+#' @param y should indicate the rate column name for the y axis if different than GR50 (e.g., "GR90", "GR10", etc).
+#' @keywords plot rates Temperature
 #' @import ggplot2
 #' @export
-#' @examples PlotRateVsTreat()
-#' PlotRateVsTreat()
+#' @examples PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
+#' PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
 PlotRateVsTreat <- function (Data, x, y)
 {
   Treatments <- Data
@@ -105,3 +103,10 @@ theme_scatter_plot <- theme(
   axis.title = element_text(size=14, color ="black",face = "bold"),
   axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
   plot.title = element_blank())
+
+
+#----------------------New Development - Under Testing
+
+
+
+
