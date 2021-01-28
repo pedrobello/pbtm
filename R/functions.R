@@ -169,8 +169,8 @@ theme_scatter_plot <- theme(
 #' @keywords Clean cumulative fraction repetitive percentage
 #' @importFrom dplyr distinct
 #' @export
-#' @examples CleanData(mydata,"Treat.ID")
-#' CleanData(mydata,"Treat.ID")
+#' @examples CleanData(mydata,"Treat.desc")
+#' CleanData(mydata,"Treat.desc")
 CleanData <- function(Data, Treat1, Treat2, Treat3, Treat4, Treat5) {
   #Clean Repetitive Percentages (keeps only initial presence of value)
 
