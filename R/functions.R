@@ -120,37 +120,37 @@ theme_scatter_plot <- theme(
 PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
 {
   TreatData <- Data
-  MaxTime <<- TreatData$CumTime[which.max(TreatData$CumTime)] #Gets the longest time measurement in the dataset provided.
-  PlotTime <<- ceiling(MaxTime/5)*5 #make maxTime a multiple of 5
-  Increment <<- round(PlotTime/5, digits = 0) #define tick mark separation
+  MaxTime <- TreatData$CumTime[which.max(TreatData$CumTime)] #Gets the longest time measurement in the dataset provided.
+  PlotTime <- ceiling(MaxTime/5)*5 #make maxTime a multiple of 5
+  Increment <- round(PlotTime/5, digits = 0) #define tick mark separation
 
-  if (missing(Treat1)) { #treatment not informed
+  gp <- "geom_point(shape=19, size=2)" #Add standard fixed shape in case shape is not used as the second factor
+  alph <- "color=T1, shape=T2"
+
+  if (missing(Treat1)) { #treatment 1 not informed
     print("Informed treatment for factor.")
   } else {
     eval(parse(text=paste("TreatData$",Treat1, " <- (factor(TreatData$",Treat1,"))", sep = "")))
     T1 <- Treat1
-    gp <- "geom_point(size=2)"
   }
-  if (missing(Treat2)) { #treatment not informed
+  if (missing(Treat2)) { #treatment 2 not informed
     T2 <- NA
-    gp <- "geom_point(shape=19, size=2)"
   } else {
+    gp <- "geom_point(size=2)" #Add fixed shape in case shape is not used as the second factor
     eval(parse(text=paste("TreatData$",Treat2, " <- (factor(TreatData$",Treat2,"))", sep = "")))
     T2 <- Treat2
   }
-  if (missing(Treat3)) { #treatment not informed
+  if (missing(Treat3)) { #treatment 3 not informed
     T3 <- NA
     alph <- ""
   } else {
     # eval(parse(text=paste("(as.factor(TreatData$",Treat3,"))", sep = "")))
     T3 <- Treat3
-    alph <- "alpha=T3"
+    alph <- "color=T1, shape=T2, alpha=T3"
   }
 
-#  If T2 not assigned ... shape=19
-
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, shape=T2)) +
+  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", eval(parse(text=alph)) )) +
     eval(parse(text=gp)) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
