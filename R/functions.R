@@ -117,7 +117,7 @@ theme_scatter_plot <- theme(
 #' @export
 #' @examples PlotRawDt(MyData)
 #' PlotRawDt(MyRawData)
-PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
+PlotRawDt <- function(Data, Treat1, Treat2)
 {
   TreatData <- Data
   MaxTime <- TreatData$CumTime[which.max(TreatData$CumTime)] #Gets the longest time measurement in the dataset provided.
@@ -125,7 +125,6 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
   Increment <- round(PlotTime/5, digits = 0) #define tick mark separation
 
   gp <- "geom_point(shape=19, size=2)" #Add standard fixed shape in case shape is not used as the second factor
-  alph <- "color=T1, shape=T2"
 
   if (missing(Treat1)) { #treatment 1 not informed
     print("Informed treatment for factor.")
@@ -140,17 +139,17 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
     eval(parse(text=paste("TreatData$",Treat2, " <- (factor(TreatData$",Treat2,"))", sep = "")))
     T2 <- Treat2
   }
-  if (missing(Treat3)) { #treatment 3 not informed
-    T3 <- NA
-    alph <- ""
-  } else {
+  #if (missing(Treat3)) { #treatment 3 not informed - possible in the near future
+  #  T3 <- NA
+  #  alph <- ""
+  #} else {
     # eval(parse(text=paste("(as.factor(TreatData$",Treat3,"))", sep = "")))
-    T3 <- Treat3
-    alph <- "color=T1, shape=T2, alpha=T3"
-  }
+  #  T3 <- Treat3
+  #  alph <- "color=T1, shape=T2, alpha=T3"
+  #}
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", eval(parse(text=alph)) )) +
+  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, shape=T2 )) +
     eval(parse(text=gp)) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
