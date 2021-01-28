@@ -138,13 +138,15 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
   }
   if (missing(Treat3)) { #treatment not informed
     T3 <- NA
+    alph <- ""
   } else {
     # eval(parse(text=paste("(as.factor(TreatData$",Treat3,"))", sep = "")))
     T3 <- Treat3
+    alph <- "alpha=T3"
   }
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, shape=T2)) +
+  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, shape=T2, eval(parse(text=alph)) )) +
     geom_point(size=2) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
