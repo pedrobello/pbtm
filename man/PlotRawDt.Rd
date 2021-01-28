@@ -4,19 +4,19 @@
 \alias{PlotRawDt}
 \title{A Function to plot the cumulative raw data selected.}
 \usage{
-PlotRawDt(Data, Treat1, Treat2, Treat3)
+PlotRawDt(Data, Treat1, Treat2)
 }
 \arguments{
 \item{Data}{with time course data for one or more treatments.}
 
-\item{Treat1, Treat2, Treat3}{are the desired treatment factors to be informed as column names. The first informed treatment will be separated as color, the second as shape and third as alpha (transparency).}
+\item{Treat1, Treat2}{are the desired treatment factors to be informed as column names. The first informed treatment will be separated as color and the second as shape.}
 }
 \description{
 This function plots the raw data previously selected. It will plot raw cumulative curves over time.
 }
 \examples{
-PlotRawDt(MyData)
-PlotRawDt(MyRawData)
+PlotRawDt(MyData,"Germ.temp")
+PlotRawDt(MyRawData,"Germ.temp")
 }
 \keyword{data}
 \keyword{plot}
