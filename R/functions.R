@@ -137,6 +137,54 @@ PlotRawDt <- function(Data, Treat1, Treat2)
   pRaw
 }
 
+#' A Function to clean cumulative curves on dataset.
+#'
+#' This function removes repetitive cumulative fractions/percentages, keeping only the initial presence of the value
+#' @param Data object with the raw cumulative data that needs to be removed.
+#' @param Treat1,Treat2,Treat3,Treat4,Treat5 are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here.
+#' @keywords Clean cumulative fraction repetitive percentage
+#' @importFrom dplyr distinct
+#' @export
+#' @examples CleanData(mydata,"Treat.desc")
+#' CleanData(mydata,"Treat.desc")
+CleanData <- function(Data, Treat1, Treat2, Treat3, Treat4, Treat5) {
+  #Clean Repetitive Percentages (keeps only initial presence of value)
+
+  if (missing(Data)) { #data object not informed
+    print("Informe the data object.")
+  } else {
+    TreatData <- Data
+    if (missing(Treat1)) { #treatment 1 not informed
+      print("Informed treatment for factor.")
+    } else {
+      T1 <-  Treat1
+      if (missing(Treat2)) { #treatment 2 not informed
+        T2 <- ""
+      } else {
+        T2 <- paste(",",Treat2, sep = "")
+      }
+      if (missing(Treat3)) { #treatment 3 not informed
+        T3 <- ""
+      } else {
+        T3 <- paste(",",Treat3, sep = "")
+      }
+      if (missing(Treat4)) { #treatment 2 not informed
+        T4 <- ""
+      } else {
+        T4 <- paste(",",Treat4, sep = "")
+      }
+      if (missing(Treat5)) { #treatment 2 not informed
+        T5 <- ""
+      } else {
+        T5 <- paste(",",Treat5, sep = "")
+      }
+
+      TreatDataClean <- eval(parse(text=paste("distinct(TreatData,",T1,T2,T3,T4,T5,",CumFract, .keep_all = TRUE)", sep="")))
+
+      return(TreatDataClean)
+    }
+  }
+}
 
 #ggplot package theme ----------------------------------------------------------------------------------
 theme_scatter_plot <- theme(
@@ -161,58 +209,78 @@ theme_scatter_plot <- theme(
 #----------------------New Development - Under Testing
 
 
-#' A Function to clean cumulative curves on dataset.
+#' A Function to calculate the Hydropriming model parameters.
 #'
-#' This function removes repetitive cumulative fractions/percentages, keeping only the initial presence of the value
-#' @param Data object with the raw cumulative data that needs to be removed.
-#' @param Treat1,Treat2,Treat3,Treat4,Treat5 are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here.
-#' @keywords Clean cumulative fraction repetitive percentage
-#' @importFrom dplyr distinct
+#' This function calculates the minimal water potential for priming effects (Psib50min).
+#' @param myData object with the calculated rates with treatments to be used in the Hydropriming model. The output of the CalcSpeed function can be directly used here with the desired treatments. The fields with Treat.priming.wp and Treat.priming.duration need to be informed in the data file.
+#' @param GR is the column name for the rate to be used in the model and needs to be informed in case the data object contains a GR different than GR50.
+#' @keywords hydropriming model parameters
 #' @export
-#' @examples CleanData(mydata,"Treat.desc")
-#' CleanData(mydata,"Treat.desc")
-CleanData <- function(Data, Treat1, Treat2, Treat3, Treat4, Treat5) {
-  #Clean Repetitive Percentages (keeps only initial presence of value)
-
-  if (missing(Data)) { #data object not informed
-    print("Informe the data object.")
+#' @examples CalcHPModel(myData, "GR20")
+#' CalcHPModel(myData)
+CalcHPModel <- function(Data, GR)
+{
+  Treatments <- Data
+  if (missing(GR)) { #GR not informed
+    grColName <- "GR50"
   } else {
-  TreatData <- Data
-  if (missing(Treat1)) { #treatment 1 not informed
-    print("Informed treatment for factor.")
-  } else {
-    T1 <-  Treat1
-    if (missing(Treat2)) { #treatment 2 not informed
-      T2 <- ""
-    } else {
-      T2 <- paste(",",Treat2, sep = "")
-    }
-    if (missing(Treat3)) { #treatment 3 not informed
-      T3 <- ""
-    } else {
-      T3 <- paste(",",Treat3, sep = "")
-    }
-    if (missing(Treat4)) { #treatment 2 not informed
-      T4 <- ""
-    } else {
-      T4 <- paste(",",Treat4, sep = "")
-    }
-    if (missing(Treat5)) { #treatment 2 not informed
-      T5 <- ""
-    } else {
-      T5 <- paste(",",Treat5, sep = "")
-    }
-
-    TreatDataClean <- eval(parse(text=paste("distinct(TreatData,",T1,T2,T3,T4,T5,",CumFract, .keep_all = TRUE)", sep="")))
-
-    #eval(parse(text=paste("TreatData$",Treat1, " <- (factor(TreatData$",Treat1,"))", sep = "")))
-
-    #eval(parse(text=paste("TreatData$",Treat1, " <- (factor(TreatData$",Treat1,"))", sep = "")))
-
-    #TreatDataClean <- distinct(TreatData, Treat.ID, Germ.temp, Germ.wp, CumFract, .keep_all = TRUE)
-
-    return(TreatDataClean)
+    grColName <- GR
   }
-  }
+
+  #Initilaze values for model calculation
+  ΨMin50 <- -1
+  grUsed <- eval(parse(text=paste("Treatments$",grColName, sep = "")))
+  Pwp <- Treatments$Treat.priming.wp
+  Pdur <- Treatments$Treat.priming.duration
+
+  #Function to calculate Theta Hydro Priming
+  fθHP <- function(PM50){(Pwp-PM50)*Pdur}
+
+  # HydroPriming - Calculate PsiMin50, y intercept and slope using NLS
+  GetPsiMin50 <<- nls(grUsed ~ inTer + fθHP(ΨMin50) * sLope, algorithm="port",
+                      start=c(inTer=0.001,ΨMin50=-1,sLope=0.1),lower=c(inTer=0.0000001,ΨMin50=-10, sLope=0.000000001),upper=c(inTer=0.1,ΨMin50=-1, sLope=1))
+
+  #Pass PsiMin50 to Treatments table
+  #Treatments <<-Treatments %>% as_tibble() %>% dplyr::mutate(
+  #  PsiMin50 = summary(GetPsiMin50)$coefficients[[2]])
+
+  #Treatments$PsiMin50 <<- summary(GetPsiMin50)$coefficients[[2]]
+
+  #Hydropriming model linear regression
+  #HPlModel <<- lm(grUsed ~ fθHP(Treatments$PsiMin50))
+
+  #Pass parameters for plot
+  #ModPar1Label <<- "Psi[min](50)=="
+  #ModPar2Label <<- "Intercept=="
+  #ModPar3Label <<- "Slope=="
+  #xAxisTitlePriming <<- "Hydropriming Time"
+
+  #ModPar1 <<- round(summary(GetPsiMin50)$coefficients[[2]],3) # PsiMin50 Value
+  #ModPar2 <<- round(summary(GetPsiMin50)$coefficients[[1]],4) # Intercept
+  #ModPar3 <<- round(summary(GetPsiMin50)$coefficients[[3]],6) # Slope
+
+  #Inter <<- summary(GetPsiMin50)$coefficients[[1]]
+  #Slope <<- summary(GetPsiMin50)$coefficients[[3]]
+
+  #get some estimation of goodness of fit
+  #Correlation <<- cor(grUsed,predict(HPlModel))^2
+  #RSquaredPlot <<- round(Correlation[1],2)
+
+  #Update Theta Hydropriming values
+  #Treatments <<-Treatments %>% as_tibble() %>% mutate(
+  #  Theta = (Treatments$Treat.priming.wp-Treatments$PsiMin50)*Treatments$Treat.priming.duration)
+
+  #Treatments$Theta <<- (Treatments$Treat.priming.wp-Treatments$PsiMin50)*Treatments$Treat.priming.duration
+
+  #Set legend position at bottom right corner
+  #LegPosV <<- 0.01
+  #LegPosH <<- 0.80
+
+  #Get higher Hydropriming time (theta HP) calculated on the dataset
+  #MaxTheta <<- Treatments$Theta[which.max(Treatments$Theta)]
+  #PlotTheta <<- (round(MaxTheta/10, digits = 0)+1)*10
+  #IncrementTheta <<- round(PlotTheta/50, digits = 0)*10
+
+  #PlotPrimingModel()
+  return(GetPsiMin50)
 }
-
