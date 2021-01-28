@@ -148,7 +148,7 @@ PlotRawDt <- function(Data, Treat1, Treat2, Treat3)
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
   pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFract", color=T1, shape=T2, eval(parse(text=alph)) )) +
-    geom_point(eval(parse(addshape)), size=2) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
+    geom_point(parse(addshape), size=2) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0), limits = c(0,PlotTime+(Increment/5))) +
     theme_scatter_plot
