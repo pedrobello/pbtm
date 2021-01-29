@@ -422,7 +422,7 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
       Theta = (Treatments$Treat.priming.wp-ModelResults$PsiMin50)*Treatments$Treat.priming.duration)
     #Treatment factor for plot
     TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
-    TreatFactor2 <- (as.factor(TreatData$Treat.priming.duration))
+    TreatFactor2 <- (as.factor(Treatments$Treat.priming.duration))
     TreatFactor3 <- NA
 
     #Pass parameters for plot
