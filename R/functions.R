@@ -205,30 +205,30 @@ CalcHPModel <- function(Data, GR)
   }
 
   #Initilaze values for model calculation
-  ΨMin50 <- -1
+  psiMin50 <- -1
   grUsed <- eval(parse(text=paste("Treatments$",grColName, sep = ""))) #grUsed <- PrimingTreats$GR50
   Pwp <- Treatments$Treat.priming.wp #Pwp <- PrimingTreats$Treat.priming.wp
   Pdur <- Treatments$Treat.priming.duration #Pdur <- PrimingTreats$Treat.priming.duration
 
   #Function to calculate Theta Hydro Priming
-  fθHP <- function(PM50){(Pwp-PM50)*Pdur}
+  fthetaHP <- function(PM50){(Pwp-PM50)*Pdur}
 
   # HydroPriming - Calculate PsiMin50, y intercept and slope using NLS
-  GetPsiMin50 <- nls(grUsed ~ inTer + fθHP(ΨMin50) * sLope, algorithm="port",
-                     start=c(inTer=0.001,ΨMin50=-1,sLope=0.1),lower=c(inTer=0.0000001,ΨMin50=-10, sLope=0.000000001),upper=c(inTer=0.1,ΨMin50=-1, sLope=1))
+  GetPsiMin50 <- nls(grUsed ~ inTer + fthetaHP(psiMin50) * sLope, algorithm="port",
+                     start=c(inTer=0.001,psiMin50=-1,sLope=0.1),lower=c(inTer=0.0000001,psiMin50=-10, sLope=0.000000001),upper=c(inTer=0.1,psiMin50=-1, sLope=1))
 
   PsiMin50 <- round(summary(GetPsiMin50)$coefficients[[2]],3) # PsiMin50 Value
   Intercept <- round(summary(GetPsiMin50)$coefficients[[1]],4) # Intercept
   Slope <- round(summary(GetPsiMin50)$coefficients[[3]],6) # Slope
 
   #Future refine of the model
-  #lmer(GR50 ~ ((Treat.priming.wp-ΨMin50)*Treat.priming.duration), PrimingTreats, start = c(ΨMin50 = -1) )
-  #fθHP <- function(PM50,Pwp,Pdur){(Pwp-PM50)*Pdur}
-  #HPlModel <- lm(GR50 ~ fθHP(PsiMin50,Treat.priming.wp,Treat.priming.duration), PrimingTreats)
+  #lmer(GR50 ~ ((Treat.priming.wp-psiMin50)*Treat.priming.duration), PrimingTreats, start = c(psiMin50 = -1) )
+  #fthetaHP <- function(PM50,Pwp,Pdur){(Pwp-PM50)*Pdur}
+  #HPlModel <- lm(GR50 ~ fthetaHP(PsiMin50,Treat.priming.wp,Treat.priming.duration), PrimingTreats)
   #summary(HPlModel)
 
   #Hydropriming model linear regression
-  HPlModel <- lm(grUsed ~ fθHP(PsiMin50))
+  HPlModel <- lm(grUsed ~ fthetaHP(PsiMin50))
 
   #get some estimation of goodness of fit
   Correlation <- cor(grUsed,predict(HPlModel))^2
@@ -258,7 +258,7 @@ CalcHTPModel <- function(Data, GR)
     grColName <- GR
   }
   #Initilaze values for model calculation
-  ΨMin50i <- -1
+  psiMin50i <- -1
   Tmini <- 12
   grUsed <- eval(parse(text=paste("Treatments$",grColName, sep = ""))) #grUsed <- PrimingTreats$GR50
   Pwp <- Treatments$Treat.priming.wp
@@ -266,11 +266,11 @@ CalcHTPModel <- function(Data, GR)
   Pdur <- Treatments$Treat.priming.duration
 
   #Function to calculate Theta Hydro Priming
-  fθHTP <- function(PM50,TMIN){(Pwp-PM50)*(Ptemp-TMIN)*Pdur}
+  fthetaHTP <- function(PM50,TMIN){(Pwp-PM50)*(Ptemp-TMIN)*Pdur}
 
   # HydroPriming - Calculate PsiMin50, y intercept and slope using NLS
-  GetPsiMin50Tmin <- nls(grUsed ~ inTer + fθHTP(ΨMin50,Tmin) * sLope, algorithm="port",
-                         start=c(inTer=0.001,ΨMin50=ΨMin50i,Tmin=Tmini,sLope=0.1),lower=c(inTer=0.0000001,ΨMin50=-10,Tmin=0.5,sLope=0.000000001),upper=c(inTer=0.1,ΨMin50=-1,Tmin=20,sLope=1))
+  GetPsiMin50Tmin <- nls(grUsed ~ inTer + fthetaHTP(psiMin50,Tmin) * sLope, algorithm="port",
+                         start=c(inTer=0.001,psiMin50=psiMin50i,Tmin=Tmini,sLope=0.1),lower=c(inTer=0.0000001,psiMin50=-10,Tmin=0.5,sLope=0.000000001),upper=c(inTer=0.1,psiMin50=-1,Tmin=20,sLope=1))
 
   PsiMin50 <- round(summary(GetPsiMin50Tmin)$coefficients[[2]],3) # PsiMin50 Value
   Tmin <- round(summary(GetPsiMin50Tmin)$coefficients[[3]],3) # Tmin Value
@@ -278,7 +278,7 @@ CalcHTPModel <- function(Data, GR)
   Slope <- round(summary(GetPsiMin50Tmin)$coefficients[[4]],6) # Slope
 
   #Hydropriming model linear regression
-  HTPlModel <- lm(grUsed ~ fθHTP(PsiMin50,Tmin))
+  HTPlModel <- lm(grUsed ~ fthetaHTP(PsiMin50,Tmin))
 
   #get some estimation of goodness of fit
   Correlation <- cor(grUsed,predict(HTPlModel))^2
