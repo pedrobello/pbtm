@@ -425,6 +425,9 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
     TreatFactor2 <- (as.factor(Treatments$Treat.priming.duration))
     TreatFactor3 <- NA
 
+    factor2lab <- "Priming \n duration"
+    factor3lab <- NA
+
     #Pass parameters for plot
     ModPar1Label <<- "Psi[min](50)=="
     ModPar2Label <<- "Intercept=="
@@ -443,6 +446,9 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
     TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
     TreatFactor2 <- (as.factor(Treatments$Treat.priming.temp))
     TreatFactor3 <- (as.factor(Treatments$Treat.priming.duration))
+
+    factor2lab <- "Priming \n temperature"
+    factor3lab <- "Priming \n duration"
 
     #Pass parameters for plot
     ModPar1Label <<- "Psi[min](50)=="
@@ -465,7 +471,7 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
     annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
     annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
     annotate("text", x = -Inf, y = Inf, label = paste("R^2 == ", ModelResults$RSquared), color = "grey0", parse = TRUE, hjust = -0.2, vjust = 6.3) +
-    theme_scatter_plot
+    theme_scatter_plot + labs(color = "Priming WP", shape = factor2lab, alpha = factor3lab )
 
   #Plot Hydropriming Model with two columns
   #grid.arrange(pPM,pPM, ncol=2)
