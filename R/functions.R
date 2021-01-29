@@ -437,52 +437,10 @@ CalcTTSubOModel <- function(Data, MaxCumFract)
   #get some estimation of goodness of fit
   Correlation <- cor(Germ,predict(TTSubOModel))^2
 
-  #Thermaltime Suboptimal Model - Create table to plot treatments with predicted model lines
-  #TreatData$TempFactor <<- with(TreatData, (as.factor(TreatData$Germ.temp)))
-  #Factor1 <<- TreatData$TempFactor
-  #Factor1Title <<- "Temperature"
-  #TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
-
   #Passing fitted Hydrotime Model Parameters
   Tb <- summary(TTSubOModel)$coefficients[[1]]
   thetaT50 <- summary(TTSubOModel)$coefficients[[2]]
   sigma <- summary(TTSubOModel)$coefficients[[3]]
-
-  #Passing fitted Hydrotime Model Parameters for plot legend
-  #ModPar1Label <<- "T[b] =="
-  #ModPar2Label <<- "θT(50)=="
-  #ModPar3Label <<- "σ == "
-  #ModPar4Label <<- "R^2 == "
-  #ModPar5Label <<- ""
-
-  #ModPar1 <<- round(Tb[1],1)
-  #ModPar2 <<- round(thetaT50[1],3)
-  #ModPar3 <<- round(Sigma[1],3)
-  #ModPar4 <<- round(Correlation[1],2)
-  #ModPar5 <<- ""
-
-
-  #Function to plot all predicted treatments by the Thermaltime model
-  #modellines <<-
-  #  alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
-  #    stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),Sigma,log=FALSE)*MaxGerm}, aes_(colour = factor(Temp)))
-  #  })
-
-  #Create column on TreatDataClean with predicted values from model
-  #TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
-  #  ModelPredicted = pnorm(log(CumTime, base = 10),thetaT50-log(Germ.temp-Tb, base = 10),Sigma,log=FALSE)*MaxGerm,
-  #  NormalizedTime = (Germ.temp-Tb)*CumTime
-  #)
-
-  #Function to plot Normalized time using the HYDROTIME model
-  #modelNormalized <<-
-  #  alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
-  #    stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(1, base = 10),Sigma,log=FALSE)*MaxGerm}, color="blue3")
-  #  })
-  #NormalizedAxisTitle <<- "Normalized thermal time (°h)"
-
-  #Plot raw data and predicted model with parameters
-  #PlotPBTMModel()
 
   Model <- "TTsuboptimal"
   HTPModelResults <- data.frame(Model,Tb,thetaT50,sigma,MaxCumFract,Correlation)
@@ -498,50 +456,59 @@ CalcTTSubOModel <- function(Data, MaxCumFract)
 #' @importFrom plyr alply
 #' @keywords plot population-based threshold model
 #' @export
-#' @examples prePlotPBTMModel()
-#' prePlotPBTMModel()
-prePlotPBTMModel <- function (Data, ModelResults)
+#' @examples PlotPBTMModel(mydata, myModelResults)
+#' PlotPBTMModel(mydata, myModelResults)
+PlotPBTMModel <- function (Data, ModelResults)
 {
   TreatData <- Data
   Germ <- TreatData$CumFract
   Time <- TreatData$CumTime
-  Temp <- TreatData$Germ.temp
-  Tb <- ModelResults$Tb
-  thetaT50 <- ModelResults$thetaT50
-  sigma <- ModelResults$sigma
   MaxCumFract <- ModelResults$MaxCumFract
   Correlation <- ModelResults$Correlation
+  Model <- ModelResults$Model
 
-  TreatFactor1 <- (as.factor(TreatData$Germ.temp))
-  TreatFactor2 <- NA
-  TreatFactor3 <- NA
+  if (Model == "TTsuboptimal")
+  {
 
-  #Label for legends
-  LegendTitleFactor1 <- "Temperature"
-  LegendTitleFactor2 <- NA
-  LegendTitleFactor3 <- NA
+    Temp <- TreatData$Germ.temp
+    Tb <- ModelResults$Tb
+    thetaT50 <- ModelResults$thetaT50
+    sigma <- ModelResults$sigma
 
-  #Passing fitted Hydrotime Model Parameters for plot legend
-  ModPar1Label <- "T[b] =="
-  ModPar2Label <- "θT(50)=="
-  ModPar3Label <- "σ == "
-  ModPar4Label <- "R^2 == "
-  ModPar5Label <- ""
+    TreatFactor1 <- (as.factor(TreatData$Germ.temp))
+    TreatFactor2 <- NA
+    TreatFactor3 <- NA
 
-  ModPar1 <- round(Tb[1],1)
-  ModPar2 <- round(thetaT50[1],3)
-  ModPar3 <- round(sigma[1],3)
-  ModPar4 <- round(Correlation[1],2)
-  ModPar5 <- ""
+    #Label for legends
+    LegendTitleFactor1 <- "Temperature"
+    LegendTitleFactor2 <- NA
+    LegendTitleFactor3 <- NA
 
-  TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+    #Passing fitted Hydrotime Model Parameters for plot legend
+    ModPar1Label <- "T[b] =="
+    ModPar2Label <- "θT(50)=="
+    ModPar3Label <- "σ == "
+    ModPar4Label <- "R^2 == "
+    ModPar5Label <- ""
 
-  #Function to plot all predicted treatments by the Thermaltime model
-  modellines <<-
-    alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
-      stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumFract}, aes_(colour = factor(Temp)))
-    })
+    ModPar1 <- round(Tb[1],1)
+    ModPar2 <- round(thetaT50[1],3)
+    ModPar3 <- round(sigma[1],3)
+    ModPar4 <- round(Correlation[1],2)
+    ModPar5 <- ""
 
+    TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+
+    #Function to plot all predicted treatments by the Thermaltime model
+    modellines <<-
+      alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
+        stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumFract}, aes_(colour = factor(Temp)))
+      })
+  }
+
+
+#-------
+#Plot provided data with predicted lines indicated above.
   p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time") + ylab("Cumulative (%)") +
     modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
@@ -558,30 +525,3 @@ prePlotPBTMModel <- function (Data, ModelResults)
 
 }
 
-
-
-#' A Function to plot the selected calculated model and parameters and predicitions.
-#'
-#' This function plots the selected model and calculated parameters.
-#' @param
-#' @keywords plot population-based threshold model
-#' @export
-#' @examples PlotModl()
-#' PlotModl()
-PlotModl <- function ()
-{
-  #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-  p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
-    modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
-    scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
-    scale_x_continuous(expand = c(0,0)) +
-    guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
-           alpha=guide_legend(reverse=T, title=LegendTitleFactor2, order = 2)) + theme_scatter_plot +
-    annotate("text", x = -Inf, y = Inf, label = paste("Model \n Parameters"), color = "grey0") +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar1Label, ModPar1), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar4Label, ModPar4), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar5Label, ModPar5), color = "grey0", parse = TRUE)
-  p
-}
