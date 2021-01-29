@@ -342,7 +342,7 @@ CalcHTPModel <- function(Data, GR)
   PsiMin50 <- round(summary(GetPsiMin50Tmin)$coefficients[[2]],3) # PsiMin50 Value
   Tmin <- round(summary(GetPsiMin50Tmin)$coefficients[[3]],3) # Tmin Value
   Intercept <- round(summary(GetPsiMin50Tmin)$coefficients[[1]],4) # Intercept
-  Slope <- round(summary(GetPsiMin50Tmin)$coefficients[[4]],4) # Slope
+  Slope <- round(summary(GetPsiMin50Tmin)$coefficients[[4]],6) # Slope
 
   #Pass PsiMin50 to Treatments table
   #Treatments <-Treatments %>% as_tibble() %>% mutate(
