@@ -418,7 +418,7 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
   grUsed <- eval(parse(text=paste("Treatments$",grColName, sep = "")))
 
   if (ModelResults$Model == "HP") { #HP Model identified and update Theta Hydropriming values
-    Treatments <-Treatments %>% as_tibble() %>% mutate(
+    Treatments <-Treatments %>% as_tibble() %>% dplyr::mutate(
       Theta = (Treatments$Treat.priming.wp-ModelResults$PsiMin50)*Treatments$Treat.priming.duration)
     #Treatment factor for plot
     TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
@@ -437,7 +437,7 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
 
 
   } else { #HTP identified and update Theta Hydrothermal priming values
-    Treatments <-Treatments %>% as_tibble() %>% mutate(
+    Treatments <-Treatments %>% as_tibble() %>% dplyr::mutate(
       Theta = (Treatments$Treat.priming.wp-ModelResults$PsiMin50)*(Treatments$Treat.priming.temp-ModelResults$Tmin)*Treatments$Treat.priming.duration)
     #Treatment factor for plot
     TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
