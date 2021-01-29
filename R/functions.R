@@ -517,22 +517,22 @@ prePlotPBTMModel <- function (Data, ModelResults)
   TreatFactor3 <- NA
 
   #Label for legends
-  LegendTitleFactor1 <<- "Temperature"
-  LegendTitleFactor2 <<- NA
-  LegendTitleFactor3 <<- NA
+  LegendTitleFactor1 <- "Temperature"
+  LegendTitleFactor2 <- NA
+  LegendTitleFactor3 <- NA
 
   #Passing fitted Hydrotime Model Parameters for plot legend
-  ModPar1Label <<- "T[b] =="
-  ModPar2Label <<- "θT(50)=="
-  ModPar3Label <<- "σ == "
-  ModPar4Label <<- "R^2 == "
-  ModPar5Label <<- ""
+  ModPar1Label <- "T[b] =="
+  ModPar2Label <- "θT(50)=="
+  ModPar3Label <- "σ == "
+  ModPar4Label <- "R^2 == "
+  ModPar5Label <- ""
 
-  ModPar1 <<- round(Tb[1],1)
-  ModPar2 <<- round(thetaT50[1],3)
-  ModPar3 <<- round(sigma[1],3)
-  ModPar4 <<- round(Correlation[1],2)
-  ModPar5 <<- ""
+  ModPar1 <- round(Tb[1],1)
+  ModPar2 <- round(thetaT50[1],3)
+  ModPar3 <- round(sigma[1],3)
+  ModPar4 <- round(Correlation[1],2)
+  ModPar5 <- ""
 
   TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
 
@@ -542,7 +542,20 @@ prePlotPBTMModel <- function (Data, ModelResults)
       stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumF}, aes_(colour = factor(Temp)))
     })
 
-  PlotModl()
+  p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
+    modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
+    scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
+    scale_x_continuous(expand = c(0,0)) +
+    guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
+           alpha=guide_legend(reverse=T, title=LegendTitleFactor2, order = 2)) + theme_scatter_plot +
+    annotate("text", x = -Inf, y = Inf, label = paste("Model \n Parameters"), color = "grey0") +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar1Label, ModPar1), color = "grey0", parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar4Label, ModPar4), color = "grey0", parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar5Label, ModPar5), color = "grey0", parse = TRUE)
+  p
+
 }
 
 
