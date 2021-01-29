@@ -465,7 +465,7 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
     annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
     annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
     annotate("text", x = -Inf, y = Inf, label = paste("R^2 == ", ModelResults$RSquared), color = "grey0", parse = TRUE, hjust = -0.2, vjust = 6.3) +
-    theme_scatter_plot + theme(legend.position="none")
+    theme_scatter_plot
 
   #Plot Hydropriming Model with two columns
   #grid.arrange(pPM,pPM, ncol=2)
