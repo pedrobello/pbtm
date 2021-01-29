@@ -559,7 +559,7 @@ PlotModl <- function ()
 {
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
   p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
-    modellines + my_colors + scale_alpha_discrete(range = c(0.5, 1.0)) +
+    modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0)) +
     guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
