@@ -539,7 +539,7 @@ prePlotPBTMModel <- function (Data, ModelResults)
   #Function to plot all predicted treatments by the Thermaltime model
   modellines <<-
     alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
-      stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumF}, aes_(colour = factor(Temp)))
+      stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumFract}, aes_(colour = factor(Temp)))
     })
 
   p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
