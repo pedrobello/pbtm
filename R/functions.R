@@ -403,6 +403,7 @@ theme_scatter_plot <- theme(
 #' @param ModelResults is data object resulting from the CalcHPModel() or CalcHTPModel() functions containing the model information and parameter results.
 #' @param GR is the column name for the rate to be used in the model and needs to be informed in case the data object contains a GR different than GR50.
 #' @keywords plot priming model hydropriming hydrothermal priming
+#' @importFrom tibble as_tibble
 #' @export
 #' @examples PlotPrimingModel(myData, HPModelResults)
 #' PlotPrimingModel(myData, HPModelResults)
