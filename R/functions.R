@@ -548,7 +548,7 @@ prePlotPBTMModel <- function (Data, ModelResults)
     scale_x_continuous(expand = c(0,0)) + expand_limits(x = 0, y = 0) +
     guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
            alpha=guide_legend(reverse=T, title=LegendTitleFactor2, order = 2)) + theme_scatter_plot +
-    annotate("text", x = -Inf, y = Inf, label = paste("Model \n Parameters"), color = "grey0", hjust = 1, vjust = 1.5) +
+    annotate("text", x = -Inf, y = Inf, label = paste("Model \n Parameters"), color = "grey0", hjust = -0.1, vjust = 1.5) +
     annotate("text", x = -Inf, y = Inf, label = paste(ModPar1Label, ModPar1), color = "grey0", hjust = -0.1, vjust = 2.5, parse = TRUE) +
     annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", hjust = -0.1, vjust = 4.5, parse = TRUE) +
     annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", hjust = -0.1, vjust = 5.5, parse = TRUE) +
