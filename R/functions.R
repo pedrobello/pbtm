@@ -392,6 +392,6 @@ CalcHTPModel <- function(Data, GR)
   #IncrementTheta <<- round(PlotTheta/50, digits = 0)*10
 
   HTPModelResults <- data.frame(PsiMin50,Tmin,Intercept,Slope,RSquared)
-  return(HPModelResults)
+  return(HTPModelResults)
 }
 
