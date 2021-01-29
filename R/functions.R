@@ -495,6 +495,7 @@ CalcTTSubOModel <- function(Data, MaxCumFract)
 #' This function plots the selected model and calculated parameters.
 #' @param Data time course and cumulative dataset to be used in the Thermaltime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours (CumTime) + a column with cumulative fractions (CumFract) and the experiment temperature (Germ.temp) are required. Filter the dataframe to only have treatments with temperature equal or under to  optimal temperature level.
 #' @param ModelResults is data object resulting from the Calc PBTM functions containing the model information and parameter results.
+#' @importFrom plyr alply
 #' @keywords plot population-based threshold model
 #' @export
 #' @examples prePlotPBTMModel()
