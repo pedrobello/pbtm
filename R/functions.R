@@ -429,14 +429,14 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
     factor3lab <- NA
 
     #Pass parameters for plot
-    ModPar1Label <<- "Psi[min](50)=="
-    ModPar2Label <<- "Intercept=="
-    ModPar3Label <<- "Slope=="
-    xAxisTitlePriming <<- "Hydropriming Time"
+    ModPar1Label <- "Psi[min](50)=="
+    ModPar2Label <- "Intercept=="
+    ModPar3Label <- "Slope=="
+    xAxisTitlePriming <- "Hydropriming Time"
 
-    ModPar1 <<- ModelResults$PsiMin50 # PsiMin50 Value
-    ModPar2 <<- ModelResults$Intercept # Intercept
-    ModPar3 <<- ModelResults$Slope # Slope
+    ModPar1 <- ModelResults$PsiMin50 # PsiMin50 Value
+    ModPar2 <- ModelResults$Intercept # Intercept
+    ModPar3 <- ModelResults$Slope # Slope
 
 
   } else { #HTP identified and update Theta Hydrothermal priming values
@@ -451,16 +451,16 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
     factor3lab <- "Priming \n duration"
 
     #Pass parameters for plot
-    ModPar1Label <<- "Psi[min](50)=="
-    ModPar2Label <<- "T[min]=="
-    ModPar3Label <<- "Intercept=="
-    ModPar4Label <<- "Slope=="
-    xAxisTitlePriming <<- "Hydrothermal priming Time"
+    ModPar1Label <- "Psi[min](50)=="
+    ModPar2Label <- "T[min]=="
+    ModPar3Label <- "Intercept=="
+    ModPar4Label <- "Slope=="
+    xAxisTitlePriming <- "Hydrothermal priming Time"
 
-    ModPar1 <<- ModelResults$PsiMin50 # PsiMin50 Value
-    ModPar2 <<- ModelResults$Tmin # Tmin Value
-    ModPar3 <<- ModelResults$Intercept # Intercept
-    ModPar4 <<- ModelResults$Slope # Slope
+    ModPar1 <- ModelResults$PsiMin50 # PsiMin50 Value
+    ModPar2 <- ModelResults$Tmin # Tmin Value
+    ModPar3 <- ModelResults$Intercept # Intercept
+    ModPar4 <- ModelResults$Slope # Slope
 
   }
 
