@@ -3,6 +3,7 @@
 export(CalcHPModel)
 export(CalcHTPModel)
 export(CalcSpeed)
+export(CalcTTSubOModel)
 export(CleanData)
 export(PlotPrimingModel)
 export(PlotRateVsTreat)

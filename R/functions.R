@@ -3,7 +3,7 @@
 #' A function that calculates the required time and rate to a desired fraction in cumulative curves
 #'
 #' This function allows you to calculate the time to a desired cumulative fraction and respective germination rate. Use this function on raw data to avoid loss of points closer to the desired cumulative fraction.
-#' @param Data time course and cumulative dataset. Several treatments can be used at once as long as it respects the template and column names provided. A column with time in hours (Germ.time.hours) + a column with cumulative fractions (Germ.fraction) are required with at least one additional column for relevant treatment (e.g., germination temperature or water potential)
+#' @param Data time course and cumulative dataset. Several treatments can be used at once as long as it respects the template and column names provided. A column with time in hours (CumTime) + a column with cumulative fractions (CumFract) are required with at least one additional column for relevant treatment (e.g., germination temperature or water potential)
 #' @param Fraction from 0 to 1 used to calculate the time required for that level to be obtained in the cumulative time course. Standard value is 0.5 (50 percent), to calculate the time to 50 percent germination (T50) and respective germination rate (GR50). Fraction level can be entered and be used for calculation and change column name.
 #' @param Treat1,Treat2,Treat3,Treat4,Treat5 are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here. These column names do not need to be informed in case the provided template file is used to organize the data.
 #' @keywords Tx, GRx, germination speed, germination rate
@@ -289,29 +289,6 @@ CalcHTPModel <- function(Data, GR)
   return(HTPModelResults)
 }
 
-
-#ggplot package theme ----------------------------------------------------------------------------------
-theme_scatter_plot <- theme(
-  legend.background = element_blank(),
-  legend.key = element_blank(),
-  legend.title = element_text(size=12, color ="black"),
-  legend.text = element_text(size=12, color ="black"),
-  panel.background = element_blank(),
-  panel.grid.minor.y=element_blank(),
-  panel.grid.major.x=element_blank(),
-  panel.grid.major.y=element_blank(),
-  panel.grid.minor.x= element_blank(),
-  panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
-  strip.background = element_rect(colour="black", fill="white"),
-  axis.ticks = element_line(color = "black", size =0.5),
-  axis.text = element_text(size=12, color ="black"),
-  axis.title = element_text(size=14, color ="black",face = "bold"),
-  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
-  plot.title = element_blank())
-
-
-#----------------------New Development - Under Testing
-
 #' A Function to plot the both priming models.
 #'
 #' This function plots the priming models and calculated parameters.
@@ -392,3 +369,114 @@ PlotPrimingModel <- function(Data, ModelResults, GR)
   pPM
 }
 
+
+#ggplot package theme ----------------------------------------------------------------------------------
+theme_scatter_plot <- theme(
+  legend.background = element_blank(),
+  legend.key = element_blank(),
+  legend.title = element_text(size=12, color ="black"),
+  legend.text = element_text(size=12, color ="black"),
+  panel.background = element_blank(),
+  panel.grid.minor.y=element_blank(),
+  panel.grid.major.x=element_blank(),
+  panel.grid.major.y=element_blank(),
+  panel.grid.minor.x= element_blank(),
+  panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
+  strip.background = element_rect(colour="black", fill="white"),
+  axis.ticks = element_line(color = "black", size =0.5),
+  axis.text = element_text(size=12, color ="black"),
+  axis.title = element_text(size=14, color ="black",face = "bold"),
+  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
+  plot.title = element_blank())
+
+
+#----------------------New Development - Under Testing
+
+
+#' A Function to calculate the Thermaltime model parameters.
+#'
+#' This function calculates the temperature base (Tb), the thermal time to 50% of the population (ThetaT50) and the standard deviation (sigma).
+#' @param Data time course and cumulative dataset to be used in the Thermaltime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours (CumTime) + a column with cumulative fractions (CumFract) and the experiment temperature (Germ.temp) are required. Filter the dataframe to only have treatments with temperature equal or under to  optimal temperature level.
+#' @keywords Thermal time model parameters
+#' @export
+#' @examples CalcTTSubOModel(myData)
+#' CalcTTSubOModel(myData)
+#'
+CalcTTSubOModel <- function(Data)
+{
+  TreatData <- Data
+  Germ <- TreatData$CumFract
+  Time <- TreatData$CumTime
+  #Inform intial and limit values for the Hydrotime Model parameters
+  # Initials
+  iTb <- 6
+  ithetaT50 <- 3
+  iSigma <- 0.09
+  MaxGerm <- 1
+  #lower limits
+  lTb <- 0
+  lthetaT50 <- 0.5
+  lSigma <- 0.0001
+  #upper limits
+  uTb <- 15
+  uthetaT50 <- 50
+  uSigma <- 0.5
+
+  #Calculate Thermaltime Suboptimal Model Parameters- nls plus algorithm port used to add constraints on the parameters
+  TTSubOModel <- nls(Germ ~ pnorm(log(Time, base = 10),mean = thetaT50-log(Temp-Tb, base = 10), sd = Sigma, log= FALSE)*MaxGerm, start=list(Tb=iTb,thetaT50=ithetaT50,Sigma=iSigma),lower=list(Tb=lTb,thetaT50=lthetaT50,Sigma=lSigma),upper=list(Tb=uTb,thetaT50=uthetaT50,Sigma=uSigma), algorithm ="port")
+  summary(TTSubOModel)
+
+  #get some estimation of goodness of fit
+  Correlation <- cor(Germ,predict(TTSubOModel))^2
+
+  #Thermaltime Suboptimal Model - Create table to plot treatments with predicted model lines
+  #TreatData$TempFactor <<- with(TreatData, (as.factor(TreatData$Germ.temp)))
+  #Factor1 <<- TreatData$TempFactor
+  #Factor1Title <<- "Temperature"
+  #TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+
+  #Passing fitted Hydrotime Model Parameters
+  Tb <- summary(TTSubOModel)$coefficients[[1]]
+  thetaT50 <- summary(TTSubOModel)$coefficients[[2]]
+  Sigma <- summary(TTSubOModel)$coefficients[[3]]
+
+  #Passing fitted Hydrotime Model Parameters for plot legend
+  #ModPar1Label <<- "T[b] =="
+  #ModPar2Label <<- "θT(50)=="
+  #ModPar3Label <<- "σ == "
+  #ModPar4Label <<- "R^2 == "
+  #ModPar5Label <<- ""
+
+  #ModPar1 <<- round(Tb[1],1)
+  #ModPar2 <<- round(thetaT50[1],3)
+  #ModPar3 <<- round(Sigma[1],3)
+  #ModPar4 <<- round(Correlation[1],2)
+  #ModPar5 <<- ""
+
+
+  #Function to plot all predicted treatments by the Thermaltime model
+  #modellines <<-
+  #  alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
+  #    stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),Sigma,log=FALSE)*MaxGerm}, aes_(colour = factor(Temp)))
+  #  })
+
+  #Create column on TreatDataClean with predicted values from model
+  #TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
+  #  ModelPredicted = pnorm(log(CumTime, base = 10),thetaT50-log(Germ.temp-Tb, base = 10),Sigma,log=FALSE)*MaxGerm,
+  #  NormalizedTime = (Germ.temp-Tb)*CumTime
+  #)
+
+  #Function to plot Normalized time using the HYDROTIME model
+  #modelNormalized <<-
+  #  alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
+  #    stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(1, base = 10),Sigma,log=FALSE)*MaxGerm}, color="blue3")
+  #  })
+  #NormalizedAxisTitle <<- "Normalized thermal time (°h)"
+
+  #Plot raw data and predicted model with parameters
+  #PlotPBTMModel()
+
+  Model <- "TTsuboptimal"
+  HTPModelResults <- data.frame(Model,Tb,thetaT50,Sigma,Correlation)
+  return(HTPModelResults)
+}
