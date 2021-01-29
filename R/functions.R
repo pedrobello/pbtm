@@ -407,6 +407,7 @@ CalcTTSubOModel <- function(Data)
   TreatData <- Data
   Germ <- TreatData$CumFract
   Time <- TreatData$CumTime
+  Temp <- TreatData$Germ.temp
   #Inform intial and limit values for the Hydrotime Model parameters
   # Initials
   iTb <- 6
