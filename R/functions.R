@@ -539,21 +539,21 @@ prePlotPBTMModel <- function (Data, ModelResults)
   #Function to plot all predicted treatments by the Thermaltime model
   modellines <<-
     alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
-      stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumF}, aes_(colour = factor(Temp)))
+      stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumFract}, aes_(colour = factor(Temp)))
     })
 
-  p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time (hours)") + ylab("Germination (%)") +
+  p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time") + ylab("Cumulative (%)") +
     modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0)) +
     guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
            alpha=guide_legend(reverse=T, title=LegendTitleFactor2, order = 2)) + theme_scatter_plot +
-    annotate("text", x = -Inf, y = Inf, label = paste("Model \n Parameters"), color = "grey0") +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar1Label, ModPar1), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar4Label, ModPar4), color = "grey0", parse = TRUE) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar5Label, ModPar5), color = "grey0", parse = TRUE)
+    annotate("text", x = -Inf, y = Inf, label = paste("Model \n Parameters"), color = "grey0", hjust = -0.1, vjust = 1.5) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar1Label, ModPar1), color = "grey0", hjust = -0.1, vjust = 2.5, parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", hjust = -0.1, vjust = 4.5, parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", hjust = -0.1, vjust = 5.5, parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar4Label, ModPar4), color = "grey0", hjust = -0.1, vjust = 6.5, parse = TRUE) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar5Label, ModPar5), color = "grey0", hjust = -0.1, vjust = 7.5, parse = TRUE)
   p
 
 }
