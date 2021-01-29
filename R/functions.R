@@ -186,29 +186,6 @@ CleanData <- function(Data, Treat1, Treat2, Treat3, Treat4, Treat5) {
   }
 }
 
-#ggplot package theme ----------------------------------------------------------------------------------
-theme_scatter_plot <- theme(
-  legend.background = element_blank(),
-  legend.key = element_blank(),
-  legend.title = element_text(size=12, color ="black"),
-  legend.text = element_text(size=12, color ="black"),
-  panel.background = element_blank(),
-  panel.grid.minor.y=element_blank(),
-  panel.grid.major.x=element_blank(),
-  panel.grid.major.y=element_blank(),
-  panel.grid.minor.x= element_blank(),
-  panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
-  strip.background = element_rect(colour="black", fill="white"),
-  axis.ticks = element_line(color = "black", size =0.5),
-  axis.text = element_text(size=12, color ="black"),
-  axis.title = element_text(size=14, color ="black",face = "bold"),
-  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
-  plot.title = element_blank())
-
-
-#----------------------New Development - Under Testing
-
-
 #' A Function to calculate the Hydropriming model parameters.
 #'
 #' This function calculates the minimal water potential for priming effects (Psib50min).
@@ -238,7 +215,7 @@ CalcHPModel <- function(Data, GR)
 
   # HydroPriming - Calculate PsiMin50, y intercept and slope using NLS
   GetPsiMin50 <- nls(grUsed ~ inTer + fθHP(ΨMin50) * sLope, algorithm="port",
-                      start=c(inTer=0.001,ΨMin50=-1,sLope=0.1),lower=c(inTer=0.0000001,ΨMin50=-10, sLope=0.000000001),upper=c(inTer=0.1,ΨMin50=-1, sLope=1))
+                     start=c(inTer=0.001,ΨMin50=-1,sLope=0.1),lower=c(inTer=0.0000001,ΨMin50=-10, sLope=0.000000001),upper=c(inTer=0.1,ΨMin50=-1, sLope=1))
 
   PsiMin50 <- round(summary(GetPsiMin50)$coefficients[[2]],3) # PsiMin50 Value
   Intercept <- round(summary(GetPsiMin50)$coefficients[[1]],4) # Intercept
@@ -300,8 +277,8 @@ CalcHPModel <- function(Data, GR)
   #IncrementTheta <<- round(PlotTheta/50, digits = 0)*10
 
   #PlotPrimingModel()
-
-  HPModelResults <- data.frame(PsiMin50,Intercept,Slope,RSquared)
+  Model <- "HP"
+  HPModelResults <- data.frame(Model,PsiMin50,Intercept,Slope,RSquared)
   return(HPModelResults)
 }
 
@@ -336,7 +313,7 @@ CalcHTPModel <- function(Data, GR)
 
   # HydroPriming - Calculate PsiMin50, y intercept and slope using NLS
   GetPsiMin50Tmin <- nls(grUsed ~ inTer + fθHTP(ΨMin50,Tmin) * sLope, algorithm="port",
-                          start=c(inTer=0.001,ΨMin50=ΨMin50i,Tmin=Tmini,sLope=0.1),lower=c(inTer=0.0000001,ΨMin50=-10,Tmin=0.5,sLope=0.000000001),upper=c(inTer=0.1,ΨMin50=-1,Tmin=20,sLope=1))
+                         start=c(inTer=0.001,ΨMin50=ΨMin50i,Tmin=Tmini,sLope=0.1),lower=c(inTer=0.0000001,ΨMin50=-10,Tmin=0.5,sLope=0.000000001),upper=c(inTer=0.1,ΨMin50=-1,Tmin=20,sLope=1))
 
 
   PsiMin50 <- round(summary(GetPsiMin50Tmin)$coefficients[[2]],3) # PsiMin50 Value
@@ -391,7 +368,106 @@ CalcHTPModel <- function(Data, GR)
   #PlotTheta <<- (round(MaxTheta/10, digits = 0)+1)*10
   #IncrementTheta <<- round(PlotTheta/50, digits = 0)*10
 
-  HTPModelResults <- data.frame(PsiMin50,Tmin,Intercept,Slope,RSquared)
+  Model <- "HTP"
+  HTPModelResults <- data.frame(Model,PsiMin50,Tmin,Intercept,Slope,RSquared)
   return(HTPModelResults)
+}
+
+
+#ggplot package theme ----------------------------------------------------------------------------------
+theme_scatter_plot <- theme(
+  legend.background = element_blank(),
+  legend.key = element_blank(),
+  legend.title = element_text(size=12, color ="black"),
+  legend.text = element_text(size=12, color ="black"),
+  panel.background = element_blank(),
+  panel.grid.minor.y=element_blank(),
+  panel.grid.major.x=element_blank(),
+  panel.grid.major.y=element_blank(),
+  panel.grid.minor.x= element_blank(),
+  panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
+  strip.background = element_rect(colour="black", fill="white"),
+  axis.ticks = element_line(color = "black", size =0.5),
+  axis.text = element_text(size=12, color ="black"),
+  axis.title = element_text(size=14, color ="black",face = "bold"),
+  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
+  plot.title = element_blank())
+
+
+#----------------------New Development - Under Testing
+
+#' A Function to plot the both priming models.
+#'
+#' This function plots the priming models and calculated parameters.
+#' @param myData object with the calculated rates with treatments to be used in the Hydrothermal priming model. The output of the CalcSpeed function can be directly used here with the desired treatments. The fields with Treat.priming.wp, Treat.priming.temp and Treat.priming.duration need to be informed in the data file.
+#' @param ModelResults is data object resulting from the CalcHPModel() or CalcHTPModel() functions containing the model information and parameter results.
+#' @param GR is the column name for the rate to be used in the model and needs to be informed in case the data object contains a GR different than GR50.
+#' @keywords plot priming model hydropriming hydrothermal priming
+#' @export
+#' @examples PlotPrimingModel(myData, HPModelResults)
+#' PlotPrimingModel(myData, HPModelResults)
+PlotPrimingModel <- function(Data, ModelResults, GR)
+{
+  Treatments <- Data
+  if (missing(GR)) { #GR not informed
+    grColName <- "GR50"
+  } else {
+    grColName <- GR
+  }
+  grUsed <- eval(parse(text=paste("Treatments$",grColName, sep = "")))
+
+  if (ModelResults$Model == "HP") { #HP Model identified and update Theta Hydropriming values
+    Treatments <-Treatments %>% as_tibble() %>% mutate(
+      Theta = (Treatments$Treat.priming.wp-ModelResults$PsiMin50)*Treatments$Treat.priming.duration)
+    #Treatment factor for plot
+    TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
+    TreatFactor2 <- (as.factor(TreatData$Treat.priming.duration))
+    TreatFactor3 <- NA
+
+    #Pass parameters for plot
+    ModPar1Label <<- "Psi[min](50)=="
+    ModPar2Label <<- "Intercept=="
+    ModPar3Label <<- "Slope=="
+    xAxisTitlePriming <<- "Hydropriming Time"
+
+    ModPar1 <<- ModelResults$PsiMin50 # PsiMin50 Value
+    ModPar2 <<- ModelResults$Intercept # Intercept
+    ModPar3 <<- ModelResults$Slope # Slope
+
+
+  } else { #HTP identified and update Theta Hydrothermal priming values
+    Treatments <-Treatments %>% as_tibble() %>% mutate(
+      Theta = (Treatments$Treat.priming.wp-ModelResults$PsiMin50)*(Treatments$Treat.priming.temp-ModelResults$Tmin)*Treatments$Treat.priming.duration)
+    #Treatment factor for plot
+    TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
+    TreatFactor2 <- (as.factor(TreatData$Treat.priming.temp))
+    TreatFactor3 <- (as.factor(TreatData$Treat.priming.duration))
+
+    #Pass parameters for plot
+    ModPar1Label <<- "Psi[min](50)=="
+    ModPar2Label <<- "T[min]=="
+    ModPar3Label <<- "Intercept=="
+    ModPar4Label <<- "Slope=="
+    xAxisTitlePriming <<- "Hydrothermal priming Time"
+
+    ModPar1 <<- ModelResults$PsiMin50 # PsiMin50 Value
+    ModPar2 <<- ModelResults$Tmin # Tmin Value
+    ModPar3 <<- ModelResults$Intercept # Intercept
+    ModPar4 <<- ModelResults$Slope # Slope
+
+  }
+
+  pPM <- ggplot(data=Treatments, aes(x=Theta, y=grUsed, color=TreatFactor1, shape = TreatFactor2, alpha = TreatFactor3)) + geom_point(size=2) + xlab(xAxisTitlePriming) + ylab("Germination Rate") +
+    scale_x_continuous(expand = c(0,0)) + geom_abline(intercept = ModelResults$Intercept, slope = ModelResults$Slope, color = "blue") +
+    annotate("text", x = -Inf, y = Inf, label = paste("Model Parameters"), color = "grey0", hjust = -0.1, vjust = 1.5) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar1Label, ModPar1), color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
+    annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
+    annotate("text", x = -Inf, y = Inf, label = paste("R^2 == ", ModelResults$RSquared), color = "grey0", parse = TRUE, hjust = -0.2, vjust = 6.3) +
+    theme_scatter_plot + theme(legend.position="none")
+
+  #Plot Hydropriming Model with two columns
+  #grid.arrange(pPM,pPM, ncol=2)
+  pPM
 }
 
