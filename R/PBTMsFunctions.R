@@ -354,6 +354,7 @@ PlotPBTMModel <- function (Data, ModelResults)
     #wps <<- Dt$Treatments.Germ.wp
 
     WP <- TreatData$Germ.wp
+    Temp <- TreatData$Germ.temp
     HT <- ModelResults$HT
     psib50 <- ModelResults$psib50
     sigma <- ModelResults$sigma
