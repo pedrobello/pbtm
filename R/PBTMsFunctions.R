@@ -389,7 +389,7 @@ PlotPBTMModel <- function (Data, ModelResults)
     #Function to plot all predicted treatments by the HYDROTHERMAL time model
     modellines <<-
       mapply(function(TreatmentsTemp, TreatmentsWP) {
-        stat_function(fun=function(x){pnorm((+WP-(HT/((Temp-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFract}, aes_(colour = factor(Temp), alpha = factor(WP)))
+        stat_function(fun=function(x){pnorm((+TreatmentsWP-(HT/((TreatmentsTemp-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFract}, aes_(colour = factor(TreatmentsTemp), alpha = factor(TreatmentsWP)))
       }, Temp, WP)
 
   }
