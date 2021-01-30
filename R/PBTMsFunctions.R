@@ -386,11 +386,19 @@ PlotPBTMModel <- function (Data, ModelResults)
     TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
     TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
 
+    #Sort data with higher temperature and higher wp
+    #TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
+    Treatments <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp),]
+
+    Dt <<- data.frame(Treatments$Germ.temp,Treatments$Germ.wp)
+    tmps <<- Dt$Treatments.Germ.temp
+    wps <<- Dt$Treatments.Germ.wp
+
     #Function to plot all predicted treatments by the HYDROTHERMAL time model
     modellines <<-
-      mapply(function(TreatmentsTemp, TreatmentsWP) {
-        stat_function(fun=function(x){pnorm((+TreatmentsWP-(HT/((TreatmentsTemp-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFract}, aes_(colour = factor(TreatmentsTemp), alpha = factor(TreatmentsWP)))
-      }, Temp, WP)
+      mapply(function(Temp1, WP1) {
+        stat_function(fun=function(x){pnorm((+WP1-(HT/((Temp1-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFract}, aes_(colour = factor(Temp1), alpha = factor(WP1)))
+      }, tmps, wps)
 
   }
 
