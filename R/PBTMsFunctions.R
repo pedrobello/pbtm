@@ -336,6 +336,61 @@ PlotPBTMModel <- function (Data, ModelResults)
         stat_function(fun=function(x){pnorm(WP-(HT/(x)),psib50,sigma,log=FALSE)*MaxCumFract}, aes_(colour = factor(WP)))
       })
 
+  } else if (Model == "HTT") { #Hydrothermal time suboptimal model selected  ------------------
+
+    #Hydrothermal time Model - Create table to plot treatments with predicted model lines
+    #TreatData$WPFactor <<- with(TreatData, (as.factor(TreatData$Germ.wp)))
+    #Factor1 <<- TreatData$WPFactor
+    #Factor1Title <<- "Water \n Potential"
+    #TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
+    #TreatData$TempFactor <<- with(TreatData, (as.factor(TreatData$Germ.temp)))
+    #Factor2 <<- TreatData$TempFactor
+    #Factor2Title <<- "Temperature"
+    #TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+    #TreatmentHTT <<- distinct(TreatData, Germ.temp, Germ.wp, .keep_all = FALSE)
+
+    #Dt <<- data.frame(Treatments$Germ.temp,Treatments$Germ.wp)
+    #tmps <<- Dt$Treatments.Germ.temp
+    #wps <<- Dt$Treatments.Germ.wp
+
+    WP <- TreatData$Germ.wp
+    HT <- ModelResults$HT
+    psib50 <- ModelResults$psib50
+    sigma <- ModelResults$sigma
+    Tb <- ModelResults$Tb
+
+    TreatFactor1 <- (as.factor(TreatData$Germ.wp))
+    TreatFactor2 <- (as.factor(TreatData$Germ.temp))
+    TreatFactor3 <- NA
+
+    #Label for legends
+    LegendTitleFactor1 <- "Water Potential"
+    LegendTitleFactor2 <- "Temperature"
+    LegendTitleFactor3 <- NA
+
+
+    #Passing fitted Hydrothermal time Model Parameters for plot legend
+    ModPar1Label <<- "HT =="
+    ModPar2Label <<- "T[b]=="
+    ModPar3Label <<- "psi[b](50)=="
+    ModPar4Label <<- "sigma == "
+    ModPar5Label <<- "R^2 == "
+
+    ModPar1 <<- round(HT[1],2)
+    ModPar2 <<- round(Tb[1],2)
+    ModPar3 <<- round(psib50[1],3)
+    ModPar4 <<- round(sigma[1],3)
+    ModPar5 <<- round(Correlation[1],2)
+
+    TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
+    TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+
+    #Function to plot all predicted treatments by the HYDROTHERMAL time model
+    modellines <<-
+      mapply(function(TreatmentsTemp, TreatmentsWP) {
+        stat_function(fun=function(x){pnorm((+WP-(HT/((Temp-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFract}, aes_(colour = factor(Temp), alpha = factor(WP)))
+      }, Temp, WP)
+
   }
 
 #-------
