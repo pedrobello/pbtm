@@ -390,6 +390,8 @@ PlotPBTMModel <- function (Data, ModelResults)
     #TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
     #Treatments <- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp),]
 
+    #still need to fix this. check mapply approach
+
     Dt <- data.frame(TreatData$Germ.temp,TreatData$Germ.wp)
     tmps <- Dt$TreatData.Germ.temp
     wps <- Dt$TreatData.Germ.wp
