@@ -145,7 +145,7 @@ CalcHTModel <- function(Data, MaxCumFract)
 
   Model <- "HT"
   HTModelResults <- data.frame(Model,HT,psib50,sigma,MaxCumFract,Correlation)
-  return(HTPModelResults)
+  return(HTModelResults)
 }
 
 
