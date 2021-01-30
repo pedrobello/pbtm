@@ -371,28 +371,28 @@ PlotPBTMModel <- function (Data, ModelResults)
 
 
     #Passing fitted Hydrothermal time Model Parameters for plot legend
-    ModPar1Label <<- "HT =="
-    ModPar2Label <<- "T[b]=="
-    ModPar3Label <<- "psi[b](50)=="
-    ModPar4Label <<- "sigma == "
-    ModPar5Label <<- "R^2 == "
+    ModPar1Label <- "HT =="
+    ModPar2Label <- "T[b]=="
+    ModPar3Label <- "psi[b](50)=="
+    ModPar4Label <- "sigma == "
+    ModPar5Label <- "R^2 == "
 
-    ModPar1 <<- round(HT[1],2)
-    ModPar2 <<- round(Tb[1],2)
-    ModPar3 <<- round(psib50[1],3)
-    ModPar4 <<- round(sigma[1],3)
-    ModPar5 <<- round(Correlation[1],2)
+    ModPar1 <- round(HT[1],2)
+    ModPar2 <- round(Tb[1],2)
+    ModPar3 <- round(psib50[1],3)
+    ModPar4 <- round(sigma[1],3)
+    ModPar5 <- round(Correlation[1],2)
 
     TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
     TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
 
     #Sort data with higher temperature and higher wp
     #TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
-    Treatments <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp),]
+    #Treatments <- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp),]
 
-    Dt <<- data.frame(Treatments$Germ.temp,Treatments$Germ.wp)
-    tmps <<- Dt$Treatments.Germ.temp
-    wps <<- Dt$Treatments.Germ.wp
+    Dt <- data.frame(TreatData$Germ.temp,TreatData$Germ.wp)
+    tmps <- Dt$TreatData.Germ.temp
+    wps <- Dt$TreatData.Germ.wp
 
     #Function to plot all predicted treatments by the HYDROTHERMAL time model
     modellines <<-
