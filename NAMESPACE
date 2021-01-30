@@ -3,6 +3,7 @@
 export(CalcHPModel)
 export(CalcHTModel)
 export(CalcHTPModel)
+export(CalcHTTModel)
 export(CalcSpeed)
 export(CalcTTSubOModel)
 export(CleanData)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/PBTMsFunctions.R
 \name{CalcTTSubOModel}
 \alias{CalcTTSubOModel}
-\title{A Function to calculate the Thermaltime model parameters.}
+\title{A Function to calculate the Thermaltime model parameters. ------------------------}
 \usage{
 CalcTTSubOModel(Data, MaxCumFract)
 }

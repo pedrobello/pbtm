@@ -2,7 +2,7 @@
 % Please edit documentation in R/PBTMsFunctions.R
 \name{CalcHTModel}
 \alias{CalcHTModel}
-\title{A Function to calculate the Hydrotime model parameters.}
+\title{A Function to calculate the Hydrotime model parameters.  ------------------------}
 \usage{
 CalcHTModel(Data, MaxCumFract)
 }
