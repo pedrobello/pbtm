@@ -394,9 +394,13 @@ PlotPBTMModel <- function (Data, ModelResults)
     #tmps <- Dt$TreatData.Germ.temp
     #wps <- Dt$TreatData.Germ.wp
 
-    Dt <- data.frame(TreatmentsTemp,TreatmentsWP)
+    Dt <- CalcSpeed(TreatData, "Germ.wp","Germ.temp")
     tmps <- Dt$TreatData.Germ.temp
     wps <- Dt$TreatData.Germ.wp
+
+    #Dt <- data.frame(TreatmentsTemp,TreatmentsWP)
+    #tmps <- Dt$TreatData.Germ.temp
+    #wps <- Dt$TreatData.Germ.wp
 
     #Function to plot all predicted treatments by the HYDROTHERMAL time model
     modellines <<-
