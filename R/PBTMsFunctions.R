@@ -150,7 +150,7 @@ CalcHTTModel <- function(Data, MaxCumFract, Tb)
   uPsib50 <- 0
   uSigma <- 10
 
-  if (missing(Tb)) {
+  if (missing(Tb)){
     #Calculate Hydrotime Model Parameters and Tb - nls plus algorithm port used to add constraints on the parameters
     HTTModel <<- nls(Germ ~ pnorm(WP-(HT/((Temp-Tb)*Time)),psib50,sigma, log= FALSE)*MaxCumFract, start=list(HT=iHT,Tb=iTb,psib50=iPsib50,sigma=iSigma),lower=list(HT=lHT,Tb=lTb,psib50=lPsib50,sigma=lSigma),upper=list(HT=uHT,Tb=uTb,psib50=uPsib50,sigma=uSigma), algorithm ="port")
     summary(HTTModel)
