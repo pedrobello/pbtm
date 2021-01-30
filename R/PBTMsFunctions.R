@@ -56,7 +56,97 @@ CalcTTSubOModel <- function(Data, MaxCumFract)
 
 #----------------------New Development - Under Testing
 
+#' A Function to calculate the Hydrotime model parameters.
+#'
+#' This function calculates the hydrotime constant (HT), the median water potential base (Psib50) and the standard deviation (sigma).
+#' @param Data time course and cumulative dataset to be used in the hydrotime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours CumTime) + a column with cumulative fractions (CumFract) and the experiment water potential (Germ.wp) are required. Filter the dataframe to only have treatments with water potential at the same temperature level.
+#' @param MaxCumFract sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
+#' @keywords hydrotime model parameters
+#' @export
+#' @examples CalcHTModel(Data)
+#' CalcHTModel(Data, MaxCumFract)
+CalcHTModel <- function(Data, MaxCumFract)
+{
+  TreatData <- Data
+  Germ <- TreatData$CumFract
+  Time <- TreatData$CumTime
+  WP <- TreatData$Germ.wp
 
+  if (missing(MaxCumFract)) { #MaxCumFract not informed
+    MaxCumFract <- 1
+  } else {
+    MaxCumFract <- MaxCumFract
+  }
+  #Inform intial and limit values for the Hydrotime Model parameters
+  # Initials
+  iHT <- 60
+  iPsib50 <- -0.8
+  iSigma <- 0.2
+  #lower limits
+  lHT <- 1
+  lPsib50 <- -5
+  lSigma <- 0.0001
+  #upper limits
+  uHT <- 1000
+  uPsib50 <- -0.000000001
+  uSigma <- 2
+
+  #Calculate Hydrotime Model Parameters- nls plus algorithm port used to add constraints on the parameters
+  HTModel <<- nls(Germ ~ pnorm(+WP-(HT/Time), Psib50, Sigma, log= FALSE)*MaxCumFract, start=list(HT=iHT,Psib50=iPsib50,Sigma=iSigma),lower=list(HT=lHT,Psib50=lPsib50,Sigma=lSigma),upper=list(HT=uHT,Psib50=uPsib50,Sigma=uSigma), algorithm ="port")
+  summary(HTModel)
+
+  #get some estimation of goodness of fit
+  Correlation <<- cor(Germ,predict(HTModel))^2
+
+  #Hydrotime Model - Create table to plot treatments with predicted model lines
+  #TreatData$WPFactor <<- with(TreatData, (as.factor(TreatData$Germ.wp)))
+  #Factor1 <<- TreatData$WPFactor
+  #Factor1Title <<- "Water \n Potential"
+  #TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
+
+  #Passing fitted Hydrotime Model Parameters
+  HT <- summary(HTModel)$coefficients[[1]]
+  psib50 <- summary(HTModel)$coefficients[[2]]
+  sigma <- summary(HTModel)$coefficients[[3]]
+
+  #Passing fitted Hydrotime Model Parameters for plot legend
+  #ModPar1Label <<- "HT =="
+  #ModPar2Label <<- "Psi[b](50)=="
+  #ModPar3Label <<- "σ == "
+  #ModPar4Label <<- "R^2 == "
+  #ModPar5Label <<- ""
+
+  #ModPar1 <<- round(summary(HTModel)$coefficients[[1]],2)
+  #ModPar2 <<- round(Psib50[1],3)
+  #ModPar3 <<- round(Sigma[1],3)
+  #ModPar4 <<- round(Correlation[1],2)
+  #ModPar5 <<- ""
+
+  #RSquaredPlot <<-  paste("R^2 == ", round(Correlation[1],2 ))
+
+  #Function to plot all predicted treatments by the HYDROTIME model
+  #modellines <<-
+  #  alply(as.matrix(TreatmentsWP), 1, function(WP) {
+  #    stat_function(fun=function(x){pnorm(WP-(HT/(x)),Psib50,Sigma,log=FALSE)*MaxGerm}, aes_(colour = factor(WP)))
+  #  })
+
+  #Create columns on TreatDataClean with predicted values and Normalized time from model
+  #TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
+  #  ModelPredicted = pnorm(Germ.wp-(HT/(Germ.time.hours)),Psib50,Sigma,log=FALSE)*MaxGerm,
+  #  NormalizedTime = (1-(Germ.wp/(Germ.wp-(HT/Germ.time.hours))))*Germ.time.hours
+  #)
+
+  #Function to plot Normalized time using the HYDROTIME model
+ # modelNormalized <<-
+  #  alply(as.matrix(TreatmentsWP), 1, function(WP) {
+   #   stat_function(fun=function(x){pnorm(0-(HT/(x)),Psib50,Sigma,log=FALSE)*MaxGerm}, color="blue3")
+   # })
+  #NormalizedAxisTitle <<- "Normalized time (h)"
+
+  Model <- "HT"
+  HTModelResults <- data.frame(Model,HT,psib50,sigma,MaxCumFract,Correlation)
+  return(HTPModelResults)
+}
 
 
 #' A Function to plot the selected calculated model and parameters and predicitions.
