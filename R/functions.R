@@ -486,8 +486,8 @@ PlotPBTMModel <- function (Data, ModelResults)
 
     #Passing fitted Hydrotime Model Parameters for plot legend
     ModPar1Label <- "T[b] =="
-    ModPar2Label <- "θT(50)=="
-    ModPar3Label <- "σ == "
+    ModPar2Label <- "thetaT(50)=="
+    ModPar3Label <- "sigma == "
     ModPar4Label <- "R^2 == "
     ModPar5Label <- ""
 
