@@ -223,7 +223,7 @@ CalcHTTModel <- function(Data, MaxCumFraction, Tb)
 
 
   Model <- "HTT"
-  HTTModelResults <- data.frame(Model,HT,psib50,sigma,Tb,MaxCumFracion,Correlation)
+  HTTModelResults <- data.frame(Model,HT,psib50,sigma,Tb,MaxCumFraction,Correlation)
   return(HTTModelResults)
 
 }
