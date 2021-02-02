@@ -7,7 +7,7 @@
 CalcSpeed(Data, Fraction, Treat1, Treat2, Treat3, Treat4, Treat5)
 }
 \arguments{
-\item{Data}{time course and cumulative dataset. Several treatments can be used at once as long as it respects the template and column names provided. A column with time in hours (CumTime) + a column with cumulative fractions (CumFract) are required with at least one additional column for relevant treatment (e.g., germination temperature or water potential)}
+\item{Data}{time course and cumulative dataset. Several treatments can be used at once as long as it respects the template and column names provided. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) are required with at least one additional column for relevant treatment (e.g., germination temperature or water potential)}
 
 \item{Fraction}{from 0 to 1 used to calculate the time required for that level to be obtained in the cumulative time course. Standard value is 0.5 (50 percent), to calculate the time to 50 percent germination (T50) and respective germination rate (GR50). Fraction level can be entered and be used for calculation and change column name.}
 

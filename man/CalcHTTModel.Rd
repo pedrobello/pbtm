@@ -4,12 +4,12 @@
 \alias{CalcHTTModel}
 \title{A Function to calculate the Hydrothermal time model parameters.}
 \usage{
-CalcHTTModel(Data, MaxCumFract, Tb)
+CalcHTTModel(Data, MaxCumFraction, Tb)
 }
 \arguments{
-\item{Data}{time course and cumulative dataset to be used in the hydrothermal time model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time (CumTime) + a column with cumulative fractions (CumFract), the experimental water potential (Germ.wp) and the temperature (Germ.temp) are required.}
+\item{Data}{time course and cumulative dataset to be used in the hydrothermal time model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time (CumTime) + a column with cumulative fractions (CumFraction), the experimental water potential (Germ.wp) and the temperature (Germ.temp) are required.}
 
-\item{MaxCumFract}{sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.}
+\item{MaxCumFraction}{sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.}
 
 \item{Tb}{is the temperature base that can be provided and have a fixed value or left in blank to be calculated with other hydrothermal parameters.}
 }
