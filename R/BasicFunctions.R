@@ -1,6 +1,6 @@
 #-----------------Tested Functions - MAc OS and Windows
 #
-#' A function that calculates the required time and rate to a desired fraction in cumulative curves
+#' A function that calculates the required time to a desired fraction in cumulative curves and respective rate.
 #'
 #' This function allows you to calculate the time to a desired cumulative fraction and respective germination rate. Use this function on raw data to avoid loss of points closer to the desired cumulative fraction.
 #' @param Data time course and cumulative dataset. Several treatments can be used at once as long as it respects the template and column names provided. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) are required with at least one additional column for relevant treatment (e.g., germination temperature or water potential)
