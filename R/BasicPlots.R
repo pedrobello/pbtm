@@ -1,4 +1,4 @@
-#-----------------Tested Functions - MAc OS and Windows
+#-----------------Tested Functions - Mac OS and Windows
 #
 #' A Function to plot rate vs desired treatment.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/BasicFunctions.R
 \name{CalcSpeed}
 \alias{CalcSpeed}
-\title{A function that calculates the required time and rate to a desired fraction in cumulative curves}
+\title{A function that calculates the required time to a desired fraction in cumulative curves and respective rate.}
 \usage{
 CalcSpeed(Data, Fraction, Treat1, Treat2, Treat3, Treat4, Treat5)
 }

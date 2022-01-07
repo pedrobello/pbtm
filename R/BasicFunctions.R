@@ -1,4 +1,4 @@
-#-----------------Tested Functions - MAc OS and Windows
+#-----------------Tested Functions - Mac OS and Windows
 #
 #' A function that calculates the required time to a desired fraction in cumulative curves and respective rate.
 #'
@@ -9,6 +9,7 @@
 #' @keywords Tx, GRx, germination speed, germination rate
 #' @importFrom dplyr group_by_at
 #' @importFrom dplyr tally
+#' @importFrom dplyr mutate
 #' @importFrom magrittr %>%
 #' @export
 #' @examples
@@ -47,7 +48,7 @@ CalcSpeed <- function(Data, Fraction, Treat1, Treat2, Treat3, Treat4, Treat5)
   TreatColNames <- c(TreatColNames, "Tx", "GRx")
 
   # Separate all treatments without germination time courses
-  Treatments <- Treatments %>% group_by_at(TreatColNames) %>% tally()
+  Treatments <- Treatments %>% dplyr::group_by_at(TreatColNames) %>% dplyr::tally()
 
   #Replaces the column name with the used fraction instead.
   names(Treatments)[names(Treatments) == "Tx"] <- FracSpeedLbl
@@ -100,7 +101,7 @@ CleanData <- function(Data, Treat1, Treat2, Treat3, Treat4, Treat5) {
         T5 <- paste(",",Treat5, sep = "")
       }
 
-      TreatDataClean <- eval(parse(text=paste("distinct(TreatData,",T1,T2,T3,T4,T5,",CumFraction, .keep_all = TRUE)", sep="")))
+      TreatDataClean <- eval(parse(text=paste("dplyr::distinct(TreatData,",T1,T2,T3,T4,T5,",CumFraction, .keep_all = TRUE)", sep="")))
 
       return(TreatDataClean)
     }

@@ -7,9 +7,9 @@
 CalcHPModel(Data, GR)
 }
 \arguments{
-\item{GR}{is the column name for the rate to be used in the model and needs to be informed in case the data object contains a GR different than GR50.}
+\item{Data}{object with the calculated rates with treatments to be used in the Hydropriming model. The output of the CalcSpeed function can be directly used here with the desired treatments. The fields with Treat.priming.wp and Treat.priming.duration need to be informed in the data file.}
 
-\item{myData}{object with the calculated rates with treatments to be used in the Hydropriming model. The output of the CalcSpeed function can be directly used here with the desired treatments. The fields with Treat.priming.wp and Treat.priming.duration need to be informed in the data file.}
+\item{GR}{is the column name for the rate to be used in the model and needs to be informed in case the data object contains a GR different than GR50.}
 }
 \description{
 This function calculates the minimal water potential for priming effects (Psib50min).
