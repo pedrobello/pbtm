@@ -98,7 +98,7 @@ theme_scatter_plot <- ggplot2::theme(
   axis.ticks = element_line(color = "black", size =0.5),
   axis.text = ggplot2::element_text(size=12, color ="black"),
   axis.title = ggplot2::element_text(size=14, color ="black",face = "bold"),
-  axis.title.x = ggplot2::element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
+  axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10, r = 0, b = 0, l = 0)),
   plot.title = element_blank())
 
 
