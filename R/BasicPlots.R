@@ -7,7 +7,7 @@
 #' @param x should indicate the treatment column name for the x axis (e.g., "Germ.temp", "Germ.wp" or others).
 #' @param y should indicate the rate column name for the y axis if different than GR50 (e.g., "GR90", "GR10", etc).
 #' @keywords plot rates Temperature
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot
 #' @export PlotRateVsTreat
 #' @examples PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
 #' PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
@@ -36,7 +36,8 @@ PlotRateVsTreat <- function (Data, x, y)
 #' @param Data with time course data for one or more treatments.
 #' @param Treat1,Treat2 are the desired treatment factors to be informed as column names. The first informed treatment will be separated as color and the second as shape.
 #' @keywords plot raw data
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 theme
 #' @export PlotRawDt
 #' @examples PlotRawDt(MyData,"Germ.temp")
 #' PlotRawDt(MyRawData,"Germ.temp")

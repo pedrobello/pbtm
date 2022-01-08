@@ -53,7 +53,7 @@ PlotPBTMModel <- function (Data, ModelResults)
 
     #Function to plot all predicted treatments by the Thermaltime model
     modellines <-
-      alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
+      plyr::alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
         stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumFraction}, aes_(colour = factor(Temp)))
       })
 
@@ -103,7 +103,7 @@ PlotPBTMModel <- function (Data, ModelResults)
 
     #Function to plot all predicted treatments by the HYDROTIME model
     modellines <-
-      alply(as.matrix(TreatmentsWP), 1, function(WP) {
+      plyr::alply(as.matrix(TreatmentsWP), 1, function(WP) {
         stat_function(fun=function(x){pnorm(WP-(HT/(x)),psib50,sigma,log=FALSE)*MaxCumFraction}, aes_(colour = factor(WP)))
       })
 

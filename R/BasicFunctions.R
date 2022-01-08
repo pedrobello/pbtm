@@ -7,7 +7,9 @@
 #' @param Fraction from 0 to 1 used to calculate the time required for that level to be obtained in the cumulative time course. Standard value is 0.5 (50 percent), to calculate the time to 50 percent germination (T50) and respective germination rate (GR50). Fraction level can be entered and be used for calculation and change column name.
 #' @param Treat1,Treat2,Treat3,Treat4,Treat5 are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here. These column names do not need to be informed in case the provided template file is used to organize the data.
 #' @keywords Tx, GRx, germination speed, germination rate
-#' @import dplyr
+#' @importFrom dplyr group_by_at
+#' @importFrom dplyr mutate
+#' @importFrom dplyr tally
 #' @importFrom magrittr %>%
 #' @export
 #' @examples
@@ -63,7 +65,7 @@ CalcSpeed <- function(Data, Fraction, Treat1, Treat2, Treat3, Treat4, Treat5)
 #' @param Data object with the raw cumulative data that needs to be removed.
 #' @param Treat1,Treat2,Treat3,Treat4,Treat5 are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here.
 #' @keywords Clean cumulative fraction repetitive percentage
-#' @import dplyr
+#' @importFrom dplyr distinct
 #' @export
 #' @examples CleanData(mydata,"Treat.desc")
 #' CleanData(mydata,"Treat.desc")
