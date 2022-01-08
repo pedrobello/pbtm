@@ -8,6 +8,7 @@
 #' @param y should indicate the rate column name for the y axis if different than GR50 (e.g., "GR90", "GR10", etc).
 #' @keywords plot rates Temperature
 #' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes_string
 #' @export PlotRateVsTreat
 #' @examples PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
 #' PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
@@ -24,7 +25,7 @@ PlotRateVsTreat <- function (Data, x, y)
   } else {
     rate <- y
   }
-  pGR <- ggplot2::ggplot(data=Treatments, aes_string(x=Treat, y=rate, color=Treat)) + geom_point(shape=19, size=2) +
+  pGR <- ggplot2::ggplot(data=Treatments, ggplot2::aes_string(x=Treat, y=rate, color=Treat)) + geom_point(shape=19, size=2) +
     expand_limits(x = 0, y = 0) + theme_scatter_plot
   pGR
 }
