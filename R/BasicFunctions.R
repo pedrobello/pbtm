@@ -41,7 +41,7 @@ CalcSpeed <- function(Data, Fraction, Treat1, Treat2, Treat3, Treat4, Treat5)
   }
 
   # Calculate the time to the fraction selected using linear interpolation (approx function) after it calculates the inverse of time to generate the rate.
-  Treatments <- Data %>% group_by_at(TreatColNames) %>%
+  Treatments <- Data %>% dplyr::group_by_at(TreatColNames) %>%
     dplyr::mutate(Tx = approx(CumFraction,CumTime, xout=Frac, ties="ordered")$y,
                   GRx = 1/approx(CumFraction,CumTime, xout=Frac, ties="ordered")$y)
 
