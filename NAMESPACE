@@ -12,6 +12,4 @@ export(PlotPrimingModel)
 export(PlotRateVsTreat)
 export(PlotRawDt)
 
-importFrom(magrittr,"%>%")
-importFrom(plyr,alply)
-importFrom(tibble,as_tibble)
+
