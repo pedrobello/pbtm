@@ -38,6 +38,7 @@ PlotRateVsTreat <- function (Data, x, y)
 #' @keywords plot raw data
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_text
 #' @export PlotRawDt
 #' @examples PlotRawDt(MyData,"Germ.temp")
 #' PlotRawDt(MyRawData,"Germ.temp")
@@ -85,8 +86,8 @@ PlotRawDt <- function(Data, Treat1, Treat2)
 theme_scatter_plot <- ggplot2::theme(
   legend.background = element_blank(),
   legend.key = element_blank(),
-  legend.title = element_text(size=12, color ="black"),
-  legend.text = element_text(size=12, color ="black"),
+  legend.title = ggplot2::element_text(size=12, color ="black"),
+  legend.text = ggplot2::element_text(size=12, color ="black"),
   panel.background = element_blank(),
   panel.grid.minor.y=element_blank(),
   panel.grid.major.x=element_blank(),
@@ -95,9 +96,9 @@ theme_scatter_plot <- ggplot2::theme(
   panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
   strip.background = element_rect(colour="black", fill="white"),
   axis.ticks = element_line(color = "black", size =0.5),
-  axis.text = element_text(size=12, color ="black"),
-  axis.title = element_text(size=14, color ="black",face = "bold"),
-  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
+  axis.text = ggplot2::element_text(size=12, color ="black"),
+  axis.title = ggplot2::element_text(size=14, color ="black",face = "bold"),
+  axis.title.x = ggplot2::element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
   plot.title = element_blank())
 
 
