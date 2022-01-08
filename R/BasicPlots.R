@@ -44,7 +44,7 @@ PlotRateVsTreat <- function (Data, x, y)
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 element_rect
 #' @importFrom ggplot2 element_line
-#' @importFrom ggplot2 element_line
+#' @importFrom ggplot2 geom_line
 #' @importFrom ggplot2 aes_string
 #' @export PlotRawDt
 #' @examples PlotRawDt(MyData,"Germ.temp")
@@ -82,7 +82,7 @@ PlotRawDt <- function(Data, Treat1, Treat2)
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
   pRaw <<- ggplot2::ggplot(data=TreatData, ggplot2::aes_string(x="CumTime", y="CumFraction", color=T1, shape=T2 )) +
-    eval(parse(text=gp)) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
+    eval(parse(text=gp)) + ggplot2::geom_line() + xlab("Time") + ylab("Cumulative (%)") +
     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
     scale_x_continuous(expand = c(0,0)) + expand_limits(x = 0, y = 0) +
     theme_scatter_plot
