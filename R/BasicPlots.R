@@ -7,7 +7,7 @@
 #' @param x should indicate the treatment column name for the x axis (e.g., "Germ.temp", "Germ.wp" or others).
 #' @param y should indicate the rate column name for the y axis if different than GR50 (e.g., "GR90", "GR10", etc).
 #' @keywords plot rates Temperature
-#' @import ggplot2
+#' @depend ggplot2
 #' @export
 #' @examples PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
 #' PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
