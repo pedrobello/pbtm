@@ -7,7 +7,7 @@
 #' @param x should indicate the treatment column name for the x axis (e.g., "Germ.temp", "Germ.wp" or others).
 #' @param y should indicate the rate column name for the y axis if different than GR50 (e.g., "GR90", "GR10", etc).
 #' @keywords plot rates Temperature
-
+#' @import ggplot2
 #' @export PlotRateVsTreat
 #' @examples PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
 #' PlotRateVsTreat(MyCalcSpeedData,"Germ.temp")
@@ -24,9 +24,9 @@ PlotRateVsTreat <- function (Data, x, y)
   } else {
     rate <- y
   }
-#  pGR <- ggplot(data=Treatments, aes_string(x=Treat, y=rate, color=Treat)) + geom_point(shape=19, size=2) +
-#    expand_limits(x = 0, y = 0) + theme_scatter_plot
-#  pGR
+  pGR <- ggplot2::ggplot(data=Treatments, aes_string(x=Treat, y=rate, color=Treat)) + geom_point(shape=19, size=2) +
+    expand_limits(x = 0, y = 0) + theme_scatter_plot
+  pGR
 }
 
 
@@ -36,7 +36,7 @@ PlotRateVsTreat <- function (Data, x, y)
 #' @param Data with time course data for one or more treatments.
 #' @param Treat1,Treat2 are the desired treatment factors to be informed as column names. The first informed treatment will be separated as color and the second as shape.
 #' @keywords plot raw data
-
+#' @import ggplot2
 #' @export PlotRawDt
 #' @examples PlotRawDt(MyData,"Germ.temp")
 #' PlotRawDt(MyRawData,"Germ.temp")
@@ -72,32 +72,32 @@ PlotRawDt <- function(Data, Treat1, Treat2)
   #}
 
   #Plot All Treatments with fitted equation (Whole data plot here, including repetitive percentages)
-#  pRaw <<- ggplot(data=TreatData, aes_string(x="CumTime", y="CumFraction", color=T1, shape=T2 )) +
-#    eval(parse(text=gp)) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
-#    scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
-#    scale_x_continuous(expand = c(0,0)) + expand_limits(x = 0, y = 0) +
-#    theme_scatter_plot
-#  pRaw
+  pRaw <<- ggplot2::ggplot(data=TreatData, aes_string(x="CumTime", y="CumFraction", color=T1, shape=T2 )) +
+    eval(parse(text=gp)) + geom_line() + xlab("Time") + ylab("Cumulative (%)") +
+    scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
+    scale_x_continuous(expand = c(0,0)) + expand_limits(x = 0, y = 0) +
+    theme_scatter_plot
+  pRaw
 }
 
 #ggplot package theme ----------------------------------------------------------------------------------
-#theme_scatter_plot <- theme(
-#  legend.background = element_blank(),
-#  legend.key = element_blank(),
-#  legend.title = element_text(size=12, color ="black"),
-#  legend.text = element_text(size=12, color ="black"),
-#  panel.background = element_blank(),
-#  panel.grid.minor.y=element_blank(),
-#  panel.grid.major.x=element_blank(),
-#  panel.grid.major.y=element_blank(),
-#  panel.grid.minor.x= element_blank(),
-#  panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
-#  strip.background = element_rect(colour="black", fill="white"),
-#  axis.ticks = element_line(color = "black", size =0.5),
-#  axis.text = element_text(size=12, color ="black"),
-#  axis.title = element_text(size=14, color ="black",face = "bold"),
-#  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
-#  plot.title = element_blank())
+theme_scatter_plot <- ggplot2::theme(
+  legend.background = element_blank(),
+  legend.key = element_blank(),
+  legend.title = element_text(size=12, color ="black"),
+  legend.text = element_text(size=12, color ="black"),
+  panel.background = element_blank(),
+  panel.grid.minor.y=element_blank(),
+  panel.grid.major.x=element_blank(),
+  panel.grid.major.y=element_blank(),
+  panel.grid.minor.x= element_blank(),
+  panel.border = element_rect(colour = "grey50", fill=NA, size=0.5),
+  strip.background = element_rect(colour="black", fill="white"),
+  axis.ticks = element_line(color = "black", size =0.5),
+  axis.text = element_text(size=12, color ="black"),
+  axis.title = element_text(size=14, color ="black",face = "bold"),
+  axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
+  plot.title = element_blank())
 
 
 
