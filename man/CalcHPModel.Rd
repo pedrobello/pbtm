@@ -15,8 +15,8 @@ CalcHPModel(Data, GR)
 This function calculates the minimal water potential for priming effects (Psib50min).
 }
 \examples{
-CalcHPModel(myData, "GR20")
-CalcHPModel(myData)
+CalcHPModel(MyData, "GR20")
+CalcHPModel(MyData)
 }
 \keyword{hydropriming}
 \keyword{model}

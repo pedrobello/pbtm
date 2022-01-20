@@ -7,8 +7,8 @@
 #' @param GR is the column name for the rate to be used in the model and needs to be informed in case the data object contains a GR different than GR50.
 #' @keywords hydropriming model parameters
 #' @export
-#' @examples CalcHPModel(myData, "GR20")
-#' CalcHPModel(myData)
+#' @examples CalcHPModel(MyData, "GR20")
+#' CalcHPModel(MyData)
 CalcHPModel <- function(Data, GR)
 {
   Treatments <- Data

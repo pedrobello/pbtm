@@ -12,7 +12,7 @@ CalcTTSubOModel(Data, MaxCumFraction)
 \item{MaxCumFraction}{sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.}
 }
 \description{
-This function calculates the temperature base (Tb), the thermal time to 50% of the population (ThetaT50) and the standard deviation (sigma).
+This function calculates the temperature base (Tb), the thermal time to 50\% of the population (ThetaT50) and the standard deviation (sigma).
 }
 \examples{
 CalcTTSubOModel(myData)
