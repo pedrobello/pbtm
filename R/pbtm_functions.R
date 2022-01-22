@@ -91,58 +91,95 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
 #' A Function to calculate the Hydrotime model parameters.
 #'
 #' This function calculates the hydrotime constant (HT), the median water potential base (Psib50) and the standard deviation (sigma).
-#' @param Data time course and cumulative dataset to be used in the hydrotime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours CumTime) + a column with cumulative fractions (CumFraction) and the experiment water potential (Germ.wp) are required. Filter the dataframe to only have treatments with water potential at the same temperature level.
-#' @param MaxCumFraction sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
+#' @param data time course and cumulative dataset to be used in the hydrotime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours CumTime) + a column with cumulative fractions (CumFraction) and the experiment water potential (Germ.wp) are required. Filter the dataframe to only have treatments with water potential at the same temperature level.
+#' @param germ.wp Column containing germination water potential.
+#' @param cum.time Column containing cumulative elapsed time.
+#' @param cum.frac Column containing cumulative fraction germinated.
+#' @param max.cum.frac Sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
 #' @keywords hydrotime model parameters
 #' @export
-#' @examples CalcHTModel(Data)
-#' CalcHTModel(Data, MaxCumFraction)
-CalcHTModel <- function(Data, MaxCumFraction)
-{
-  TreatData <- Data
-  Germ <- TreatData$CumFraction
-  Time <- TreatData$CumTime
-  WP <- TreatData$Germ.wp
+#' @examples calcHTModel(MyData)
+#' calcHTModel(MyData)
 
-  if (missing(MaxCumFraction)) { #MaxCumFraction not informed
-    MaxCumFraction <- 1
-  } else {
-    MaxCumFraction <- MaxCumFraction
-  }
-  #Inform intial and limit values for the Hydrotime Model parameters
-  # Initials
+calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1) {
+
+  # data and argument checks
+  if (!is.data.frame(data)) stop("Data is not a valid data frame.")
+
+  # check validity of columns defs
+  if (!is.element(germ.wp, names(data))) stop("Germination water potential column '", germ.wp, "' not found in data frame.")
+  if (!is.element(cum.time, names(data))) stop("Cumulative time column '", cum.time, "' not found in data frame.")
+  if (!is.element(cum.frac, names(data))) stop("Cumulative fraction column '", cum.frac, "' not found in data frame.")
+
+  # check validity of fraction argument
+  if (!is.numeric(max.cum.frac)) stop("Non-numeric fraction value specified.")
+  if (max.cum.frac < 0 || max.cum.frac > 1) stop("Fraction value ", max.cum.frac, " is out of range, must be between 0 and 1.")
+
+  wp <- data[[germ.wp]]
+  time <- data[[cum.time]]
+  germ <- data[[cum.frac]]
+
+  # Inform intial and limit values for the Hydrotime Model parameters
+  # initial values
   iHT <- 60
   iPsib50 <- -0.8
   iSigma <- 0.2
+
   #lower limits
   lHT <- 1
   lPsib50 <- -5
   lSigma <- 0.0001
+
   #upper limits
   uHT <- 1000
   uPsib50 <- -0.000000001
   uSigma <- 2
 
-  #Calculate Hydrotime Model Parameters- nls plus algorithm port used to add constraints on the parameters
-  HTModel <<- nls(Germ ~ pnorm(+WP-(HT/Time), Psib50, Sigma, log= FALSE)*MaxCumFraction, start=list(HT=iHT,Psib50=iPsib50,Sigma=iSigma),lower=list(HT=lHT,Psib50=lPsib50,Sigma=lSigma),upper=list(HT=uHT,Psib50=uPsib50,Sigma=uSigma), algorithm ="port")
+  # Calculate Hydrotime Model Parameters- nls plus algorithm port used to add constraints on the parameters
+  HTModel <- stats::nls(
+    formula = germ ~ max.cum.frac * stats::pnorm(
+      wp - (HT / time),
+      Psib50,
+      Sigma,
+      log = FALSE),
+    start = list(
+      HT = iHT,
+      Psib50 = iPsib50,
+      Sigma = iSigma),
+    lower = list(
+      HT = lHT,
+      Psib50 = lPsib50,
+      Sigma = lSigma),
+    upper = list(
+      HT = uHT,
+      Psib50 = uPsib50,
+      Sigma = uSigma),
+    algorithm = "port")
+
   summary(HTModel)
 
   #get some estimation of goodness of fit
-  Correlation <<- cor(Germ,predict(HTModel))^2
+  corr <- cor(germ, stats::predict(HTModel)) ^ 2
 
-  #Passing fitted Hydrotime Model Parameters
-  HT <- summary(HTModel)$coefficients[[1]]
+  # Passing fitted Hydrotime Model Parameters
+  ht <- summary(HTModel)$coefficients[[1]]
   psib50 <- summary(HTModel)$coefficients[[2]]
   sigma <- summary(HTModel)$coefficients[[3]]
 
-  Model <- "HT"
-  HTModelResults <- data.frame(Model,HT,psib50,sigma,MaxCumFraction,Correlation)
-  return(HTModelResults)
+  results <- list(
+    Model = "Hydrotime",
+    HT = ht,
+    Psib50 = psib50,
+    Sigma = sigma,
+    MaxCumFraction = max.cum.frac,
+    Correlation = corr)
+
+  return(results)
 }
 
+
+
 #----------------------New Development - Under Testing
-
-
 
 #' A Function to calculate the Hydrothermal time model parameters.
 #'
