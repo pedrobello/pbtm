@@ -18,8 +18,6 @@
 
 calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = "CumTime", cum.frac = "CumFraction") {
 
-  # Argument checks ----
-
   # check if data is valid
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
 
@@ -35,24 +33,18 @@ calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
 
   # check validity of observation columns
   if (!is.element(cum.time, names(data))) stop("Cumulative time column '", cum.time, "' not found in data frame.")
-  names(data)[names(data) == cum.time] <- "CumTime"
-
   if (!is.element(cum.frac, names(data))) stop("Cumulative fraction column '", cum.frac, "' not found in data frame.")
-  names(data)[names(data) == cum.frac] <- "CumFraction"
-
-
-  # Compute germination time and growth rate ----
 
   # TODO: Maybe should extract this section into its own function.
   # regenerate cumulative fractions depending on grouping trts
   df <- data %>%
     dplyr::group_by_at(trts) %>%
-    dplyr::arrange(.data$CumTime, .data$CumFraction) %>%
-    dplyr::mutate(FracDiff = .data$CumFraction - dplyr::lag(.data$CumFraction, default = 0))
+    dplyr::arrange(.data[[cum.time]], .data[[cum.frac]]) %>%
+    dplyr::mutate(FracDiff = .data[[cum.frac]] - dplyr::lag(.data[[cum.frac]], default = 0))
 
   # merge values that occur at the same timepoint
   df <- df %>%
-    dplyr::group_by(.data$CumTime, .add = T) %>%
+    dplyr::group_by(.data[[cum.time]], .add = T) %>%
     dplyr::summarise(
       FracDiff = sum(.data$FracDiff),
       n = dplyr::n(),
@@ -64,14 +56,14 @@ calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
     dplyr::group_by_at(trts) %>%
     dplyr::summarise(
       n = dplyr::n(),
-      Tx = stats::approx(.data$CumFraction, .data$CumTime, xout = fraction, ties = "ordered", rule = 2)$y,
+      Tx = stats::approx(.data$CumFraction, .data[[cum.time]], xout = fraction, ties = "ordered", rule = 2)$y,
       GRx = 1 / .data$Tx,
       .groups = "drop"
     )
 
   # Rename time and rate columns based on specified fraction.
-  names(df)[names(df) == "Tx"] <- paste0("Tx", fraction * 100)
-  names(df)[names(df) == "GRx"] <- paste0("GRx", fraction * 100)
+  names(df)[names(df) == "Tx"] <- paste0("T", fraction * 100)
+  names(df)[names(df) == "GRx"] <- paste0("GR", fraction * 100)
 
   return(df)
 }
@@ -93,8 +85,6 @@ calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
 #' cleanData(MyData)
 
 cleanData <- function(data, treatments = c("TrtID"), cum.frac = "CumFraction") {
-
-  # Argument checks ----
 
   # check if data is valid
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
