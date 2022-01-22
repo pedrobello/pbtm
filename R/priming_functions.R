@@ -164,7 +164,6 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
   corr <- stats::cor(growthRate, stats::predict(l_model)) ^ 2
   RSquared <- round(corr[1], 2)
 
-  Model <- "HTP"
   results <- list(
     Type = "HydroThermalPriming",
     Model = nls_model,
