@@ -14,9 +14,9 @@
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
-#' CalcSpeed(MyData)
+#' calcSpeed(MyData)
 
-CalcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = "CumTime", cum.frac = "CumFraction") {
+calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = "CumTime", cum.frac = "CumFraction") {
 
   # Argument checks ----
 
@@ -28,7 +28,7 @@ CalcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
   if (fraction < 0 || fraction > 1) stop("Fraction value ", fraction, " is out of range, must be between 0 and 1.")
 
   # check validity of treatments list
-  if (!is.character(treatments)) stop("Invalid or no treatments list specified.")
+  if (!is.character(treatments) || length(treatments) == 0) stop("Invalid or no treatments specified.")
   trts <- intersect(names(data), treatments)
   if (length(trts) == 0) stop("Specified treatments do not occur in the data frame.")
   if (!setequal(treatments, trts)) warning("Treatments '", paste(setdiff(treatments, names(data)), collapse = ", "), "' do not appear in the data frame.")
@@ -43,6 +43,7 @@ CalcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
 
   # Compute germination time and growth rate ----
 
+  # TODO: Maybe should extract this section into its own function.
   # regenerate cumulative fractions depending on grouping trts
   df <- data %>%
     dplyr::group_by_at(trts) %>%
@@ -76,55 +77,43 @@ CalcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
 }
 
 
+# TODO: Seems like we could eliminate this function if all it does is run dplyr::distinct. The user can do that themselves.
 #' A Function to clean cumulative curves on dataset.
 #'
 #' This function removes repetitive cumulative fractions/percentages, keeping only the initial presence of the value
-#' @param Data object with the raw cumulative data that needs to be removed.
-#' @param Treat1,Treat2,Treat3,Treat4,Treat5 are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here.
-#' @keywords Clean cumulative fraction repetitive percentage
-#' @importFrom dplyr distinct
+#' @param data A data frame object with the raw cumulative data that needs to be cleaned.
+#' @param treatments are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here.
+#'
+#' @return A data frame with duplicate observations removed
+#' @keywords clean cumulative fraction repetitive percentage
+#' @importFrom rlang .data
+#' @importFrom dplyr %>%
 #' @export
-#' @examples CleanData(mydata,"Treat.desc")
-#' CleanData(mydata,"Treat.desc")
-CleanData <- function(Data, Treat1, Treat2, Treat3, Treat4, Treat5) {
-  #Clean Repetitive Percentages (keeps only initial presence of value)
+#' @examples cleanData(MyData)
+#' cleanData(MyData)
 
-  if (missing(Data)) { #data object not informed
-    print("Missing the data object.")
-  } else {
-    TreatData <- Data
-    if (missing(Treat1)) { #treatment 1 not informed
-      print("Informed treatment for factor.")
-    } else {
-      T1 <-  Treat1
-      if (missing(Treat2)) { #treatment 2 not informed
-        T2 <- ""
-      } else {
-        T2 <- paste(",",Treat2, sep = "")
-      }
-      if (missing(Treat3)) { #treatment 3 not informed
-        T3 <- ""
-      } else {
-        T3 <- paste(",",Treat3, sep = "")
-      }
-      if (missing(Treat4)) { #treatment 2 not informed
-        T4 <- ""
-      } else {
-        T4 <- paste(",",Treat4, sep = "")
-      }
-      if (missing(Treat5)) { #treatment 2 not informed
-        T5 <- ""
-      } else {
-        T5 <- paste(",",Treat5, sep = "")
-      }
+cleanData <- function(data, treatments = c("TrtID"), cum.frac = "CumFraction") {
 
-      TreatDataClean <- eval(
-        parse(
-          text = paste("dplyr::distinct(TreatData,", T1, T2, T3, T4, T5, ",CumFraction, .keep_all = TRUE)", sep = "")
-        )
-      )
+  # Argument checks ----
 
-      return(TreatDataClean)
-    }
-  }
+  # check if data is valid
+  if (!is.data.frame(data)) stop("Data is not a valid data frame.")
+
+  # check validity of treatments list
+  if (!is.character(treatments) || length(treatments) == 0) stop("Invalid or no treatments specified.")
+  trts <- intersect(names(data), treatments)
+  if (length(trts) == 0) stop("Specified treatments do not occur in the data frame.")
+  if (!setequal(treatments, trts)) warning("Treatments '", paste(setdiff(treatments, names(data)), collapse = ", "), "' do not appear in the data frame.")
+
+  # check the cumulative fraction column
+  if (!is.element(cum.frac, names(data))) stop("Cumulative fraction column '", cum.frac, "' not found in data frame.")
+  names(data)[names(data) == cum.frac] <- "CumFraction"
+
+  # clean the data
+  df <- data %>%
+    dplyr::distinct(dplyr::across(c(treatments, cum.frac)), .keep_all = T)
+
+  message("Removed ", nrow(data) - nrow(df), " rows with duplicated cumulative fraction values.")
+
+  return(df)
 }
