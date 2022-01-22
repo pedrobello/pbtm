@@ -1,60 +1,94 @@
-#-----------------Tested Functions - MAc OS and Windows
-#
+
 #' A Function to calculate the Thermaltime model parameters. ------------------------
 #'
 #' This function calculates the temperature base (Tb), the thermal time to 50% of the population (ThetaT50) and the standard deviation (sigma).
-#' @param Data time course and cumulative dataset to be used in the Thermaltime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) and the experiment temperature (Germ.temp) are required. Filter the dataframe to only have treatments with temperature equal or under to  optimal temperature level.
-#' @param MaxCumFraction sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
+#' @param data Time course and cumulative dataset to be used in the Thermaltime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) and the experiment temperature (Germ.temp) are required. Filter the dataframe to only have treatments with temperature equal or under to  optimal temperature level.
+#' @param germ.temp Column containing germination temperature values.
+#' @param cum.time Column containing cumulative elapsed time.
+#' @param cum.frac Column containing cumulative fraction germinated.
+#' @param max.cum.frac Sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
 #' @keywords Thermal time model parameters
 #' @export
-#' @examples CalcTTSubOModel(myData)
-#' CalcTTSubOModel(myData)
-#'
-CalcTTSubOModel <- function(Data, MaxCumFraction)
-{
-  TreatData <- Data
-  Germ <- TreatData$CumFraction
-  Time <- TreatData$CumTime
-  Temp <- TreatData$Germ.temp
+#' @examples calcTTSubOModel(MyData)
+#' calcTTSubOModel(MyData)
 
-  if (missing(MaxCumFraction)) { #MaxCumFraction not informed
-    MaxCumFraction <- 1
-  } else {
-    MaxCumFraction <- MaxCumFraction
-  }
+calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1) {
 
-  #Inform intial and limit values for the Hydrotime Model parameters
-  # Initials
+  # data and argument checks
+  if (!is.data.frame(data)) stop("Data is not a valid data frame.")
+
+  # check validity of columns defs
+  if (!is.element(germ.temp, names(data))) stop("Germination temperature column '", germ.temp, "' not found in data frame.")
+  if (!is.element(cum.time, names(data))) stop("Cumulative time column '", cum.time, "' not found in data frame.")
+  if (!is.element(cum.frac, names(data))) stop("Cumulative fraction column '", cum.frac, "' not found in data frame.")
+
+  # check validity of fraction argument
+  if (!is.numeric(max.cum.frac)) stop("Non-numeric fraction value specified.")
+  if (max.cum.frac < 0 || max.cum.frac > 1) stop("Fraction value ", max.cum.frac, " is out of range, must be between 0 and 1.")
+
+  temp <- data[[germ.temp]]
+  time <- data[[cum.time]]
+  germ <- data[[cum.frac]]
+
+  # Define intial and limit values for the Hydrotime Model parameters
+  # initial values
   iTb <- 6
   ithetaT50 <- 3
   iSigma <- 0.09
-  #lower limits
+
+  # lower limits
   lTb <- 0
   lthetaT50 <- 0.5
   lSigma <- 0.0001
-  #upper limits
+
+  # upper limits
   uTb <- 15
   uthetaT50 <- 50
   uSigma <- 0.5
 
   #Calculate Thermaltime Suboptimal Model Parameters- nls plus algorithm port used to add constraints on the parameters
-  TTSubOModel <- nls(Germ ~ pnorm(log(Time, base = 10),mean = thetaT50-log(Temp-Tb, base = 10), sd = sigma, log= FALSE)*MaxCumFraction, start=list(Tb=iTb,thetaT50=ithetaT50,sigma=iSigma),lower=list(Tb=lTb,thetaT50=lthetaT50,sigma=lSigma),upper=list(Tb=uTb,thetaT50=uthetaT50,sigma=uSigma), algorithm ="port")
+  TTSubOModel <- stats::nls(
+    formula = germ ~ max.cum.frac * stats::pnorm(
+      log(time, base = 10),
+      mean = thetaT50 - log(temp - Tb, base = 10),
+      sd = sigma,
+      log = FALSE),
+    start = list(
+      Tb = iTb,
+      thetaT50 = ithetaT50,
+      sigma = iSigma),
+    lower = list(
+      Tb = lTb,
+      thetaT50 = lthetaT50,
+      sigma = lSigma),
+    upper = list(
+      Tb = uTb,
+      thetaT50 = uthetaT50,
+      sigma = uSigma),
+    algorithm = "port")
+
   summary(TTSubOModel)
 
-  #get some estimation of goodness of fit
-  Correlation <- cor(Germ,predict(TTSubOModel))^2
+  # get some estimation of goodness of fit
+  corr <- stats::cor(germ, stats::predict(TTSubOModel)) ^ 2
 
-  #Passing fitted Hydrotime Model Parameters
+  # passing fitted Hydrotime Model Parameters
   Tb <- summary(TTSubOModel)$coefficients[[1]]
-  thetaT50 <- summary(TTSubOModel)$coefficients[[2]]
-  sigma <- summary(TTSubOModel)$coefficients[[3]]
+  ThetaT50 <- summary(TTSubOModel)$coefficients[[2]]
+  Sigma <- summary(TTSubOModel)$coefficients[[3]]
 
-  Model <- "TTsuboptimal"
-  HTPModelResults <- data.frame(Model,Tb,thetaT50,sigma,MaxCumFraction,Correlation)
-  return(HTPModelResults)
+  results <- list(
+    Model = "Thermaltime Suboptimal",
+    Tb = Tb,
+    ThetaT50 = ThetaT50,
+    Sigma = Sigma,
+    MaxCumFrac = max.cum.frac,
+    Correlation = corr)
+
+  return(results)
 }
 
-#' A Function to calculate the Hydrotime model parameters.  ------------------------
+#' A Function to calculate the Hydrotime model parameters.
 #'
 #' This function calculates the hydrotime constant (HT), the median water potential base (Psib50) and the standard deviation (sigma).
 #' @param Data time course and cumulative dataset to be used in the hydrotime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours CumTime) + a column with cumulative fractions (CumFraction) and the experiment water potential (Germ.wp) are required. Filter the dataframe to only have treatments with water potential at the same temperature level.
