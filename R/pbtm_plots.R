@@ -1,63 +1,86 @@
-#-----------------Tested Functions - MAc OS and Windows
-#
 #' A Function to plot the selected calculated model and parameters and predicitions.
 #'
 #' This function plots the selected model and calculated parameters.
-#' @param Data time course and cumulative dataset to be used in the Thermaltime model. The original dataframe template should be used or column names should be modified similarly to the template. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) and the experiment temperature (Germ.temp) are required. Filter the dataframe to only have treatments with temperature equal or under to  optimal temperature level.
-#' @param ModelResults is data object resulting from the Calc PBTM functions containing the model information and parameter results.
-#' @importFrom plyr alply
+#' @param data A data frame containing time course and cumulative germination fractions to be used in the ThermalTime model. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) and the experiment temperature (GermTemp) are required.
+#' @param model is the results list returned from from running any of the PBT models.
 #' @keywords plot population-based threshold model
+#' @importFrom rlang .data
+#' @importFrom dplyr %>%
 #' @export
-#' @examples PlotPBTMModel(mydata, myModelResults)
-#' PlotPBTMModel(mydata, myModelResults)
-PlotPBTMModel <- function (Data, ModelResults)
-{
-  TreatData <- Data
-  Germ <- TreatData$CumFraction
-  Time <- TreatData$CumTime
-  MaxCumFraction <- ModelResults$MaxCumFraction
-  Correlation <- ModelResults$Correlation
-  Model <- ModelResults$Model
+#' @examples plotPBTModel(MyData, MyModelResults)
+#' plotPBTModel(MyData, MyModelResults)
 
-  if (Model == "TTsuboptimal") #Thermaltime suboptimal model selected ------------------
-  {
+plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
-    Temp <- TreatData$Germ.temp
-    Tb <- ModelResults$Tb
-    thetaT50 <- ModelResults$thetaT50
-    sigma <- ModelResults$sigma
+  # data and argument checks
+  if (!is.data.frame(data)) stop("Data is not a valid data frame.")
+  if (!is.list(model)) stop("Model results must be in list format as output from any of the PBT model functions.")
 
-    TreatFactor1 <- (as.factor(TreatData$Germ.temp))
-    TreatFactor2 <- NA
-    TreatFactor3 <- NA
+  # check validity of columns defs
+  if (!is.element(cum.time, names(data))) stop("Cumulative time column '", cum.time, "' not found in data frame.")
+  if (!is.element(cum.frac, names(data))) stop("Cumulative fraction column '", cum.frac, "' not found in data frame.")
 
-    #Label for legends
-    LegendTitleFactor1 <- "Temperature"
-    LegendTitleFactor2 <- NA
-    LegendTitleFactor3 <- NA
+  # check for presence of model results
+  modelParams <- c("Type", "MaxCumFrac", "BaseTemp", "ThetaT50", "Sigma", "Correlation")
+  lapply(modelParams, function(m) {
+    if (!is.element(m, names(model))) stop("Required param '", m, "' missing from supplied model results.")
+  })
+  if (model$Type != "ThermalTime Suboptimal") stop("Model type must be 'ThermalTime Suboptimal' for this plot function.")
 
-    #Passing fitted Hydrotime Model Parameters for plot legend
-    ModPar1Label <- "T[b] =="
-    ModPar2Label <- "thetaT(50)=="
-    ModPar3Label <- "sigma == "
-    ModPar4Label <- "R^2 == "
-    ModPar5Label <- ""
+  # model params
+  maxCumFrac <- model$MaxCumFrac
+  Tb <- model$BaseTemp
+  thetaT50 <- model$ThetaT50
+  sigma <- model$Sigma
+  corr <- model$Correlation
 
-    ModPar1 <- round(Tb[1],1)
-    ModPar2 <- round(thetaT50[1],3)
-    ModPar3 <- round(sigma[1],3)
-    ModPar4 <- round(Correlation[1],2)
-    ModPar5 <- ""
+  par1 <- paste("T[b] ==", round(Tb, 1))
+  par2 <- paste("ThetaT(50) ==", round(thetaT50, 3))
+  par3 <- paste("sigma ==", round(sigma, 3))
+  par4 <- paste("R^2 ==", round(corr, 2))
 
-    TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
+  # Function to plot all predicted treatments by the Thermaltime model
+  df <- data %>% dplyr::distinct(.data[[germ.temp]], .keep_all = FALSE)
+  modelLines <- plyr::alply(as.matrix(df), 1, function(temp) {
+    ggplot2::stat_function(
+      fun = function(x) {
+        stats::pnorm(
+          log(x, base = 10),
+          thetaT50 - log(temp - Tb, base = 10),
+          sigma,
+          log = FALSE
+        )
+      },
+      aes(color = as.factor(temp))
+    )
+  })
 
-    #Function to plot all predicted treatments by the Thermaltime model
-    modellines <-
-      plyr::alply(as.matrix(TreatmentsTemp), 1, function(Temp) {
-        stat_function(fun=function(x){pnorm(log(x, base = 10),thetaT50-log(Temp-Tb, base = 10),sigma,log=FALSE)*MaxCumFraction}, aes_(colour = factor(Temp)))
-      })
+  plt <- data %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.temp]]))) +
+    geom_point(shape = 19, size = 2) +
+    modelLines +
+    scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
+    scale_x_continuous(expand = c(0, 0)) +
+    expand_limits(x = 0, y = 0) +
+    labs(
+      title = "HydroThermal Time Model",
+      x = "Time",
+      y = "Cumulative fraction germinated (%)",
+      color = "Temperature") +
+    guides(color = guide_legend(reverse = T, order = 1)) +
+    theme_scatter_plot +
+    annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
+    annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
+    annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
+    annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
+    annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE)
+  plt
+}
 
-  } else if (Model == "HT") { #Hydrotime suboptimal model selected  ------------------
+
+plotHTModel <- function(data, model, ) {
+
+#  else if (Model == "HT") { #Hydrotime suboptimal model selected  ------------------
 
     #Create columns on TreatDataClean with predicted values and Normalized time from model
     #TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
@@ -182,6 +205,9 @@ PlotPBTMModel <- function (Data, ModelResults)
       }, tmps, wps)
 
   }
+
+
+
 
 #-------
 #Plot provided data with predicted lines indicated above.
