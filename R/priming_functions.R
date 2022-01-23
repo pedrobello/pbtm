@@ -142,7 +142,7 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
 
   Intercept <- summary(nls_model)$coefficients[[1]]
   PsiMin50 <- summary(nls_model)$coefficients[[2]]
-  TMin <- summary(nls_model)$coefficients[[3]]
+  Tmin <- summary(nls_model)$coefficients[[3]]
   Slope <- summary(nls_model)$coefficients[[4]]
 
   # Hydropriming model linear regression
@@ -170,7 +170,7 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
     LinearModel = l_model,
     Rate = rate,
     PsiMin50 = PsiMin50,
-    Tmin = TMin,
+    Tmin = Tmin,
     Intercept = Intercept,
     Slope = Slope,
     RSquared = RSquared)
