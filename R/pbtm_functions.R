@@ -7,12 +7,13 @@
 #' @param cum.time Column containing cumulative elapsed time.
 #' @param cum.frac Column containing cumulative fraction germinated.
 #' @param max.cum.frac Sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
+#' @param plot Should the model results be plotted?
 #' @keywords Thermal time model parameters
 #' @export
 #' @examples calcTTSubOModel(MyData)
 #' calcTTSubOModel(MyData)
 
-calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1) {
+calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, plot = TRUE) {
 
   # data and argument checks
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
@@ -70,6 +71,17 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
     ThetaT50 = ThetaT50,
     Sigma = Sigma,
     Correlation = Corr)
+
+  if (plot == TRUE) {
+    plt <- plotTTSubOModel(
+      data,
+      results,
+      germ.temp = germ.temp,
+      cum.time = cum.time,
+      cum.frac = cum.frac
+    )
+    show(plt)
+  }
 
   return(results)
 }

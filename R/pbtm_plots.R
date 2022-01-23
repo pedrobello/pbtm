@@ -10,6 +10,7 @@
 #' @examples plotPBTModel(MyData, MyModelResults)
 #' plotPBTModel(MyData, MyModelResults)
 
+# TODO: Maybe this plot should be called when the model itself is run to illustrate it.
 plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
   # data and argument checks
@@ -74,7 +75,8 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
     annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
     annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
     annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE)
-  plt
+
+  return(plt)
 }
 
 
