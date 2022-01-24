@@ -1,14 +1,17 @@
 #' A Function to plot the selected calculated model and parameters and predicitions.
 #'
 #' This function plots the selected model and calculated parameters.
-#' @param data A data frame containing time course and cumulative germination fractions to be used in the ThermalTime model. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) and the experiment temperature (GermTemp) are required.
+#' @param data A data frame containing time course and cumulative germination fractions to be used in the ThermalTime model. A column with time in hours, a column with cumulative fractions, and the experiment temperature are required.
 #' @param model is the results list returned from from running any of the PBT models.
-#' @keywords plot population-based threshold model
+#' @param germ.temp Name of the column for the experimental temperature.
+#' @param cum.time Name of the column for cumulative time.
+#' @param cum.frac Name of the the column for cumulative fraction germinated.
+#' @keywords plot population-based threshold model hydrotime
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
-#' @examples plotPBTModel(MyData, MyModelResults)
-#' plotPBTModel(MyData, MyModelResults)
+#' @examples plotTTSubOModel(MyData, MyModelResults)
+#' plotTTSubOModel(MyData, MyModelResults)
 
 plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -79,6 +82,21 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
   return(plt)
 }
 
+
+#' A Function to plot the selected calculated model and parameters and predicitions.
+#'
+#' This function plots the selected model and calculated parameters.
+#' @param data A data frame containing time course and cumulative germination fractions to be used in the ThermalTime model. A column with time in hours, a column with cumulative fractions, and the experiment temperature are required.
+#' @param model is the results list returned from from running any of the PBT models.
+#' @param germ.wp Name of the column for the water potential.
+#' @param cum.time Name of the column for cumulative time.
+#' @param cum.frac Name of the the column for cumulative fraction germinated.
+#' @keywords plot population-based threshold model hydrotime
+#' @importFrom rlang .data
+#' @importFrom dplyr %>%
+#' @export
+#' @examples plotHTModel(MyData, MyModelResults)
+#' plotHTModel(MyData, MyModelResults)
 
 plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -151,6 +169,22 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
 }
 
 
+#' A Function to plot the selected calculated model and parameters and predicitions.
+#'
+#' This function plots the selected model and calculated parameters.
+#' @param data A data frame containing time course and cumulative germination fractions to be used in the ThermalTime model. A column with time in hours, a column with cumulative fractions, and the experiment temperature are required.
+#' @param model is the results list returned from from running any of the PBT models.
+#' @param germ.wp Name of the column for the water potential.
+#' @param germ.temp Name of the column for the experimental temperature.
+#' @param cum.time Name of the column for cumulative time.
+#' @param cum.frac Name of the the column for cumulative fraction germinated.
+#' @keywords plot population-based threshold model hydrotime
+#' @importFrom rlang .data
+#' @importFrom dplyr %>%
+#' @export
+#' @examples plotHTTModel(MyData, MyModelResults)
+#' plotHTTModel(MyData, MyModelResults)
+
 plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
   modelName <- "HydroThermalTime"
@@ -214,6 +248,7 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
   #   }, tmps, wps)
 
 
+  # generate the plot
   plt <- data %>%
     ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.wp]]), alpha = as.factor(.data[[germ.temp]]))) +
     geom_point(aes(shape = as.factor(.data[[germ.temp]])), size = 2) +
@@ -236,27 +271,5 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
     annotate("text", x = -Inf, y = 0.7, label = par5, color = "grey0", hjust = -0.2, parse = TRUE) +
     theme_scatter_plot
 
-  plt
+  return(plt)
 }
-
-
-
-
-#-------
-# #Plot provided data with predicted lines indicated above.
-#   p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time") + ylab("Cumulative (%)") +
-#     modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
-#     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
-#     scale_x_continuous(expand = c(0,0)) + expand_limits(x = 0, y = 0) +
-#     guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
-#            alpha=guide_legend(reverse=T, title=LegendTitleFactor2, order = 2)) + theme_scatter_plot +
-#     annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
-#     annotate("text", x = -Inf, y = 0.9, label = paste(ModPar1Label, ModPar1), color = "grey0", hjust = -0.15, parse = TRUE) +
-#     annotate("text", x = -Inf, y = 0.85, label = paste(ModPar2Label, ModPar2), color = "grey0", hjust = -0.12, parse = TRUE) +
-#     annotate("text", x = -Inf, y = 0.8, label = paste(ModPar3Label, ModPar3), color = "grey0", hjust = -0.15, parse = TRUE) +
-#     annotate("text", x = -Inf, y = 0.75, label = paste(ModPar4Label, ModPar4), color = "grey0", hjust = -0.15, parse = TRUE) +
-#     annotate("text", x = -Inf, y = 0.7, label = paste(ModPar5Label, ModPar5), color = "grey0", hjust = -0.2, parse = TRUE)
-#   p
-#
-# }
-
