@@ -7,14 +7,12 @@
 #' @param treatments are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here. These column names do not need to be informed in case the provided template file is used to organize the data.
 #' @param cum.time is the column name in the dataset for cumulative time elapsed during the germination trial.
 #' @param cum.frac is the column name in the data for cumulative fraction germinated.
-#'
 #' @return A dataframe with germination speed and germination rate calculated from specified treatment columns.
 #' @keywords Tx, GRx, germination speed, germination rate
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
-#' calcSpeed(MyData)
 
 calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -75,14 +73,13 @@ calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
 #' This function removes repetitive cumulative fractions/percentages, keeping only the initial presence of the value
 #' @param data A data frame object with the raw cumulative data that needs to be cleaned.
 #' @param treatments are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here.
-#'
+#' @param cum.frac Column name for cumulative fraction germinated.
 #' @return A data frame with duplicate observations removed
 #' @keywords clean cumulative fraction repetitive percentage
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
-#' @examples cleanData(MyData)
-#' cleanData(MyData)
+#' @examples
 
 cleanData <- function(data, treatments = c("TrtID"), cum.frac = "CumFraction") {
 

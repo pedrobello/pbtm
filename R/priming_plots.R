@@ -11,8 +11,7 @@
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
-#' @examples plotHPModel(MyPrimingData, HPModelResults)
-#' plotHPModel(MyPrimingData, HPModelResults)
+#' @examples
 
 plotHPModel <- function(data, model, priming.wp = "PrimingWP", priming.duration = "PrimingDuration") {
 
@@ -53,22 +52,22 @@ plotHPModel <- function(data, model, priming.wp = "PrimingWP", priming.duration 
 
   # generate plot
   plt <- data %>%
-    ggplot2::ggplot(aes(x = Theta, y = .data[[rate]], color = as.factor(.data[[priming.wp]]), shape = as.factor(.data[[priming.duration]]))) +
+    ggplot2::ggplot(ggplot2::aes(x = .data$Theta, y = .data[[rate]], color = as.factor(.data[[priming.wp]]), shape = as.factor(.data[[priming.duration]]))) +
     ggplot2::geom_point(size = 2) +
     ggplot2::geom_abline(intercept = intercept, slope = slope, color = "blue") +
-    scale_x_continuous(expand = c(0,0)) +
-    labs(
+    ggplot2::scale_x_continuous(expand = c(0,0)) +
+    ggplot2::labs(
       title = paste(modelName, "Model"),
       x = "Hydro Priming Time",
       y = "Germination Rate",
       color = "Priming Water Potential",
       shape = "Priming Duration"
     ) +
-    annotate("text", x = -Inf, y = Inf, label = "Model Parameters", color = "grey0", hjust = -0.1, vjust = 1.5) +
-    annotate("text", x = -Inf, y = Inf, label = par1, color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
-    annotate("text", x = -Inf, y = Inf, label = par2, color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
-    annotate("text", x = -Inf, y = Inf, label = par3, color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
-    annotate("text", x = -Inf, y = Inf, label = par4, color = "grey0", parse = TRUE, hjust = -0.2, vjust = 6.3) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = "Model Parameters", color = "grey0", hjust = -0.1, vjust = 1.5) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par1, color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par2, color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par3, color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par4, color = "grey0", parse = TRUE, hjust = -0.2, vjust = 6.3) +
     theme_scatter_plot
 
   return(plt)
@@ -88,8 +87,7 @@ plotHPModel <- function(data, model, priming.wp = "PrimingWP", priming.duration 
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
-#' @examples plotHPModel(MyPrimingData, HPModelResults)
-#' plotHPModel(MyPrimingData, HPModelResults)
+#' @examples
 
 plotHTPModel <- function(data, model, priming.wp = "PrimingWP", priming.temp = "PrimingTemp", priming.duration = "PrimingDuration") {
 
@@ -133,16 +131,16 @@ plotHTPModel <- function(data, model, priming.wp = "PrimingWP", priming.temp = "
 
   # generate plot
   plt <- data %>%
-    ggplot2::ggplot(aes(
-      x = Theta,
+    ggplot2::ggplot(ggplot2::aes(
+      x = .data$Theta,
       y = .data[[rate]],
       color = as.factor(.data[[priming.wp]]),
       shape = as.factor(.data[[priming.duration]]),
       alpha = as.factor(.data[[priming.temp]]))) +
     ggplot2::geom_point(size = 2) +
     ggplot2::geom_abline(intercept = intercept, slope = slope, color = "blue") +
-    scale_x_continuous(expand = c(0,0)) +
-    labs(
+    ggplot2::scale_x_continuous(expand = c(0,0)) +
+    ggplot2::labs(
       title = paste(modelName, "Model"),
       x = "Hydro Thermal Priming Time",
       y = "Germination Rate",
@@ -150,12 +148,12 @@ plotHTPModel <- function(data, model, priming.wp = "PrimingWP", priming.temp = "
       shape = "Priming Duration",
       alpha = "Priming Temperature"
     ) +
-    annotate("text", x = -Inf, y = Inf, label = "Model Parameters", color = "grey0", hjust = -0.1, vjust = 1.5) +
-    annotate("text", x = -Inf, y = Inf, label = par1, color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
-    annotate("text", x = -Inf, y = Inf, label = par2, color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
-    annotate("text", x = -Inf, y = Inf, label = par3, color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
-    annotate("text", x = -Inf, y = Inf, label = par4, color = "grey0", parse = TRUE, hjust = -0.1, vjust = 7.2) +
-    annotate("text", x = -Inf, y = Inf, label = par5, color = "grey0", parse = TRUE, hjust = -0.2, vjust = 7.8) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = "Model Parameters", color = "grey0", hjust = -0.1, vjust = 1.5) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par1, color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par2, color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par3, color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par4, color = "grey0", parse = TRUE, hjust = -0.1, vjust = 7.2) +
+    ggplot2::annotate("text", x = -Inf, y = Inf, label = par5, color = "grey0", parse = TRUE, hjust = -0.2, vjust = 7.8) +
     theme_scatter_plot
 
   return(plt)

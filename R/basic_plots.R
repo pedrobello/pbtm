@@ -7,9 +7,8 @@
 #' @param x should indicate the treatment column name for the x axis (e.g., "GermTemp", "GermWP" or others).
 #' @param y should indicate the rate column name for the y axis if different than GR50 (e.g., "GR10", "GR90", etc).
 #' @keywords plot rates Temperature
-#' @export plotRateVsTreat
-#' @examples plotRateVsTreat(MyCalcSpeedData, x = "GermTemp")
-#' plotRateVsTreat(MyCalcSpeedData, x = "GermTemp")
+#' @export
+#' @examples
 
 plotRateVsTrt <- function(data, x = "TrtID", y = "GR50") {
 
@@ -23,7 +22,7 @@ plotRateVsTrt <- function(data, x = "TrtID", y = "GR50") {
 
   ggplot2::ggplot(data, ggplot2::aes_string(x = x, y = y, color = x)) +
     ggplot2::geom_point(shape = 19, size = 2) +
-    expand_limits(x = 0, y = 0) +
+    ggplot2::expand_limits(x = 0, y = 0) +
     theme_scatter_plot
 }
 
@@ -34,10 +33,12 @@ plotRateVsTrt <- function(data, x = "TrtID", y = "GR50") {
 #' @param data A data frame with time course data for one or two treatments.
 #' @param color The treatment to be mapped to color on the plot.
 #' @param shape The treatment to be mapped to shape on the plot.
+#' @param line Should the line overlay be added?
+#' @param cum.time Column name for cumulative elapsed time.
+#' @param cum.frac Column name for cumulative fraction germinated.
 #' @keywords plot raw data
-#' @export plotRawData
-#' @examples plotRawData(MyData, color = "GermTemp")
-#' plotRawData(MyRawData, color = "GermTemp")
+#' @export
+#' @examples
 
 plotRawData <- function(data, color = NULL, shape = NULL, line = TRUE, cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -53,11 +54,11 @@ plotRawData <- function(data, color = NULL, shape = NULL, line = TRUE, cum.time 
   if (!is.null(shape)) data[[shape]] <- as.character(data[[shape]])
 
   # Plot raw data
-  plt <- ggplot2::ggplot(data = data, ggplot2::aes_string(x = cum.time, y = cum.frac, color = color, shape = shape )) +
-    scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
-    scale_x_continuous(expand = c(0, 0)) +
-    expand_limits(x = 0, y = 0) +
-    labs(
+  plt <- ggplot2::ggplot(data, ggplot2::aes_string(x = cum.time, y = cum.frac, color = color, shape = shape )) +
+    ggplot2::scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::expand_limits(x = 0, y = 0) +
+    ggplot2::labs(
       x = "Time",
       y = "Cumulative fraction germinated (%)"
     ) +

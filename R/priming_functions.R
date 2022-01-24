@@ -8,8 +8,7 @@
 #' @param plot Should the model results be plotted?
 #' @keywords hydropriming model parameters
 #' @export
-#' @examples calcHPModel(MySpeedData)
-#' calcHPModel(MySpeedData)
+#' @examples
 
 calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "PrimingDuration", rate = "GR50", plot = TRUE) {
 
@@ -50,12 +49,12 @@ calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "Prim
   Slope <- summary(nls_model)$coefficients[[3]]
 
   message("HydroPriming nonlinear least-squares model summary:")
-  show(summary(nls_model))
+  methods::show(summary(nls_model))
 
   #Hydropriming model linear regression
   l_model <- stats::lm(
     formula = growthRate ~ (primingWP - psiMin50) * primingDuration,
-    data = tibble(
+    data = data.frame(
       growthRate = growthRate,
       primingWP = primingWP,
       psiMin50 = PsiMin50,
@@ -63,7 +62,7 @@ calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "Prim
     ))
 
   message("HydroPriming linear model summary:")
-  show(summary(l_model))
+  methods::show(summary(l_model))
 
   #Future refine of the model
   #lmer(GR50 ~ ((Treat.priming.wp-psiMin50)*Treat.priming.duration), PrimingTreats, start = c(psiMin50 = -1) )
@@ -94,7 +93,7 @@ calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "Prim
       priming.duration = priming.duration
     )
     results$Plot <- plt
-    show(plt)
+    methods::show(plt)
   }
 
   return(results)
@@ -109,10 +108,10 @@ calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "Prim
 #' @param priming.temp Column containing the priming temperature treatments.
 #' @param priming.duration Column containing the priming duration treatments.
 #' @param rate Column containing the growth rate calculations from the calcSpeed function.
+#' @param plot Should the model results be plotted?
 #' @keywords hydrothermal priming model parameters
 #' @export
-#' @examples calcHTPModel(MySpeedData)
-#' calcHTPModel(MySpeedData)
+#' @examples
 
 calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "PrimingTemp", priming.duration = "PrimingDuration", rate = "GR50", plot = TRUE) {
 
@@ -151,7 +150,7 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
     algorithm = "port")
 
   message("HydroThermalPriming nonlinear least-squares model summary:")
-  show(summary(nls_model))
+  methods::show(summary(nls_model))
 
   Intercept <- summary(nls_model)$coefficients[[1]]
   PsiMin50 <- summary(nls_model)$coefficients[[2]]
@@ -161,7 +160,7 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
   # Hydropriming model linear regression
   l_model <- stats::lm(
     formula = growthRate ~ ((primingWP - psiMin50) * (primingTemp - tMin) * primingDuration),
-    data = tibble(
+    data = data.frame(
       growthRate = growthRate,
       primingWP = primingWP,
       psiMin50 = PsiMin50,
@@ -171,7 +170,7 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
     ))
 
   message("HydroThermalPriming linear model summary:")
-  show(summary(l_model))
+  methods::show(summary(l_model))
 
   # get some estimation of goodness of fit
   corr <- stats::cor(growthRate, stats::predict(l_model)) ^ 2
@@ -198,7 +197,7 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
       priming.duration = priming.duration
     )
     results$Plot <- plt
-    show(plt)
+    methods::show(plt)
   }
 
   return(results)

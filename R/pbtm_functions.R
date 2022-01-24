@@ -10,8 +10,7 @@
 #' @param plot Should the model results be plotted?
 #' @keywords Thermal time model parameters
 #' @export
-#' @examples calcTTSubOModel(MyData)
-#' calcTTSubOModel(MyData)
+#' @examples
 
 calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, plot = TRUE) {
 
@@ -61,7 +60,7 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
   Sigma <- summary(model)$coefficients[[3]]
 
   message("ThermalTime Suboptimal Model Summary:")
-  show(summary(model))
+  methods::show(summary(model))
 
   results <- list(
     Type = "ThermalTime Suboptimal",
@@ -83,7 +82,7 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
       cum.frac = cum.frac
     )
     results$Plot <- plt
-    show(plt)
+    methods::show(plt)
   }
 
   return(results)
@@ -102,8 +101,7 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
 #' @param plot Should the model results be plotted?
 #' @keywords hydrotime model parameters
 #' @export
-#' @examples calcHTModel(MyData)
-#' calcHTModel(MyData)
+#' @examples
 
 calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, plot = TRUE) {
 
@@ -145,7 +143,7 @@ calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac
     algorithm = "port")
 
   #get some estimation of goodness of fit
-  corr <- cor(germ, stats::predict(model)) ^ 2
+  corr <- stats::cor(germ, stats::predict(model)) ^ 2
 
   # Passing fitted Hydrotime Model Parameters
   HT <- summary(model)$coefficients[[1]]
@@ -153,7 +151,7 @@ calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac
   Sigma <- summary(model)$coefficients[[3]]
 
   message("HydroTime Model Summary:")
-  show(summary(model))
+  methods::show(summary(model))
 
   results <- list(
     Type = "HydroTime",
@@ -174,7 +172,7 @@ calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac
       cum.frac = cum.frac
     )
     results$Plot <- plt
-    show(plt)
+    methods::show(plt)
   }
 
   return(results)
@@ -195,8 +193,7 @@ calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac
 #' @param plot Should the model results be plotted?
 #' @keywords hydrothermal time model parameters
 #' @export
-#' @examples calcHTTModel(MyData)
-#' calcHTTModel(MyData)
+#' @examples
 
 calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, base.temp = NULL, plot = TRUE) {
 
@@ -272,7 +269,7 @@ calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.t
   corr <- stats::cor(germ, stats::predict(model)) ^ 2
 
   message("HydroThermalTime model summary:")
-  show(summary(model))
+  methods::show(summary(model))
 
   results <- list(
     Type = "HydroThermalTime",
@@ -295,7 +292,7 @@ calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.t
       cum.frac = cum.frac
     )
     results$Plot <- plt
-    show(plt)
+    methods::show(plt)
   }
 
   return(results)

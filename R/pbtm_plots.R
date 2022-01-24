@@ -10,8 +10,7 @@
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
-#' @examples plotTTSubOModel(MyData, MyModelResults)
-#' plotTTSubOModel(MyData, MyModelResults)
+#' @examples
 
 plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -52,7 +51,7 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
       fun = function(x) {
         stats::pnorm(log(x, base = 10), thetaT50 - log(temp - tb, base = 10),  sigma, log = FALSE)
       },
-      aes(color = as.factor(temp))
+      ggplot2::aes(color = as.factor(temp))
     )
   },
     df[[germ.temp]]
@@ -61,23 +60,23 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
   # generate the plot
   plt <- data %>%
     ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.temp]]))) +
-    geom_point(shape = 19, size = 2) +
+    ggplot2::geom_point(shape = 19, size = 2) +
     modelLines +
-    scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
-    scale_x_continuous(expand = c(0, 0)) +
-    expand_limits(x = 0, y = 0) +
-    labs(
+    ggplot2::scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::expand_limits(x = 0, y = 0) +
+    ggplot2::labs(
       title = paste(modelName, "Model"),
       x = "Time",
       y = "Cumulative fraction germinated (%)",
       color = "Temperature") +
-    guides(color = guide_legend(reverse = T, order = 1)) +
+    ggplot2::guides(color = ggplot2::guide_legend(reverse = T, order = 1)) +
     theme_scatter_plot +
-    annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
-    annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE)
+    ggplot2::annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
+    ggplot2::annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE)
 
   return(plt)
 }
@@ -95,8 +94,7 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
-#' @examples plotHTModel(MyData, MyModelResults)
-#' plotHTModel(MyData, MyModelResults)
+#' @examples
 
 plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -138,7 +136,7 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
       fun = function(x) {
         maxCumFrac * stats::pnorm(wp - (ht / x), psib50, sigma, log = FALSE)
       },
-      aes(color = as.factor(wp))
+      ggplot2::aes(color = as.factor(wp))
     )
   },
     df[[germ.wp]]
@@ -147,22 +145,22 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
   # generate the plot
   plt <- data %>%
     ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.wp]]))) +
-    geom_point(shape = 19, size = 2) +
+    ggplot2::geom_point(shape = 19, size = 2) +
     modelLines +
-    scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
-    scale_x_continuous(expand = c(0, 0)) +
-    expand_limits(x = 0, y = 0) +
-    labs(
+    ggplot2::scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::expand_limits(x = 0, y = 0) +
+    ggplot2::labs(
       title = paste(modelName, "Model"),
       x = "Time",
       y = "Cumulative fraction germinated (%)",
       color = "Water Potential") +
-    guides(color = guide_legend(reverse = T, order = 1)) +
-    annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
-    annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::guides(color = ggplot2::guide_legend(reverse = T, order = 1)) +
+    ggplot2::annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
+    ggplot2::annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE) +
     theme_scatter_plot
 
   return(plt)
@@ -182,8 +180,7 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
 #' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @export
-#' @examples plotHTTModel(MyData, MyModelResults)
-#' plotHTTModel(MyData, MyModelResults)
+#' @examples
 
 plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -234,7 +231,7 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
           log = FALSE
         )
       },
-      aes(color = as.factor(wp), alpha = as.factor(temp))
+      ggplot2::aes(color = as.factor(wp), alpha = as.factor(temp))
     )
   },
     df[[germ.wp]],
@@ -251,24 +248,24 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
   # generate the plot
   plt <- data %>%
     ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.wp]]), alpha = as.factor(.data[[germ.temp]]))) +
-    geom_point(aes(shape = as.factor(.data[[germ.temp]])), size = 2) +
+    ggplot2::geom_point(ggplot2::aes(shape = as.factor(.data[[germ.temp]])), size = 2) +
     modelLines +
-    scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
-    scale_x_continuous(expand = c(0, 0)) +
-    expand_limits(x = 0, y = 0) +
-    labs(
+    ggplot2::scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
+    ggplot2::scale_x_continuous(expand = c(0, 0)) +
+    ggplot2::expand_limits(x = 0, y = 0) +
+    ggplot2::labs(
       title = paste(modelName, "Model"),
       x = "Time",
       y = "Cumulative fraction germinated (%)",
       color = "Water Potential",
       shape = "Temperature") +
-    guides(color = guide_legend(reverse = T, order = 1)) +
-    annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
-    annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.7, label = par5, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::guides(color = ggplot2::guide_legend(reverse = T, order = 1)) +
+    ggplot2::annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
+    ggplot2::annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE) +
+    ggplot2::annotate("text", x = -Inf, y = 0.7, label = par5, color = "grey0", hjust = -0.2, parse = TRUE) +
     theme_scatter_plot
 
   return(plt)
