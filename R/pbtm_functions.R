@@ -252,17 +252,15 @@ calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.t
     upper = upper,
     algorithm = "port")
 
+  HT <- summary(model)$coefficients[[1]]
+  Psib50 <- summary(model)$coefficients[[2]]
+  Sigma <- summary(model)$coefficients[[3]]
+
   # get model coefficients
   if (is.null(base.temp)) {
-    HT <- summary(model)$coefficients[[1]]
-    Tb <- summary(model)$coefficients[[2]]
-    Psib50 <- summary(model)$coefficients[[3]]
-    Sigma <- summary(model)$coefficients[[4]]
+    Tb <- summary(model)$coefficients[[4]]
   } else {
-    HT <- summary(model)$coefficients[[1]]
     Tb <- base.temp
-    Psib50 <- summary(model)$coefficients[[2]]
-    Sigma <- summary(model)$coefficients[[3]]
   }
 
   # estimate goodness of fit

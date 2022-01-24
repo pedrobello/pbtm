@@ -52,7 +52,11 @@ plotHPModel <- function(data, model, priming.wp = "PrimingWP", priming.duration 
 
   # generate plot
   plt <- data %>%
-    ggplot2::ggplot(ggplot2::aes(x = .data$Theta, y = .data[[rate]], color = as.factor(.data[[priming.wp]]), shape = as.factor(.data[[priming.duration]]))) +
+    ggplot2::ggplot(ggplot2::aes(
+      x = .data$Theta,
+      y = .data[[rate]],
+      color = as.factor(.data[[priming.wp]]),
+      shape = as.factor(.data[[priming.duration]]))) +
     ggplot2::geom_point(size = 2) +
     ggplot2::geom_abline(intercept = intercept, slope = slope, color = "blue") +
     ggplot2::scale_x_continuous(expand = c(0,0)) +

@@ -238,17 +238,14 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
     df[[germ.temp]]
   )
 
-  # modelLines <- mapply(function(temp, WP1) {
-  #   ggplot2::stat_function(
-  #     fun = function(x){
-  #       stats::pnorm((WP1-(HT/((Temp1-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFraction}, aes_(colour = factor(Temp1), alpha = factor(WP1)))
-  #   }, tmps, wps)
-
-
   # generate the plot
   plt <- data %>%
-    ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.wp]]), alpha = as.factor(.data[[germ.temp]]))) +
-    ggplot2::geom_point(ggplot2::aes(shape = as.factor(.data[[germ.temp]])), size = 2) +
+    ggplot2::ggplot(ggplot2::aes(
+      x = .data[[cum.time]],
+      y = .data[[cum.frac]],
+      color = as.factor(.data[[germ.wp]]),
+      alpha = as.factor(.data[[germ.temp]]))) +
+    ggplot2::geom_point(size = 2) +
     modelLines +
     ggplot2::scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
@@ -258,7 +255,7 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
       x = "Time",
       y = "Cumulative fraction germinated (%)",
       color = "Water Potential",
-      shape = "Temperature") +
+      alpha = "Temperature") +
     ggplot2::guides(color = ggplot2::guide_legend(reverse = T, order = 1)) +
     ggplot2::annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
     ggplot2::annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
