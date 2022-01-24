@@ -5,12 +5,13 @@
 #' @param priming.wp Column containing the priming water potential treatments.
 #' @param priming.duration Column containing the priming duration treatments.
 #' @param rate Column containing the growth rate data from the calcSpeed function.
+#' @param plot Should the model results be plotted?
 #' @keywords hydropriming model parameters
 #' @export
 #' @examples calcHPModel(MySpeedData)
 #' calcHPModel(MySpeedData)
 
-calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "PrimingDuration", rate = "GR50") {
+calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "PrimingDuration", rate = "GR50", plot = TRUE) {
 
   # data and argument checks
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
@@ -78,11 +79,23 @@ calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "Prim
     Type = "HydroPriming",
     Model = nls_model,
     LinearModel = l_model,
+    Plot = NULL,
     Rate = rate,
     PsiMin50 = PsiMin50,
     Intercept = Intercept,
     Slope = Slope,
     RSquared = RSquared)
+
+  if (plot == TRUE) {
+    plt <- plotHPModel(
+      data,
+      results,
+      priming.wp = priming.wp,
+      priming.duration = priming.duration
+    )
+    results$Plot <- plt
+    show(plt)
+  }
 
   return(results)
 }
@@ -101,7 +114,7 @@ calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "Prim
 #' @examples calcHTPModel(MySpeedData)
 #' calcHTPModel(MySpeedData)
 
-calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "PrimingTemp", priming.duration = "PrimingDuration", rate = "GR50") {
+calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "PrimingTemp", priming.duration = "PrimingDuration", rate = "GR50", plot = TRUE) {
 
   # data and argument checks
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
@@ -153,7 +166,7 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
       primingWP = primingWP,
       psiMin50 = PsiMin50,
       primingTemp = primingTemp,
-      tMin = TMin,
+      tMin = Tmin,
       primingDuration = primingDuration
     ))
 
@@ -168,12 +181,25 @@ calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "Priming
     Type = "HydroThermalPriming",
     Model = nls_model,
     LinearModel = l_model,
+    Plot = NULL,
     Rate = rate,
     PsiMin50 = PsiMin50,
     Tmin = Tmin,
     Intercept = Intercept,
     Slope = Slope,
     RSquared = RSquared)
+
+  if (plot == TRUE) {
+    plt <- plotHTPModel(
+      data,
+      results,
+      priming.wp = priming.wp,
+      priming.temp = priming.temp,
+      priming.duration = priming.duration
+    )
+    results$Plot <- plt
+    show(plt)
+  }
 
   return(results)
 }

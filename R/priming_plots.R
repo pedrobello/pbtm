@@ -3,85 +3,160 @@
 #' A Function to plot the both priming models.
 #'
 #' This function plots the priming models and calculated parameters.
-#' @param myData object with the calculated rates with treatments to be used in the Hydrothermal priming model. The output of the CalcSpeed function can be directly used here with the desired treatments. The fields with Treat.priming.wp, Treat.priming.temp and Treat.priming.duration need to be informed in the data file.
-#' @param ModelResults is data object resulting from the CalcHPModel() or CalcHTPModel() functions containing the model information and parameter results.
-#' @param GR is the column name for the rate to be used in the model and needs to be informed in case the data object contains a GR different than GR50.
+#' @param data object with the calculated rates with treatments to be used in the Hydrothermal priming model. The output of the CalcSpeed function can be directly used here with the desired treatments. The fields with Treat.priming.wp, Treat.priming.temp and Treat.priming.duration need to be informed in the data file.
+#' @param model is data object resulting from the CalcHPModel() or CalcHTPModel() functions containing the model information and parameter results.
+#' @param priming.wp Column name for the priming water potential.
+#' @param priming.duration Column name for the duration of priming.
 #' @keywords plot priming model hydropriming hydrothermal priming
-#' @importFrom tibble as_tibble
+#' @importFrom rlang .data
+#' @importFrom dplyr %>%
 #' @export
-#' @examples PlotPrimingModel(myData, HPModelResults)
-#' PlotPrimingModel(myData, HPModelResults)
-PlotPrimingModel <- function(Data, ModelResults, GR)
-{
-  Treatments <- Data
-  if (missing(GR)) { #GR not informed
-    grColName <- "GR50"
-  } else {
-    grColName <- GR
-  }
-  grUsed <- eval(parse(text=paste("Treatments$",grColName, sep = "")))
+#' @examples plotHPModel(MyPrimingData, HPModelResults)
+#' plotHPModel(MyPrimingData, HPModelResults)
 
-  if (ModelResults$Model == "HP") { #HP Model identified and update Theta Hydropriming values
-    Treatments <-Treatments %>% as_tibble() %>% dplyr::mutate(
-      Theta = (Treatments$Treat.priming.wp-ModelResults$PsiMin50)*Treatments$Treat.priming.duration)
-    #Treatment factor for plot
-    TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
-    TreatFactor2 <- (as.factor(Treatments$Treat.priming.duration))
-    TreatFactor3 <- NA
+plotHPModel <- function(data, model, priming.wp = "PrimingWP", priming.duration = "PrimingDuration") {
 
-    factor2lab <- "Priming \n duration"
-    factor3lab <- NA
+  modelName <- "HydroPriming"
+  modelParams <- c("Type", "Rate", "PsiMin50", "Intercept", "Slope")
 
-    #Pass parameters for plot
-    ModPar1Label <- "Psi[min](50)=="
-    ModPar2Label <- "Intercept=="
-    ModPar3Label <- "Slope=="
-    xAxisTitlePriming <- "Hydropriming Time"
+  # data and argument checks
+  if (!is.data.frame(data)) stop("Data is not a valid data frame.")
+  if (!is.list(model)) stop("Model results must be in list format as output from any of the PBT model functions.")
 
-    ModPar1 <- ModelResults$PsiMin50 # PsiMin50 Value
-    ModPar2 <- ModelResults$Intercept # Intercept
-    ModPar3 <- ModelResults$Slope # Slope
+  # check validity of columns defs
 
+  if (!is.element(priming.wp, names(data))) stop("Priming water potential column '", priming.wp, "' not found in data frame.")
+  if (!is.element(priming.duration, names(data))) stop("Priming duration column '", priming.duration, "' not found in data frame.")
 
-  } else { #HTP identified and update Theta Hydrothermal priming values
-    Treatments <-Treatments %>% as_tibble() %>% dplyr::mutate(
-      Theta = (Treatments$Treat.priming.wp-ModelResults$PsiMin50)*(Treatments$Treat.priming.temp-ModelResults$Tmin)*Treatments$Treat.priming.duration)
-    #Treatment factor for plot
-    TreatFactor1 <- (as.factor(Treatments$Treat.priming.wp))
-    TreatFactor2 <- (as.factor(Treatments$Treat.priming.temp))
-    TreatFactor3 <- (as.factor(Treatments$Treat.priming.duration))
+  # check for presence of model results
+  lapply(modelParams, function(m) {
+    if (!is.element(m, names(model))) stop("Required param '", m, "' missing from supplied model results.")
+  })
+  if (model$Type != modelName) stop("Model type must be '", modelName, "' for this plot function.")
+  if (!is.element(model$Rate, names(data))) stop("Model rate '", model$Rate, "' does not match a rate column from the supplied speed data.")
 
-    factor2lab <- "Priming \n temperature"
-    factor3lab <- "Priming \n duration"
+  # set local vars
+  rate <- model$Rate
+  psimin50 <- model$PsiMin50
+  intercept <- model$Intercept
+  slope <- model$Slope
+  r2 <- model$RSquared
 
-    #Pass parameters for plot
-    ModPar1Label <- "Psi[min](50)=="
-    ModPar2Label <- "T[min]=="
-    ModPar3Label <- "Intercept=="
-    ModPar4Label <- "Slope=="
-    xAxisTitlePriming <- "Hydrothermal priming Time"
+  data <- data %>%
+    dplyr::mutate(Theta = (.data[[priming.wp]] - psimin50) * .data[[priming.duration]])
 
-    ModPar1 <- ModelResults$PsiMin50 # PsiMin50 Value
-    ModPar2 <- ModelResults$Tmin # Tmin Value
-    ModPar3 <- ModelResults$Intercept # Intercept
-    ModPar4 <- ModelResults$Slope # Slope
+  # model params
+  par1 <- paste("Psi[min](50)==", psimin50)
+  par2 <- paste("Intercept==", intercept)
+  par3 <- paste("Slope==", slope)
+  par4 <- paste("R^2==", r2)
 
-  }
+  # generate plot
+  plt <- data %>%
+    ggplot2::ggplot(aes(x = Theta, y = .data[[rate]], color = as.factor(.data[[priming.wp]]), shape = as.factor(.data[[priming.duration]]))) +
+    ggplot2::geom_point(size = 2) +
+    ggplot2::geom_abline(intercept = intercept, slope = slope, color = "blue") +
+    scale_x_continuous(expand = c(0,0)) +
+    labs(
+      title = paste(modelName, "Model"),
+      x = "Hydro Priming Time",
+      y = "Germination Rate",
+      color = "Priming Water Potential",
+      shape = "Priming Duration"
+    ) +
+    annotate("text", x = -Inf, y = Inf, label = "Model Parameters", color = "grey0", hjust = -0.1, vjust = 1.5) +
+    annotate("text", x = -Inf, y = Inf, label = par1, color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
+    annotate("text", x = -Inf, y = Inf, label = par2, color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
+    annotate("text", x = -Inf, y = Inf, label = par3, color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
+    annotate("text", x = -Inf, y = Inf, label = par4, color = "grey0", parse = TRUE, hjust = -0.2, vjust = 6.3) +
+    theme_scatter_plot
 
-  pPM <- ggplot(data=Treatments, aes(x=Theta, y=grUsed, color=TreatFactor1, shape = TreatFactor2, alpha = TreatFactor3)) + geom_point(size=2) + xlab(xAxisTitlePriming) + ylab("Germination Rate") +
-    scale_x_continuous(expand = c(0,0)) + geom_abline(intercept = ModelResults$Intercept, slope = ModelResults$Slope, color = "blue") +
-    annotate("text", x = -Inf, y = Inf, label = paste("Model Parameters"), color = "grey0", hjust = -0.1, vjust = 1.5) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar1Label, ModPar1), color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar2Label, ModPar2), color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
-    annotate("text", x = -Inf, y = Inf, label = paste(ModPar3Label, ModPar3), color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
-    annotate("text", x = -Inf, y = Inf, label = paste("R^2 == ", ModelResults$RSquared), color = "grey0", parse = TRUE, hjust = -0.2, vjust = 6.3) +
-    theme_scatter_plot + labs(color = "Priming WP", shape = factor2lab, alpha = factor3lab )
-
-  pPM
+  return(plt)
 }
 
-#----------------------New Development - Under Testing
 
 
+#' A Function to plot the both priming models.
+#'
+#' This function plots the priming models and calculated parameters.
+#' @param data object with the calculated rates with treatments to be used in the Hydrothermal priming model. The output of the CalcSpeed function can be directly used here with the desired treatments.
+#' @param model is data object resulting from the calcHPModel or calcHTPModel functions containing the model information and parameter results.
+#' @param priming.wp Column name for the priming water potential.
+#' @param priming.temp Column name for the priming temperature.
+#' @param priming.duration Column name for the duration of priming.
+#' @keywords plot priming model hydropriming hydrothermal priming
+#' @importFrom rlang .data
+#' @importFrom dplyr %>%
+#' @export
+#' @examples plotHPModel(MyPrimingData, HPModelResults)
+#' plotHPModel(MyPrimingData, HPModelResults)
 
+plotHTPModel <- function(data, model, priming.wp = "PrimingWP", priming.temp = "PrimingTemp", priming.duration = "PrimingDuration") {
 
+  modelName <- "HydroThermalPriming"
+  modelParams <- c("Type", "Rate", "PsiMin50", "Tmin", "Intercept", "Slope")
+
+  # data and argument checks
+  if (!is.data.frame(data)) stop("Data is not a valid data frame.")
+  if (!is.list(model)) stop("Model results must be in list format as output from any of the PBT model functions.")
+
+  # check validity of columns defs
+
+  if (!is.element(priming.wp, names(data))) stop("Priming water potential column '", priming.wp, "' not found in data frame.")
+  if (!is.element(priming.temp, names(data))) stop("Priming temperature column '", priming.temp, "' not found in data frame.")
+  if (!is.element(priming.duration, names(data))) stop("Priming duration column '", priming.duration, "' not found in data frame.")
+
+  # check for presence of model results
+  lapply(modelParams, function(m) {
+    if (!is.element(m, names(model))) stop("Required param '", m, "' missing from supplied model results.")
+  })
+  if (model$Type != modelName) stop("Model type must be '", modelName, "' for this plot function.")
+  if (!is.element(model$Rate, names(data))) stop("Model rate '", model$Rate, "' does not match a rate column from the supplied speed data.")
+
+  # set local vars
+  rate <- model$Rate
+  psimin50 <- model$PsiMin50
+  tmin <- model$Tmin
+  intercept <- model$Intercept
+  slope <- model$Slope
+  r2 <- model$RSquared
+
+  data <- data %>%
+    dplyr::mutate(Theta = (.data[[priming.wp]] - psimin50) * (.data[[priming.temp]] - tmin) * .data[[priming.duration]])
+
+  # model params
+  par1 <- paste("Psi[min](50)==", round(psimin50, 3))
+  par2 <- paste("T[min]==", round(tmin, 2))
+  par3 <- paste("Intercept==", round(intercept, 4))
+  par4 <- paste("Slope==", round(slope, 6))
+  par5 <- paste("R^2==", round(r2, 2))
+
+  # generate plot
+  plt <- data %>%
+    ggplot2::ggplot(aes(
+      x = Theta,
+      y = .data[[rate]],
+      color = as.factor(.data[[priming.wp]]),
+      shape = as.factor(.data[[priming.duration]]),
+      alpha = as.factor(.data[[priming.temp]]))) +
+    ggplot2::geom_point(size = 2) +
+    ggplot2::geom_abline(intercept = intercept, slope = slope, color = "blue") +
+    scale_x_continuous(expand = c(0,0)) +
+    labs(
+      title = paste(modelName, "Model"),
+      x = "Hydro Thermal Priming Time",
+      y = "Germination Rate",
+      color = "Priming Water Potential",
+      shape = "Priming Duration",
+      alpha = "Priming Temperature"
+    ) +
+    annotate("text", x = -Inf, y = Inf, label = "Model Parameters", color = "grey0", hjust = -0.1, vjust = 1.5) +
+    annotate("text", x = -Inf, y = Inf, label = par1, color = "grey0", parse = TRUE, hjust = -0.09, vjust = 2.5) +
+    annotate("text", x = -Inf, y = Inf, label = par2, color = "grey0", parse = TRUE, hjust = -0.12, vjust = 4.5) +
+    annotate("text", x = -Inf, y = Inf, label = par3, color = "grey0", parse = TRUE, hjust = -0.11, vjust = 5.8) +
+    annotate("text", x = -Inf, y = Inf, label = par4, color = "grey0", parse = TRUE, hjust = -0.1, vjust = 7.2) +
+    annotate("text", x = -Inf, y = Inf, label = par5, color = "grey0", parse = TRUE, hjust = -0.2, vjust = 7.8) +
+    theme_scatter_plot
+
+  return(plt)
+}
