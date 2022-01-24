@@ -66,11 +66,13 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
   results <- list(
     Type = "ThermalTime Suboptimal",
     Model = model,
+    Plot = NULL,
     MaxCumFrac = max.cum.frac,
     BaseTemp = Tb,
     ThetaT50 = ThetaT50,
     Sigma = Sigma,
-    Correlation = Corr)
+    Correlation = Corr
+  )
 
   if (plot == TRUE) {
     plt <- plotTTSubOModel(
@@ -80,6 +82,7 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
       cum.time = cum.time,
       cum.frac = cum.frac
     )
+    results$Plot <- plt
     show(plt)
   }
 
@@ -96,12 +99,13 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
 #' @param cum.time Column containing cumulative elapsed time.
 #' @param cum.frac Column containing cumulative fraction germinated.
 #' @param max.cum.frac Sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
+#' @param plot Should the model results be plotted?
 #' @keywords hydrotime model parameters
 #' @export
 #' @examples calcHTModel(MyData)
 #' calcHTModel(MyData)
 
-calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1) {
+calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, plot = TRUE) {
 
   # data and argument checks
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
@@ -154,11 +158,24 @@ calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac
   results <- list(
     Type = "HydroTime",
     Model = model,
+    Plot = NULL,
     MaxCumFrac = max.cum.frac,
     HT = HT,
     Psib50 = Psib50,
     Sigma = Sigma,
     Correlation = corr)
+
+  if (plot == TRUE) {
+    plt <- plotHTModel(
+      data,
+      results,
+      germ.wp = germ.wp,
+      cum.time = cum.time,
+      cum.frac = cum.frac
+    )
+    results$Plot <- plt
+    show(plt)
+  }
 
   return(results)
 }

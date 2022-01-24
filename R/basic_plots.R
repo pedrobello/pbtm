@@ -72,7 +72,7 @@ plotRawData <- function(data, color = NULL, shape = NULL, line = TRUE, cum.time 
 }
 
 
-#ggplot package theme ----------------------------------------------------------------------------------
+# ggplot package theme ----------------------------------------------------------------------------------
 theme_scatter_plot <- ggplot2::theme(
   legend.background = ggplot2::element_blank(),
   legend.key = ggplot2::element_blank(),
@@ -88,8 +88,7 @@ theme_scatter_plot <- ggplot2::theme(
   axis.ticks = ggplot2::element_line(color = "black", size = 0.5),
   axis.text = ggplot2::element_text(size = 12, color = "black"),
   axis.title = ggplot2::element_text(size = 14, color = "black", face = "bold"),
-  axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10, r = 0, b = 0, l = 0)),
-  plot.title = ggplot2::element_blank())
+  axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 10, r = 0, b = 0, l = 0)))
 
 
 
