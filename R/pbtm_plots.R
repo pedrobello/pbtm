@@ -13,7 +13,7 @@
 plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
   modelName <- "ThermalTime Suboptimal"
-  modelParams <- c("Type", "MaxCumFrac", "BaseTemp", "ThetaT50", "Sigma", "Correlation")
+  modelParams <- c("Type", "MaxCumFrac", "Tb", "ThetaT50", "Sigma", "Correlation")
 
   # data and argument checks
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
@@ -31,27 +31,31 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
 
   # model params
   maxCumFrac <- model$MaxCumFrac
-  Tb <- model$BaseTemp
+  tb <- model$Tb
   thetaT50 <- model$ThetaT50
   sigma <- model$Sigma
   corr <- model$Correlation
 
-  par1 <- paste("T[b] ==", round(Tb, 1))
+  par1 <- paste("T[b] ==", round(tb, 1))
   par2 <- paste("ThetaT(50) ==", round(thetaT50, 3))
   par3 <- paste("sigma ==", round(sigma, 3))
   par4 <- paste("R^2 ==", round(corr, 2))
 
-  # Function to plot all predicted treatments by the Thermaltime model
+  # Plot all predicted treatments by the thermal time model
   df <- data %>% dplyr::distinct(.data[[germ.temp]], .keep_all = FALSE)
-  modelLines <- plyr::alply(as.matrix(df), 1, function(temp) {
+
+  modelLines <- mapply(function(temp) {
     ggplot2::stat_function(
       fun = function(x) {
-        stats::pnorm(log(x, base = 10), thetaT50 - log(temp - Tb, base = 10),  sigma, log = FALSE)
+        stats::pnorm(log(x, base = 10), thetaT50 - log(temp - tb, base = 10),  sigma, log = FALSE)
       },
       aes(color = as.factor(temp))
     )
-  })
+  },
+    df[[germ.temp]]
+  )
 
+  # generate the plot
   plt <- data %>%
     ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.temp]]))) +
     geom_point(shape = 19, size = 2) +
@@ -95,42 +99,34 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
   })
   if (model$Type != modelName) stop("Model type must be '", modelName, "' for this plot function.")
 
-
-    #Create columns on TreatDataClean with predicted values and Normalized time from model
-    #TreatDataClean <<-TreatDataClean %>% as_tibble() %>% mutate(
-    #  ModelPredicted = pnorm(Germ.wp-(HT/(Germ.time.hours)),Psib50,Sigma,log=FALSE)*MaxGerm,
-    #  NormalizedTime = (1-(Germ.wp/(Germ.wp-(HT/Germ.time.hours))))*Germ.time.hours
-    #)
-
-    #Function to plot Normalized time using the HYDROTIME model
-    # modelNormalized <<-
-    #  alply(as.matrix(TreatmentsWP), 1, function(WP) {
-    #   stat_function(fun=function(x){pnorm(0-(HT/(x)),Psib50,Sigma,log=FALSE)*MaxGerm}, color="blue3")
-    # })
-    #NormalizedAxisTitle <<- "Normalized time (h)"
-
+  # set local vars
   maxCumFrac <- model$MaxCumFrac
   ht <- model$HT
   psib50 <- model$Psib50
   sigma <- model$Sigma
   corr <- model$Correlation
 
-  # Model params to display
+  # model params to display
   par1 <- paste("HT ==", round(ht, 2))
   par2 <- paste("Psi[b](50)==", round(psib50, 3))
   par3 <- paste("sigma == ", round(sigma, 3))
   par4 <- paste("R^2 == ", round(corr, 2))
 
-  # Function to plot all predicted treatments by the HYDROTIME model
+  # plot all predicted treatments by the hydro time model
   df <- dplyr::distinct(data, .data[[germ.wp]], .keep_all = FALSE)
-  modelLines <- plyr::alply(as.matrix(df), 1, function(wp) {
+
+  modelLines <- mapply(function(wp) {
     ggplot2::stat_function(
       fun = function(x) {
         maxCumFrac * stats::pnorm(wp - (ht / x), psib50, sigma, log = FALSE)
       },
-      aes(color = as.factor(wp)))
-    })
+      aes(color = as.factor(wp))
+    )
+  },
+    df[[germ.wp]]
+  )
 
+  # generate the plot
   plt <- data %>%
     ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.wp]]))) +
     geom_point(shape = 19, size = 2) +
@@ -174,10 +170,11 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
   })
   if (model$Type != modelName) stop("Model type must be '", modelName, "' for this plot function.")
 
+  # set local vars
   maxCumFrac <- model$MaxCumFrac
   ht <- model$HT
   psib50 <- model$Psib50
-  tb <- model$BaseTemp
+  tb <- model$Tb
   sigma <- model$Sigma
   corr <- model$Correlation
 
@@ -188,10 +185,10 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
   par4 <- paste("sigma == ", round(sigma, 3))
   par5 <- paste("R^2 == ", round(corr, 2))
 
-  # Function to plot all predicted treatments by the HYDROTHERMAL time model
+  # function to plot all predicted treatments by the hydro thermal time model
   df <- data %>%
-    dplyr::distinct(.data[[germ.wp]], .data[[germ.temp]], .keep_all = F) #%>%
-    #arrange(.data[[germ.wp]], .data[[germ.temp]])
+    dplyr::distinct(.data[[germ.wp]], .data[[germ.temp]], .keep_all = F) %>%
+    dplyr::arrange(.data[[germ.wp]], .data[[germ.temp]])
 
   modelLines <- mapply(function(wp, temp) {
     ggplot2::stat_function(
@@ -240,7 +237,6 @@ plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp"
     theme_scatter_plot
 
   plt
-
 }
 
 

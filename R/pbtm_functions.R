@@ -68,7 +68,7 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
     Model = model,
     Plot = NULL,
     MaxCumFrac = max.cum.frac,
-    BaseTemp = Tb,
+    Tb = Tb,
     ThetaT50 = ThetaT50,
     Sigma = Sigma,
     Correlation = Corr
@@ -277,12 +277,26 @@ calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.t
   results <- list(
     Type = "HydroThermalTime",
     Model = model,
+    Plot = NULL,
     MaxCumFrac = max.cum.frac,
     HT = HT,
-    BaseTemp = Tb,
+    Tb = Tb,
     Psib50 = Psib50,
     Sigma = Sigma,
     Correlation = corr)
+
+  if (plot == TRUE) {
+    plt <- plotHTTModel(
+      data,
+      results,
+      germ.wp = germ.wp,
+      germ.temp = germ.temp,
+      cum.time = cum.time,
+      cum.frac = cum.frac
+    )
+    results$Plot <- plt
+    show(plt)
+  }
 
   return(results)
 }
