@@ -79,6 +79,7 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
 plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction") {
 
   modelName <- "HydroTime"
+  modelParams <- c("Type", "MaxCumFrac", "HT", "Psib50", "Sigma", "Correlation")
 
   # data and argument checks
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
@@ -89,7 +90,6 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
   if (!is.element(cum.frac, names(data))) stop("Cumulative fraction column '", cum.frac, "' not found in data frame.")
 
   # check for presence of model results
-  modelParams <- c("Type", "MaxCumFrac", "HT", "Psib50", "Sigma", "Correlation")
   lapply(modelParams, function(m) {
     if (!is.element(m, names(model))) stop("Required param '", m, "' missing from supplied model results.")
   })
@@ -155,101 +155,112 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
 }
 
 
+plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
-   #else if (Model == "HTT") { #Hydrothermal time suboptimal model selected  ------------------
+  modelName <- "HydroThermalTime"
+  modelParams <- c("Type", "MaxCumFrac", "HT", "Psib50", "Sigma", "Correlation")
 
-    #Hydrothermal time Model - Create table to plot treatments with predicted model lines
-    #TreatData$WPFactor <<- with(TreatData, (as.factor(TreatData$Germ.wp)))
-    #Factor1 <<- TreatData$WPFactor
-    #Factor1Title <<- "Water \n Potential"
-    #TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
-    #TreatData$TempFactor <<- with(TreatData, (as.factor(TreatData$Germ.temp)))
-    #Factor2 <<- TreatData$TempFactor
-    #Factor2Title <<- "Temperature"
-    #TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
-    #TreatmentHTT <<- distinct(TreatData, Germ.temp, Germ.wp, .keep_all = FALSE)
+  # data and argument checks
+  if (!is.data.frame(data)) stop("Data is not a valid data frame.")
+  if (!is.list(model)) stop("Model results must be in list format as output from any of the PBT model functions.")
 
-    #Dt <<- data.frame(Treatments$Germ.temp,Treatments$Germ.wp)
-    #tmps <<- Dt$Treatments.Germ.temp
-    #wps <<- Dt$Treatments.Germ.wp
+  # check validity of columns defs
+  if (!is.element(cum.time, names(data))) stop("Cumulative time column '", cum.time, "' not found in data frame.")
+  if (!is.element(cum.frac, names(data))) stop("Cumulative fraction column '", cum.frac, "' not found in data frame.")
 
-    WP <- TreatData$Germ.wp
-    Temp <- TreatData$Germ.temp
-    HT <- ModelResults$HT
-    psib50 <- ModelResults$psib50
-    sigma <- ModelResults$sigma
-    Tb <- ModelResults$Tb
+  # check for presence of model results
+  lapply(modelParams, function(m) {
+    if (!is.element(m, names(model))) stop("Required param '", m, "' missing from supplied model results.")
+  })
+  if (model$Type != modelName) stop("Model type must be '", modelName, "' for this plot function.")
 
-    TreatFactor1 <- (as.factor(TreatData$Germ.wp))
-    TreatFactor2 <- (as.factor(TreatData$Germ.temp))
-    TreatFactor3 <- NA
+  maxCumFrac <- model$MaxCumFrac
+  ht <- model$HT
+  psib50 <- model$Psib50
+  tb <- model$BaseTemp
+  sigma <- model$Sigma
+  corr <- model$Correlation
 
-    #Label for legends
-    LegendTitleFactor1 <- "Water Potential"
-    LegendTitleFactor2 <- "Temperature"
-    LegendTitleFactor3 <- NA
+  # model params
+  par1 <- paste("HT ==", round(ht, 2))
+  par2 <- paste("T[b]==", round(tb, 2))
+  par3 <- paste("psi[b](50)==", round(psib50,3))
+  par4 <- paste("sigma == ", round(sigma, 3))
+  par5 <- paste("R^2 == ", round(corr, 2))
+
+  # Function to plot all predicted treatments by the HYDROTHERMAL time model
+  df <- data %>%
+    dplyr::distinct(.data[[germ.wp]], .data[[germ.temp]], .keep_all = F) #%>%
+    #arrange(.data[[germ.wp]], .data[[germ.temp]])
+
+  modelLines <- mapply(function(wp, temp) {
+    ggplot2::stat_function(
+      fun = function(x) {
+        maxCumFrac * stats::pnorm(
+          wp - (ht / ((temp - tb) * x)),
+          psib50,
+          sigma,
+          log = FALSE
+        )
+      },
+      aes(color = as.factor(wp), alpha = as.factor(temp))
+    )
+  },
+    df[[germ.wp]],
+    df[[germ.temp]]
+  )
+
+  # modelLines <- mapply(function(temp, WP1) {
+  #   ggplot2::stat_function(
+  #     fun = function(x){
+  #       stats::pnorm((WP1-(HT/((Temp1-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFraction}, aes_(colour = factor(Temp1), alpha = factor(WP1)))
+  #   }, tmps, wps)
 
 
-    #Passing fitted Hydrothermal time Model Parameters for plot legend
-    ModPar1Label <- "HT =="
-    ModPar2Label <- "T[b]=="
-    ModPar3Label <- "psi[b](50)=="
-    ModPar4Label <- "sigma == "
-    ModPar5Label <- "R^2 == "
+  plt <- data %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data[[cum.time]], y = .data[[cum.frac]], color = as.factor(.data[[germ.wp]]), alpha = as.factor(.data[[germ.temp]]))) +
+    geom_point(aes(shape = as.factor(.data[[germ.temp]])), size = 2) +
+    modelLines +
+    scale_y_continuous(labels = scales::percent, expand = c(0, 0), limits = c(0, 1.02)) +
+    scale_x_continuous(expand = c(0, 0)) +
+    expand_limits(x = 0, y = 0) +
+    labs(
+      title = paste(modelName, "Model"),
+      x = "Time",
+      y = "Cumulative fraction germinated (%)",
+      color = "Water Potential",
+      shape = "Temperature") +
+    guides(color = guide_legend(reverse = T, order = 1)) +
+    annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
+    annotate("text", x = -Inf, y = 0.9, label = par1, color = "grey0", hjust = -0.2, parse = TRUE) +
+    annotate("text", x = -Inf, y = 0.85, label = par2, color = "grey0", hjust = -0.1, parse = TRUE) +
+    annotate("text", x = -Inf, y = 0.8, label = par3, color = "grey0", hjust = -0.2, parse = TRUE) +
+    annotate("text", x = -Inf, y = 0.75, label = par4, color = "grey0", hjust = -0.2, parse = TRUE) +
+    annotate("text", x = -Inf, y = 0.7, label = par5, color = "grey0", hjust = -0.2, parse = TRUE) +
+    theme_scatter_plot
 
-    ModPar1 <- round(HT[1],2)
-    ModPar2 <- round(Tb[1],2)
-    ModPar3 <- round(psib50[1],3)
-    ModPar4 <- round(sigma[1],3)
-    ModPar5 <- round(Correlation[1],2)
+  plt
 
-    TreatmentsWP <<- distinct(TreatData, Germ.wp, .keep_all = FALSE)
-    TreatmentsTemp <<- distinct(TreatData, Germ.temp, .keep_all = FALSE)
-
-    #Sort data with higher temperature and higher wp
-    #TreatData <<- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp, TreatData$Germ.time.hours),]
-    Treatments <- TreatData[order(TreatData$Treat.ID,-TreatData$Germ.temp, -TreatData$Germ.wp),]
-
-    #still need to fix this. check mapply approach
-
-    Dt <- data.frame(Treatments$Germ.temp,TreatData$Germ.wp)
-    tmps <- Dt$Treatments.Germ.temp
-    wps <- Dt$Treatments.Germ.wp
-
-    #Dt <- CalcSpeed(TreatData, "Germ.wp","Germ.temp")
-    #tmps <- Dt$TreatData.Germ.temp
-    #wps <- Dt$TreatData.Germ.wp
-
-    #Dt <- data.frame(TreatmentsTemp,TreatmentsWP)
-    #tmps <- Dt$TreatData.Germ.temp
-    #wps <- Dt$TreatData.Germ.wp
-
-    #Function to plot all predicted treatments by the HYDROTHERMAL time model
-    modellines <<-
-      mapply(function(Temp1, WP1) {
-        stat_function(fun=function(x){pnorm((+WP1-(HT/((Temp1-Tb)*x))),psib50,sigma, log= FALSE)*MaxCumFraction}, aes_(colour = factor(Temp1), alpha = factor(WP1)))
-      }, tmps, wps)
-
-  }
+}
 
 
 
 
 #-------
-#Plot provided data with predicted lines indicated above.
-  p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time") + ylab("Cumulative (%)") +
-    modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
-    scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
-    scale_x_continuous(expand = c(0,0)) + expand_limits(x = 0, y = 0) +
-    guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
-           alpha=guide_legend(reverse=T, title=LegendTitleFactor2, order = 2)) + theme_scatter_plot +
-    annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
-    annotate("text", x = -Inf, y = 0.9, label = paste(ModPar1Label, ModPar1), color = "grey0", hjust = -0.15, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.85, label = paste(ModPar2Label, ModPar2), color = "grey0", hjust = -0.12, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.8, label = paste(ModPar3Label, ModPar3), color = "grey0", hjust = -0.15, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.75, label = paste(ModPar4Label, ModPar4), color = "grey0", hjust = -0.15, parse = TRUE) +
-    annotate("text", x = -Inf, y = 0.7, label = paste(ModPar5Label, ModPar5), color = "grey0", hjust = -0.2, parse = TRUE)
-  p
-
-}
+# #Plot provided data with predicted lines indicated above.
+#   p <- ggplot(data=TreatData, aes(x=Time, y=Germ,color=TreatFactor1, alpha = TreatFactor2)) + geom_point(shape=19, size=2) + xlab("Time") + ylab("Cumulative (%)") +
+#     modellines + scale_alpha_discrete(range = c(0.5, 1.0)) +
+#     scale_y_continuous(labels = scales::percent, expand = c(0,0), limits = c(0,1.02)) +
+#     scale_x_continuous(expand = c(0,0)) + expand_limits(x = 0, y = 0) +
+#     guides(color=guide_legend(reverse=T, title=LegendTitleFactor1, order = 1),
+#            alpha=guide_legend(reverse=T, title=LegendTitleFactor2, order = 2)) + theme_scatter_plot +
+#     annotate("text", x = -Inf, y = 0.95, label = paste("Model Parameters"), color = "grey0", hjust = -0.1) +
+#     annotate("text", x = -Inf, y = 0.9, label = paste(ModPar1Label, ModPar1), color = "grey0", hjust = -0.15, parse = TRUE) +
+#     annotate("text", x = -Inf, y = 0.85, label = paste(ModPar2Label, ModPar2), color = "grey0", hjust = -0.12, parse = TRUE) +
+#     annotate("text", x = -Inf, y = 0.8, label = paste(ModPar3Label, ModPar3), color = "grey0", hjust = -0.15, parse = TRUE) +
+#     annotate("text", x = -Inf, y = 0.75, label = paste(ModPar4Label, ModPar4), color = "grey0", hjust = -0.15, parse = TRUE) +
+#     annotate("text", x = -Inf, y = 0.7, label = paste(ModPar5Label, ModPar5), color = "grey0", hjust = -0.2, parse = TRUE)
+#   p
+#
+# }
 

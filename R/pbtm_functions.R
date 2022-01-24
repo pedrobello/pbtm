@@ -192,12 +192,13 @@ calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac
 #' @param cum.frac Column containin cumulative fraction germinated.
 #' @param max.cum.frac Sets the ceiling cumulative fraction for the model when treatment at optimal condition displays a lower maximum cumulative fraction. Use it on your own discretion.
 #' @param base.temp is the temperature base that can be provided and have a fixed value or left in blank to be calculated with other hydrothermal parameters.
+#' @param plot Should the model results be plotted?
 #' @keywords hydrothermal time model parameters
 #' @export
 #' @examples calcHTTModel(MyData)
 #' calcHTTModel(MyData)
 
-calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, base.temp = NULL) {
+calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, base.temp = NULL, plot = TRUE) {
 
   # data and argument checks
   if (!is.data.frame(data)) stop("Data is not a valid data frame.")
