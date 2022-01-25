@@ -26,6 +26,9 @@ plotHTModel(
 \description{
 This function plots the selected model and calculated parameters.
 }
+\examples{
+"foo"
+}
 \keyword{hydrotime}
 \keyword{model}
 \keyword{plot}

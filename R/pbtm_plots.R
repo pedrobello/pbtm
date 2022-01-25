@@ -11,6 +11,7 @@
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
+#' "foo"
 
 plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -95,6 +96,7 @@ plotTTSubOModel <- function(data, model, germ.temp = "GermTemp", cum.time = "Cum
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
+#' "foo"
 
 plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -181,6 +183,7 @@ plotHTModel <- function(data, model, germ.wp = "GermWP", cum.time = "CumTime", c
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
+#' "foo"
 
 plotHTTModel <- function(data, model, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction") {
 

@@ -11,6 +11,7 @@
 #' @keywords Thermal time model parameters
 #' @export
 #' @examples
+#' "foo"
 
 calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, plot = TRUE) {
 
@@ -102,6 +103,7 @@ calcTTSubOModel <- function(data, germ.temp = "GermTemp", cum.time = "CumTime", 
 #' @keywords hydrotime model parameters
 #' @export
 #' @examples
+#' "foo"
 
 calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, plot = TRUE) {
 
@@ -194,6 +196,7 @@ calcHTModel <- function(data, germ.wp = "GermWP", cum.time = "CumTime", cum.frac
 #' @keywords hydrothermal time model parameters
 #' @export
 #' @examples
+#' "foo"
 
 calcHTTModel <- function(data, germ.wp = "GermWP", germ.temp = "GermTemp", cum.time = "CumTime", cum.frac = "CumFraction", max.cum.frac = 1, base.temp = NULL, plot = TRUE) {
 

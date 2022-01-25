@@ -1,7 +1,13 @@
 library(tidyverse)
 
-sample_data <- read_csv("sample-germ-data.csv")
+sample_data <- read_csv("test/sample-germ-data.csv")
 sample_priming_data <- read_csv("sample-priming-data.csv")
+
+myGermData <- sample_data
+myPrimingData <- sample_priming_data
+save(myGermData, myPrimingData, file = "./data/sample_data.RData")
+
+load("data/sample_data.RData")
 
 
 ## PBT MODELS ##

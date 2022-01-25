@@ -29,6 +29,9 @@ calcHTModel(
 \description{
 This function calculates the hydrotime constant (HT), the median water potential base (Psib50) and the standard deviation (sigma).
 }
+\examples{
+"foo"
+}
 \keyword{hydrotime}
 \keyword{model}
 \keyword{parameters}

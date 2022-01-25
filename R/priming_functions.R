@@ -9,6 +9,7 @@
 #' @keywords hydropriming model parameters
 #' @export
 #' @examples
+#' "foo"
 
 calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "PrimingDuration", rate = "GR50", plot = TRUE) {
 
@@ -112,6 +113,7 @@ calcHPModel <- function(data, priming.wp = "PrimingWP", priming.duration = "Prim
 #' @keywords hydrothermal priming model parameters
 #' @export
 #' @examples
+#' "foo"
 
 calcHTPModel <- function(data, priming.wp = "PrimingWP", priming.temp = "PrimingTemp", priming.duration = "PrimingDuration", rate = "GR50", plot = TRUE) {
 

@@ -29,6 +29,9 @@ calcTTSubOModel(
 \description{
 This function calculates the temperature base (Tb), the thermal time to 50\% of the population (ThetaT50) and the standard deviation (sigma).
 }
+\examples{
+"foo"
+}
 \keyword{Thermal}
 \keyword{model}
 \keyword{parameters}

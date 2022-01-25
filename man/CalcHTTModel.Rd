@@ -35,6 +35,9 @@ calcHTTModel(
 \description{
 This function calculates the hydrohermal time constant (HT), the temperature base (tb), the median water potential base (Psib50) and the standard deviation (sigma).
 }
+\examples{
+"foo"
+}
 \keyword{hydrothermal}
 \keyword{model}
 \keyword{parameters}

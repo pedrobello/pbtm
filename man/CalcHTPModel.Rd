@@ -29,6 +29,9 @@ calcHTPModel(
 \description{
 This function calculates the minimal water potential for priming effects (Psibmin50) and minimal temperature (Tmin).
 }
+\examples{
+"foo"
+}
 \keyword{hydrothermal}
 \keyword{model}
 \keyword{parameters}

@@ -12,6 +12,7 @@
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
+#' "foo"
 
 plotHPModel <- function(data, model, priming.wp = "PrimingWP", priming.duration = "PrimingDuration") {
 
@@ -92,6 +93,7 @@ plotHPModel <- function(data, model, priming.wp = "PrimingWP", priming.duration 
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
+#' "foo"
 
 plotHTPModel <- function(data, model, priming.wp = "PrimingWP", priming.temp = "PrimingTemp", priming.duration = "PrimingDuration") {
 

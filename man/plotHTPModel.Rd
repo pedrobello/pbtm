@@ -26,6 +26,9 @@ plotHTPModel(
 \description{
 This function plots the priming models and calculated parameters.
 }
+\examples{
+"foo"
+}
 \keyword{hydropriming}
 \keyword{hydrothermal}
 \keyword{model}

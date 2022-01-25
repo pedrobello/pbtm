@@ -16,6 +16,9 @@ plotRateVsTrt(data, x = "TrtID", y = "GR50")
 \description{
 This function plots rates against the desired treatment.
 }
+\examples{
+"foo"
+}
 \keyword{Temperature}
 \keyword{plot}
 \keyword{rates}

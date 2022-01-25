@@ -26,6 +26,9 @@ calcHPModel(
 \description{
 This function calculates the minimal water potential for priming effects (Psib50min).
 }
+\examples{
+"foo"
+}
 \keyword{hydropriming}
 \keyword{model}
 \keyword{parameters}

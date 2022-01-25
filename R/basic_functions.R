@@ -13,6 +13,9 @@
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
+#' load("data/sample_data.RData")
+#' mySpeedData <- calcSpeed(myGermData, treatments = c("GermWP", "GermTemp"))
+#' print(mySpeedData)
 
 calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = "CumTime", cum.frac = "CumFraction") {
 
@@ -80,6 +83,7 @@ calcSpeed <- function(data, fraction = 0.5, treatments = c("TrtID"), cum.time = 
 #' @importFrom dplyr %>%
 #' @export
 #' @examples
+#' "foo"
 
 cleanData <- function(data, treatments = c("TrtID"), cum.frac = "CumFraction") {
 

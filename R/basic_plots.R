@@ -9,6 +9,7 @@
 #' @keywords plot rates Temperature
 #' @export
 #' @examples
+#' "foo"
 
 plotRateVsTrt <- function(data, x = "TrtID", y = "GR50") {
 
@@ -39,6 +40,7 @@ plotRateVsTrt <- function(data, x = "TrtID", y = "GR50") {
 #' @keywords plot raw data
 #' @export
 #' @examples
+#' "foo"
 
 plotRawData <- function(data, color = NULL, shape = NULL, line = TRUE, cum.time = "CumTime", cum.frac = "CumFraction") {
 

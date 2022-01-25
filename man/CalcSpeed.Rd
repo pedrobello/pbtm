@@ -29,6 +29,11 @@ A dataframe with germination speed and germination rate calculated from specifie
 \description{
 This function allows you to calculate the time to a desired cumulative fraction and respective germination rate. Use this function on raw data to avoid loss of points closer to the desired cumulative fraction.
 }
+\examples{
+load("data/sample_data.RData")
+mySpeedData <- calcSpeed(myGermData, treatments = c("GermWP", "GermTemp"))
+print(mySpeedData)
+}
 \keyword{GRx,}
 \keyword{Tx,}
 \keyword{germination}

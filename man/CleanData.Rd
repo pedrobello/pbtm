@@ -19,6 +19,9 @@ A data frame with duplicate observations removed
 \description{
 This function removes repetitive cumulative fractions/percentages, keeping only the initial presence of the value
 }
+\examples{
+"foo"
+}
 \keyword{clean}
 \keyword{cumulative}
 \keyword{fraction}

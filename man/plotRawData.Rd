@@ -29,6 +29,9 @@ plotRawData(
 \description{
 This function plots the raw data previously selected. It will plot raw cumulative curves over time.
 }
+\examples{
+"foo"
+}
 \keyword{data}
 \keyword{plot}
 \keyword{raw}
