@@ -62,8 +62,7 @@ plotRawData <- function(data, color = NULL, shape = NULL, line = TRUE, cum.time 
     ggplot2::expand_limits(x = 0, y = 0) +
     ggplot2::labs(
       x = "Time",
-      y = "Cumulative fraction germinated (%)"
-    ) +
+      y = "Cumulative fraction germinated (%)") +
     theme_scatter_plot
   if (is.null(shape)) {
     plt <- plt + ggplot2::geom_point(shape = 19, size = 2)

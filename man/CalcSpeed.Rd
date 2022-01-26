@@ -6,8 +6,8 @@
 \usage{
 calcSpeed(
   data,
-  fraction = 0.5,
   treatments = c("TrtID"),
+  f = 0.5,
   cum.time = "CumTime",
   cum.frac = "CumFraction"
 )
@@ -15,9 +15,9 @@ calcSpeed(
 \arguments{
 \item{data}{time course and cumulative dataset. Several treatments can be used at once as long as it respects the template and column names provided. A column with time in hours (CumTime) + a column with cumulative fractions (CumFraction) are required with at least one additional column for relevant treatment (e.g., germination temperature or water potential)}
 
-\item{fraction}{from 0 to 1 used to calculate the time required for that level to be obtained in the cumulative time course. Default value is 0.5 (50 percent), to calculate the time to 50 percent germination (T50) and respective germination rate (GR50). Fraction level can be entered and be used for calculation and change column name.}
-
 \item{treatments}{are the names of the treatment columns to separate the dataset. The time course cumulative curves will be grouped for each distinct treatment that should be informed here. These column names do not need to be informed in case the provided template file is used to organize the data.}
+
+\item{f}{A single value or vector of values from 0 to 1 used to calculate the time required for that level to be obtained in the cumulative time course. Default value is 0.5 (50 percent), to calculate the time to 50 percent germination (T50) and respective germination rate (GR50).}
 
 \item{cum.time}{is the column name in the dataset for cumulative time elapsed during the germination trial.}
 
@@ -30,9 +30,7 @@ A dataframe with germination speed and germination rate calculated from specifie
 This function allows you to calculate the time to a desired cumulative fraction and respective germination rate. Use this function on raw data to avoid loss of points closer to the desired cumulative fraction.
 }
 \examples{
-load("data/sample_data.RData")
-mySpeedData <- calcSpeed(myGermData, treatments = c("GermWP", "GermTemp"))
-print(mySpeedData)
+"foo"
 }
 \keyword{GRx,}
 \keyword{Tx,}
