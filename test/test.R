@@ -16,7 +16,8 @@ load("data/sample_data.RData")
 # calcSpeed
 
 calcSpeed(sample_data, treatments = c("GermWP", "GermTemp"), f = 0.5)
-calcSpeed(sample_data, treatments = c("GermWP", "GermTemp"), f = c(0.25, 0.5, .5, .2))
+calcSpeed(sample_data, treatments = c("GermWP", "GermTemp"), f = c(0.25, 0.5))
+calcSpeed(sample_data, treatments = c("GermWP", "GermTemp"), f = c(0.10, 0.16, 0.5))
 
 f <- 0.5
 
@@ -86,6 +87,22 @@ build_approx <- function(x, y, f) {
 
 # mergeTrts
 
+sample_data %>%
+  mutate(GermTemp = as.factor(GermTemp)) %>%
+  ggplot(aes(x = CumTime, y = CumFraction, color = GermTemp)) +
+  geom_smooth(method = "glm", method.args = list(family = "quasibinomial"), se = F) +
+  geom_point(data = sample_data, size = 1, color = "grey") +
+  geom_point()
+
+sample_data %>%
+  filter(GermWP == 0) %>%
+  mutate(GermTemp = as.factor(GermTemp)) %>%
+  ggplot(aes(x = CumTime, y = CumFraction, color = GermTemp)) +
+  geom_smooth(method = "glm", method.args = list(family = "quasibinomial"), se = F) +
+  geom_point(data = sample_data, size = 1, color = "grey") +
+  geom_point()
+
+
 # merge on temperature
 sample_data %>%
   mergeTrts(keep.trts = "GermTemp") %>%
@@ -140,9 +157,19 @@ plotRateVsTrt(speed_data, x = "TrtDesc")
 
 # thermaltime
 calcTTSubOModel(sample_data)
+
 calcTTSubOModel(sample_data, plot = F)
 tt_results <- calcTTSubOModel(sample_data)
 plotTTSubOModel(sample_data, tt_results)
+
+sample_data %>%
+  filter(GermWP == 0) %>%
+  calcTTSubOModel()
+
+tt_results <- sample_data %>%
+  filter(GermWP == 0) %>%
+  calcTTSubOModel()
+tt_results$Plot
 
 sample_data %>%
   mergeTrts(keep.trts = "GermTemp") %>%
@@ -152,6 +179,11 @@ sample_data %>%
 
 # hydrotime
 calcHTModel(sample_data)
+
+sample_data %>%
+  filter(GermTemp == 25) %>%
+  calcHTModel()
+
 calcHTModel(sample_data, plot = F)
 ht_results <- calcHTModel(sample_data)
 plotHTModel(sample_data, ht_results)
@@ -180,6 +212,10 @@ hp_results <- calcHPModel(ht_speed_data)
 plotHPModel(speed_data, hp_results)
 
 sample_priming_data %>%
+  calcSpeed(treatments = c("PrimingWP", "PrimingDuration")) %>%
+  calcHPModel()
+
+sample_priming_data %>%
   mergeTrts(keep.trts = c("PrimingWP", "PrimingDuration")) %>%
   calcSpeed(treatments = c("PrimingWP", "PrimingDuration")) %>%
   calcHPModel()
@@ -196,3 +232,7 @@ calcHTPModel(htp_speed_data)
 htp_results <- calcHTPModel(htp_speed_data)
 plotHTPModel(htp_speed_data, htp_results)
 
+
+sample_priming_data %>%
+  calcSpeed(treatments = c("PrimingWP", "PrimingTemp", "PrimingDuration")) %>%
+  calcHTPModel()
