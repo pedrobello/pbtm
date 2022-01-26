@@ -1,7 +1,7 @@
 Package: pbtm
 Type: Package
 Title: Population-based threshold models
-Version: 0.1.3
+Version: 0.2.0
 Authors@R: c(
     person("Pedro", "Bello", email = "pedrobello@gmail.com", role = "cre"),
     person("Ben", "Bradford", email = "bradfordium@gmail.com", role = "aut"))

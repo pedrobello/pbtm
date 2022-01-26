@@ -149,11 +149,16 @@ sample_data %>%
   calcTTSubOModel()
 
 
+
 # hydrotime
 calcHTModel(sample_data)
 calcHTModel(sample_data, plot = F)
 ht_results <- calcHTModel(sample_data)
 plotHTModel(sample_data, ht_results)
+
+sample_data %>%
+  mergeTrts(keep.trts = "GermWP") %>%
+  calcHTModel()
 
 
 # hydro thermal time
@@ -161,6 +166,7 @@ calcHTTModel(sample_data)
 calcHTTModel(sample_data, plot = F)
 htt_results <- calcHTTModel(sample_data)
 plotHTTModel(sample_data, htt_results)
+
 
 
 ## PRIMING MODELS ##
@@ -173,6 +179,13 @@ calcHPModel(ht_speed_data)
 hp_results <- calcHPModel(ht_speed_data)
 plotHPModel(speed_data, hp_results)
 
+sample_priming_data %>%
+  mergeTrts(keep.trts = c("PrimingWP", "PrimingDuration")) %>%
+  calcSpeed(treatments = c("PrimingWP", "PrimingDuration")) %>%
+  calcHPModel()
+
+
+# should there be a thermal priming model?
 
 
 # hydro thermal priming
@@ -182,3 +195,4 @@ htp_speed_data <- calcSpeed(sample_priming_data, treatments = c("PrimingWP", "Pr
 calcHTPModel(htp_speed_data)
 htp_results <- calcHTPModel(htp_speed_data)
 plotHTPModel(htp_speed_data, htp_results)
+
