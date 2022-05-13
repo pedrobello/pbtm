@@ -1,10 +1,24 @@
 Package: pbtm
 Type: Package
-Title: Population-based threshold models package  
-Version: 0.1.02
-Author: Pedro Bello
-Maintainer: Pedro Bello <pedrobello@gmail.com>
-Description: This package is intended to make more practical the use of PBTMs in seed physiology and other areas.
-License: Open
+Title: Population-based threshold models
+Version: 0.2.0
+Authors@R: c(
+    person("Pedro", "Bello", email = "pedrobello@gmail.com", role = "cre"),
+    person("Ben", "Bradford", email = "bradfordium@gmail.com", role = "aut"))
+Description: This package is intended to make more practical the use of PBTMs
+    (population-based threshold models) in seed physiology and other areas.
+License: MIT + file LICENSE
 Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Imports: 
+    dplyr,
+    ggplot2,
+    methods,
+    rlang,
+    scales,
+    tibble,
+    tidyr
+Depends: 
+    R (>= 2.10)
+LazyData: true
